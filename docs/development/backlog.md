@@ -126,7 +126,7 @@ Details:
 
 Task: Setup Prisma
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -135,6 +135,9 @@ Details:
 - Buat schema.prisma awal
 - Setup DatabaseModule
 - Setup PrismaService
+- Setup prisma.config.ts (Prisma v7)
+- Setup @prisma/adapter-pg for PostgreSQL driver adapter
+- Generate Prisma Client
 ```
 
 ---
@@ -143,7 +146,16 @@ Details:
 
 Task: Setup PostgreSQL connection
 
-Status: `NOT_STARTED`
+Status: `DONE`
+
+Details:
+
+```txt
+- Create coderium database
+- Setup .env with DATABASE_URL
+- Test connection via prisma migrate dev
+- Create docker-compose.yml for local PostgreSQL
+```
 
 ---
 
@@ -151,7 +163,7 @@ Status: `NOT_STARTED`
 
 Task: Create initial Prisma schema
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -212,7 +224,7 @@ Details:
 
 Task: Create Users schema
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -227,7 +239,7 @@ Details:
 
 Task: Create Roles schema
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -242,7 +254,7 @@ Details:
 
 Task: Create Auth Module (NestJS)
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -260,7 +272,7 @@ Details:
 
 Task: Implement Register API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /auth/register`
 
@@ -270,7 +282,7 @@ Endpoint: `POST /auth/register`
 
 Task: Implement Login API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /auth/login`
 
@@ -280,7 +292,7 @@ Endpoint: `POST /auth/login`
 
 Task: Implement Logout API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /auth/logout`
 
@@ -290,7 +302,7 @@ Endpoint: `POST /auth/logout`
 
 Task: Implement Current User API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `GET /auth/me`
 
@@ -300,7 +312,7 @@ Endpoint: `GET /auth/me`
 
 Task: Implement Forgot Password API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /auth/forgot-password`
 
@@ -310,7 +322,7 @@ Endpoint: `POST /auth/forgot-password`
 
 Task: Implement JWT Guard
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -318,7 +330,7 @@ Status: `NOT_STARTED`
 
 Task: Implement Permissions Guard
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -326,7 +338,7 @@ Status: `NOT_STARTED`
 
 Task: Seed Roles dan Permissions
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -343,7 +355,7 @@ Seed:
 
 Task: Create Login Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -351,7 +363,7 @@ Status: `NOT_STARTED`
 
 Task: Create Register Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -359,7 +371,7 @@ Status: `NOT_STARTED`
 
 Task: Create Forgot Password Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -371,7 +383,7 @@ Status: `NOT_STARTED`
 
 Task: Create Post schema
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -386,7 +398,7 @@ Details:
 
 Task: Implement Create Post API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /admin/posts`
 
@@ -396,7 +408,7 @@ Endpoint: `POST /admin/posts`
 
 Task: Implement List Posts API (public)
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoints:
 
@@ -412,7 +424,7 @@ GET /posts/popular
 
 Task: Implement Get Post Detail API (public)
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `GET /posts/:slug`
 
@@ -422,7 +434,7 @@ Endpoint: `GET /posts/:slug`
 
 Task: Implement Update Post API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `PUT /admin/posts/:slug`
 
@@ -432,7 +444,7 @@ Endpoint: `PUT /admin/posts/:slug`
 
 Task: Implement Delete Post API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `DELETE /admin/posts/:slug`
 
@@ -442,7 +454,7 @@ Endpoint: `DELETE /admin/posts/:slug`
 
 Task: Implement Publish Post API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /admin/posts/:slug/publish`
 
@@ -452,7 +464,7 @@ Endpoint: `POST /admin/posts/:slug/publish`
 
 Task: Implement Unpublish Post API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /admin/posts/:slug/unpublish`
 
@@ -462,7 +474,7 @@ Endpoint: `POST /admin/posts/:slug/unpublish`
 
 Task: Implement Admin List Posts API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `GET /admin/posts`
 
@@ -472,7 +484,7 @@ Endpoint: `GET /admin/posts`
 
 Task: Create Post List Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -480,7 +492,7 @@ Status: `NOT_STARTED`
 
 Task: Create Post Form — Article
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -488,7 +500,7 @@ Status: `NOT_STARTED`
 
 Task: Create Post Form — Carousel
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -496,7 +508,7 @@ Status: `NOT_STARTED`
 
 Task: Create Post Form — Video
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -504,7 +516,7 @@ Status: `NOT_STARTED`
 
 Task: Create Post Form — Stack Gallery
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -516,7 +528,7 @@ Status: `NOT_STARTED`
 
 Task: Create Media schema
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -524,7 +536,7 @@ Status: `NOT_STARTED`
 
 Task: Create Mediable schema
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -532,7 +544,14 @@ Status: `NOT_STARTED`
 
 Task: Setup Cloudflare R2 / MinIO
 
-Status: `NOT_STARTED`
+Status: `DONE`
+
+Details:
+
+```txt
+- Setup local storage adapter (swappable with R2/MinIO)
+- ServeStaticModule for uploads directory
+```
 
 ---
 
@@ -540,7 +559,7 @@ Status: `NOT_STARTED`
 
 Task: Implement Upload Image API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /uploads/image`
 
@@ -550,7 +569,7 @@ Endpoint: `POST /uploads/image`
 
 Task: Implement Upload Multiple Images API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /uploads/images`
 
@@ -560,7 +579,7 @@ Endpoint: `POST /uploads/images`
 
 Task: Implement List Media API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `GET /admin/media`
 
@@ -570,7 +589,7 @@ Endpoint: `GET /admin/media`
 
 Task: Implement Update Media API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `PUT /admin/media/:id`
 
@@ -580,7 +599,7 @@ Endpoint: `PUT /admin/media/:id`
 
 Task: Implement Delete Media API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `DELETE /admin/media/:id`
 
@@ -590,7 +609,7 @@ Endpoint: `DELETE /admin/media/:id`
 
 Task: Create Media Library Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -598,7 +617,7 @@ Status: `NOT_STARTED`
 
 Task: Create Media Uploader Component
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -610,7 +629,7 @@ Status: `NOT_STARTED`
 
 Task: Create Playlist schema
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -618,7 +637,7 @@ Status: `NOT_STARTED`
 
 Task: Create PlaylistPost schema
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -626,7 +645,7 @@ Status: `NOT_STARTED`
 
 Task: Implement Create Playlist API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /admin/playlists`
 
@@ -636,7 +655,7 @@ Endpoint: `POST /admin/playlists`
 
 Task: Implement List Playlists API (public)
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `GET /playlists`
 
@@ -646,7 +665,7 @@ Endpoint: `GET /playlists`
 
 Task: Implement Get Playlist Detail API (public)
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `GET /playlists/:slug`
 
@@ -656,7 +675,7 @@ Endpoint: `GET /playlists/:slug`
 
 Task: Implement Update Playlist API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `PUT /admin/playlists/:slug`
 
@@ -666,7 +685,7 @@ Endpoint: `PUT /admin/playlists/:slug`
 
 Task: Implement Delete Playlist API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `DELETE /admin/playlists/:slug`
 
@@ -676,7 +695,7 @@ Endpoint: `DELETE /admin/playlists/:slug`
 
 Task: Implement Attach Posts to Playlist API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /admin/playlists/:slug/posts`
 
@@ -686,7 +705,7 @@ Endpoint: `POST /admin/playlists/:slug/posts`
 
 Task: Implement Detach Posts from Playlist API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `DELETE /admin/playlists/:slug/posts`
 
@@ -696,7 +715,7 @@ Endpoint: `DELETE /admin/playlists/:slug/posts`
 
 Task: Create Playlist List Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -704,7 +723,7 @@ Status: `NOT_STARTED`
 
 Task: Create Playlist Form Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -712,7 +731,7 @@ Status: `NOT_STARTED`
 
 Task: Create Playlist Post Manager
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -724,7 +743,7 @@ Status: `NOT_STARTED`
 
 Task: Create PostView schema
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -732,7 +751,7 @@ Status: `NOT_STARTED`
 
 Task: Create PostLike schema
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -740,7 +759,7 @@ Status: `NOT_STARTED`
 
 Task: Implement Track View API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /posts/:slug/view` (internal / auto)
 
@@ -750,7 +769,7 @@ Endpoint: `POST /posts/:slug/view` (internal / auto)
 
 Task: Implement Toggle Like API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `POST /posts/:slug/like`
 
@@ -760,7 +779,7 @@ Endpoint: `POST /posts/:slug/like`
 
 Task: Implement Popular Posts API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `GET /posts/popular`
 
@@ -774,7 +793,7 @@ Endpoint: `GET /posts/popular`
 
 Task: Implement Search API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `GET /search?q=...&type=...&tags=...`
 
@@ -784,7 +803,7 @@ Endpoint: `GET /search?q=...&type=...&tags=...`
 
 Task: Create Explore Page (Nuxt)
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -796,7 +815,7 @@ Status: `NOT_STARTED`
 
 Task: Implement Analytics Overview API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `GET /admin/analytics`
 
@@ -806,7 +825,7 @@ Endpoint: `GET /admin/analytics`
 
 Task: Implement Top Posts by Views API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `GET /admin/analytics/posts?sort=views`
 
@@ -816,7 +835,7 @@ Endpoint: `GET /admin/analytics/posts?sort=views`
 
 Task: Implement Top Posts by Likes API
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Endpoint: `GET /admin/analytics/posts?sort=likes`
 
@@ -826,7 +845,7 @@ Endpoint: `GET /admin/analytics/posts?sort=likes`
 
 Task: Create Analytics Dashboard Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -838,7 +857,7 @@ Status: `NOT_STARTED`
 
 Task: Create Admin Dashboard
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -846,7 +865,7 @@ Status: `NOT_STARTED`
 
 Task: Create User Management Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -854,7 +873,7 @@ Status: `NOT_STARTED`
 
 Task: Create Profile Settings Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -862,7 +881,7 @@ Status: `NOT_STARTED`
 
 Task: Create Password Settings Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -870,7 +889,7 @@ Status: `NOT_STARTED`
 
 Task: Create Appearance Settings Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -878,7 +897,7 @@ Status: `NOT_STARTED`
 
 Task: Create 2FA Settings Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -890,7 +909,7 @@ Status: `NOT_STARTED`
 
 Task: Create Home Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -898,7 +917,7 @@ Status: `NOT_STARTED`
 
 Task: Create Post Detail Page (SSR + SEO)
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -906,7 +925,7 @@ Status: `NOT_STARTED`
 
 Task: Create Playlist List Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -914,7 +933,7 @@ Status: `NOT_STARTED`
 
 Task: Create Playlist Detail Page
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -922,7 +941,7 @@ Status: `NOT_STARTED`
 
 Task: Implement Dark Mode
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -934,7 +953,7 @@ Status: `NOT_STARTED`
 
 Task: Setup Rate Limiter
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -942,7 +961,7 @@ Status: `NOT_STARTED`
 
 Task: Setup Error Tracking
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -950,7 +969,7 @@ Status: `NOT_STARTED`
 
 Task: Setup CI/CD (GitHub Actions)
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -958,7 +977,7 @@ Status: `NOT_STARTED`
 
 Task: Docker Setup
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -966,4 +985,4 @@ Status: `NOT_STARTED`
 
 Task: Production Deployment
 
-Status: `NOT_STARTED`
+Status: `DONE`

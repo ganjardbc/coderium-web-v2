@@ -1,12 +1,3 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@coderium/tsconfig/vue.json",
-  "compilerOptions": {
-    "paths": {
-      "#imports": ["./.nuxt/imports.d.ts"],
-      "#components": ["./.nuxt/components.d.ts"]
-    }
-  },
-  "include": ["**/*.ts", "**/*.vue"],
-  "exclude": ["node_modules", ".nuxt", ".output", "dist"]
+  "extends": "./.nuxt/tsconfig.json"
 }

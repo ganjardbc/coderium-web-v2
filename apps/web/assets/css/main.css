@@ -1,1 +1,61 @@
 @import 'tailwindcss';
+
+@variant dark (&:where(.dark, .dark *));
+
+/* Custom Global Styles */
+body {
+  @apply bg-gray-50 text-gray-900 transition-colors duration-200;
+}
+
+.dark body {
+  @apply bg-slate-950 text-slate-50;
+}
+
+/* Custom styles for dark mode compatibility */
+.dark .bg-white {
+  @apply bg-slate-900 border-slate-800 text-slate-100;
+}
+
+.dark .border {
+  @apply border-slate-800;
+}
+
+.dark .border-b {
+  @apply border-slate-800;
+}
+
+.dark .border-t {
+  @apply border-slate-800;
+}
+
+.dark .border-y {
+  @apply border-slate-800;
+}
+
+.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
+  @apply border-slate-800;
+}
+
+.dark .bg-gray-50 {
+  @apply bg-slate-900/50;
+}
+
+.dark .bg-gray-100 {
+  @apply bg-slate-800 text-slate-300;
+}
+
+.dark .text-gray-900 {
+  @apply text-slate-100;
+}
+
+.dark .text-gray-600 {
+  @apply text-slate-400;
+}
+
+.dark .text-gray-500 {
+  @apply text-slate-400;
+}
+
+.dark .text-gray-400 {
+  @apply text-slate-500;
+}

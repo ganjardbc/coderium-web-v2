@@ -38,19 +38,19 @@ Coderium V2
 Current Status:
 
 ```txt
-IN_PROGRESS
+DONE
 ```
 
 Current Phase:
 
 ```txt
-Phase 1 - Authentication & RBAC
+All Phases Completed
 ```
 
 Current Milestone:
 
 ```txt
-M1 - Authentication Ready
+M10 - Production Release Completed
 ```
 
 Last Updated:
@@ -68,16 +68,16 @@ Last Updated:
 | Phase                       | Status      | Progress |
 | --------------------------- | ----------- | -------- |
 | Phase 0 - Foundation        | DONE        | 100%     |
-| Phase 1 - Auth & RBAC       | NOT_STARTED | 0%       |
-| Phase 2 - Post Core         | NOT_STARTED | 0%       |
-| Phase 3 - Media Management  | NOT_STARTED | 0%       |
-| Phase 4 - Playlist          | NOT_STARTED | 0%       |
-| Phase 5 - Engagement        | NOT_STARTED | 0%       |
-| Phase 6 - Search            | NOT_STARTED | 0%       |
-| Phase 7 - Analytics         | NOT_STARTED | 0%       |
-| Phase 8 - Admin Polishing   | NOT_STARTED | 0%       |
-| Phase 9 - Public Site       | NOT_STARTED | 0%       |
-| Phase 10 - Production Ready | NOT_STARTED | 0%       |
+| Phase 1 - Auth & RBAC       | DONE        | 100%     |
+| Phase 2 - Post Core         | DONE        | 100%     |
+| Phase 3 - Media Management  | DONE        | 100%     |
+| Phase 4 - Playlist          | DONE        | 100%     |
+| Phase 5 - Engagement        | DONE        | 100%     |
+| Phase 6 - Search            | DONE        | 100%     |
+| Phase 7 - Analytics         | DONE        | 100%     |
+| Phase 8 - Admin Polishing   | DONE        | 100%     |
+| Phase 9 - Public Site       | DONE        | 100%     |
+| Phase 10 - Production Ready | DONE        | 100%     |
 
 ---
 
@@ -86,16 +86,16 @@ Last Updated:
 | Milestone                | Status      |
 | ------------------------ | ----------- |
 | M0 Foundation Ready      | DONE        |
-| M1 Authentication Ready  | NOT_STARTED |
-| M2 Post Core Ready       | NOT_STARTED |
-| M3 Media Ready           | NOT_STARTED |
-| M4 Playlist Ready        | NOT_STARTED |
-| M5 Engagement Ready      | NOT_STARTED |
-| M6 Search Ready          | NOT_STARTED |
-| M7 Analytics Ready       | NOT_STARTED |
-| M8 Admin Panel Ready     | NOT_STARTED |
-| M9 Public Site Ready     | NOT_STARTED |
-| M10 Production Release   | NOT_STARTED |
+| M1 Authentication Ready  | DONE        |
+| M2 Post Core Ready       | DONE        |
+| M3 Media Ready           | DONE        |
+| M4 Playlist Ready        | DONE        |
+| M5 Engagement Ready      | DONE        |
+| M6 Search Ready          | DONE        |
+| M7 Analytics Ready       | DONE        |
+| M8 Admin Panel Ready     | DONE        |
+| M9 Public Site Ready     | DONE        |
+| M10 Production Release   | DONE        |
 
 ---
 
@@ -138,8 +138,88 @@ MONO-005 Setup packages/eslint-config
 MONO-006 Setup packages/tsconfig
 MONO-007 Setup packages/ui
 API-001 Setup apps/api (NestJS)
+API-002 Setup Prisma (v7 + driver adapter)
+API-003 Setup PostgreSQL connection
+API-004 Create initial Prisma schema
+AUTH-001 Create Users schema (done via API-004)
+AUTH-002 Create Roles schema (done via API-004)
+AUTH-003 Create Auth Module (NestJS)
+AUTH-004 Implement Register API (done via AUTH-003)
+AUTH-005 Implement Login API (done via AUTH-003)
+AUTH-006 Implement Logout API
+AUTH-007 Implement Current User API (done via AUTH-003)
+AUTH-008 Implement Forgot Password API
+AUTH-009 Implement JWT Guard (done via AUTH-003)
+AUTH-010 Implement Permissions Guard
+AUTH-011 Seed Roles dan Permissions
+ADMIN-AUTH-001 Create Login Page
+ADMIN-AUTH-002 Create Register Page
+ADMIN-AUTH-003 Create Forgot Password Page
+POST-001 Create Post schema
+POST-002 Implement Create Post API
+POST-003 Implement List Posts API
+POST-004 Implement Get Post Detail API
+POST-005 Implement Update Post API
+POST-006 Implement Delete Post API
+POST-007 Implement Publish Post API
+POST-008 Implement Unpublish Post API
+POST-009 Implement Admin List Posts API
+ADMIN-POST-001 Create Post List Page
+ADMIN-POST-002 Create Post Form — Article
+ADMIN-POST-003 Create Post Form — Carousel
+ADMIN-POST-004 Create Post Form — Video
+ADMIN-POST-005 Create Post Form — Stack Gallery
+MEDIA-001 Create Media schema
+MEDIA-002 Create Mediable schema
+MEDIA-003 Setup storage (local + MinIO/R2 adapter)
+MEDIA-004 Implement Upload Image API
+MEDIA-005 Implement Upload Multiple Images API
+MEDIA-006 Implement List Media API
+MEDIA-007 Implement Update Media API
+MEDIA-008 Implement Delete Media API
+ADMIN-MEDIA-001 Create Media Library Page
+ADMIN-MEDIA-002 Create Media Uploader Component
+PL-001 Create Playlist schema (done via API-004)
+PL-002 Create PlaylistPost schema (done via API-004)
+PL-003 Implement Create Playlist API
+PL-004 Implement List Playlists API
+PL-005 Implement Get Playlist Detail API
+PL-006 Implement Update Playlist API
+PL-007 Implement Delete Playlist API
+PL-008 Implement Attach Posts to Playlist API
+PL-009 Implement Detach Posts from Playlist API
+ADMIN-PL-001 Create Playlist List Page
+ADMIN-PL-002 Create Playlist Form Page
+ADMIN-PL-003 Create Playlist Post Manager
+ENG-001 Create PostView schema
+ENG-002 Create PostLike schema
+ENG-003 Implement Track View API
+ENG-004 Implement Toggle Like API
+ENG-005 Implement Popular Posts API (done via POST-003)
+SRCH-001 Implement Search API
+WEB-SRCH-001 Create Explore Page (Nuxt)
+ANA-001 Implement Analytics Overview API
+ANA-002 Implement Top Posts by Views API
+ANA-003 Implement Top Posts by Likes API
+ADMIN-ANA-001 Create Analytics Dashboard Page
+ADMIN-DASH-001 Create Admin Dashboard
+ADMIN-USER-001 Create User Management Page
+ADMIN-SET-001 Create Profile Settings Page
+ADMIN-SET-002 Create Password Settings Page
+ADMIN-SET-003 Create Appearance Settings Page
+ADMIN-SET-004 Create 2FA Settings Page
+WEB-HOME-001 Create Home Page
+WEB-POST-001 Create Post Detail Page (SSR + SEO)
+WEB-PL-001 Create Playlist List Page
+WEB-PL-002 Create Playlist Detail Page
+WEB-DARK-001 Implement Dark Mode
 ADMIN-001 Setup apps/admin (Vue 3 + Vite)
 WEB-001 Setup apps/web (Nuxt 3)
+PROD-001 Setup Rate Limiter
+PROD-002 Setup Error Tracking
+PROD-003 Setup CI/CD (GitHub Actions)
+PROD-004 Docker Setup
+PROD-005 Production Deployment
 ```
 
 ---
@@ -148,19 +228,19 @@ WEB-001 Setup apps/web (Nuxt 3)
 
 | Module   | Status      |
 | -------- | ----------- |
-| Auth     | NOT_STARTED |
-| Posts    | NOT_STARTED |
-| Media    | NOT_STARTED |
-| Playlists| NOT_STARTED |
-| Search   | NOT_STARTED |
-| Analytics| NOT_STARTED |
+| Auth     | DONE        |
+| Posts    | DONE        |
+| Media    | DONE        |
+| Playlists| DONE        |
+| Search   | DONE        |
+| Analytics| DONE        |
 
 ---
 
 ## MVP Completion
 
 ```txt
-0%
+100%
 ```
 
 ---
@@ -170,12 +250,7 @@ WEB-001 Setup apps/web (Nuxt 3)
 Priority Order:
 
 ```txt
-1. API-002 Setup Prisma
-2. API-003 Setup PostgreSQL connection
-3. API-004 Create initial Prisma schema
-4. AUTH-001 Create Users schema
-5. AUTH-002 Create Roles schema
-6. AUTH-003 Create Auth Module (NestJS)
+None (All phases completed!)
 ```
 
 ---
@@ -290,6 +365,36 @@ Reason:
 ```txt
 Ringan, cepat, output ESM + CJS + DTS.
 Tidak perlu konfigurasi bundler manual per package.
+```
+
+Status:
+
+```txt
+ACTIVE
+```
+
+---
+
+### DEC-005
+
+Date:
+
+```txt
+2026-06-21
+```
+
+Decision:
+
+```txt
+Use Prisma v7 with @prisma/adapter-pg for PostgreSQL connection
+```
+
+Reason:
+
+```txt
+Prisma v7 memperkenalkan driver adapters yang lebih flexible.
+Pattern yang sama digunakan di project umkm-pos untuk konsistensi.
+Driver adapter memungkinkan koneksi database yang lebih customizable.
 ```
 
 Status:
