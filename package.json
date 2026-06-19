@@ -1,0 +1,19 @@
+{
+  "name": "coderium-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Coderium V2 Monorepo",
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "turbo": "^2.0.4",
+    "typescript": "^5.4.5"
+  }
+}

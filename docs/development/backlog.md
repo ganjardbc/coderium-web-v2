@@ -14,7 +14,7 @@ docs/development/backlog.md
 
 Task: Setup pnpm workspace
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -30,7 +30,7 @@ Details:
 
 Task: Setup TurboRepo
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -45,7 +45,7 @@ Details:
 
 Task: Setup packages/shared-types
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -60,7 +60,7 @@ Details:
 
 Task: Setup packages/shared-utils
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -75,7 +75,7 @@ Details:
 
 Task: Setup packages/eslint-config
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -83,7 +83,7 @@ Status: `NOT_STARTED`
 
 Task: Setup packages/tsconfig
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 ---
 
@@ -91,7 +91,7 @@ Status: `NOT_STARTED`
 
 Task: Setup packages/ui
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -107,7 +107,7 @@ Details:
 
 Task: Setup apps/api (NestJS)
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -170,7 +170,7 @@ Buat models awal:
 
 Task: Setup apps/admin (Vue 3 + Vite)
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 
@@ -190,7 +190,7 @@ Details:
 
 Task: Setup apps/web (Nuxt 3)
 
-Status: `NOT_STARTED`
+Status: `DONE`
 
 Details:
 

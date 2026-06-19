@@ -38,25 +38,25 @@ Coderium V2
 Current Status:
 
 ```txt
-NOT_STARTED
+IN_PROGRESS
 ```
 
 Current Phase:
 
 ```txt
-Phase 0 - Foundation
+Phase 1 - Authentication & RBAC
 ```
 
 Current Milestone:
 
 ```txt
-M0 - Foundation Ready
+M1 - Authentication Ready
 ```
 
 Last Updated:
 
 ```txt
-2026-06-19
+2026-06-21
 ```
 
 ---
@@ -67,7 +67,7 @@ Last Updated:
 
 | Phase                       | Status      | Progress |
 | --------------------------- | ----------- | -------- |
-| Phase 0 - Foundation        | NOT_STARTED | 0%       |
+| Phase 0 - Foundation        | DONE        | 100%     |
 | Phase 1 - Auth & RBAC       | NOT_STARTED | 0%       |
 | Phase 2 - Post Core         | NOT_STARTED | 0%       |
 | Phase 3 - Media Management  | NOT_STARTED | 0%       |
@@ -85,7 +85,7 @@ Last Updated:
 
 | Milestone                | Status      |
 | ------------------------ | ----------- |
-| M0 Foundation Ready      | NOT_STARTED |
+| M0 Foundation Ready      | DONE        |
 | M1 Authentication Ready  | NOT_STARTED |
 | M2 Post Core Ready       | NOT_STARTED |
 | M3 Media Ready           | NOT_STARTED |
@@ -114,11 +114,7 @@ Phase 0 - Foundation Setup
 ### TODO
 
 ```txt
-MONO-001 Setup pnpm workspace
-MONO-002 Setup TurboRepo
-API-001  Setup apps/api (NestJS)
-ADMIN-001 Setup apps/admin (Vue 3 + Vite)
-WEB-001  Setup apps/web (Nuxt 3)
+None
 ```
 
 ---
@@ -134,7 +130,16 @@ None
 ### DONE
 
 ```txt
-None
+MONO-001 Setup pnpm workspace
+MONO-002 Setup TurboRepo
+MONO-003 Setup packages/shared-types
+MONO-004 Setup packages/shared-utils
+MONO-005 Setup packages/eslint-config
+MONO-006 Setup packages/tsconfig
+MONO-007 Setup packages/ui
+API-001 Setup apps/api (NestJS)
+ADMIN-001 Setup apps/admin (Vue 3 + Vite)
+WEB-001 Setup apps/web (Nuxt 3)
 ```
 
 ---
@@ -165,11 +170,12 @@ None
 Priority Order:
 
 ```txt
-1. MONO-001 Setup pnpm workspace
-2. MONO-002 Setup TurboRepo
-3. API-001 Setup apps/api
-4. ADMIN-001 Setup apps/admin
-5. WEB-001 Setup apps/web
+1. API-002 Setup Prisma
+2. API-003 Setup PostgreSQL connection
+3. API-004 Create initial Prisma schema
+4. AUTH-001 Create Users schema
+5. AUTH-002 Create Roles schema
+6. AUTH-003 Create Auth Module (NestJS)
 ```
 
 ---
@@ -255,6 +261,35 @@ Reason:
 ```txt
 Lebih ringan dari Nuxt untuk SPA admin.
 Konsisten dengan pattern undangabi-v2.
+```
+
+Status:
+
+```txt
+ACTIVE
+```
+
+---
+
+### DEC-004
+
+Date:
+
+```txt
+2026-06-20
+```
+
+Decision:
+
+```txt
+Use tsup as build tool for shared packages (shared-types, shared-utils, ui)
+```
+
+Reason:
+
+```txt
+Ringan, cepat, output ESM + CJS + DTS.
+Tidak perlu konfigurasi bundler manual per package.
 ```
 
 Status:

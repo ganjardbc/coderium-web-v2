@@ -1,0 +1,1 @@
+{"root":["./src/app.vue","./src/main.ts","./src/core/global-routes.ts","./src/core/global-stores.ts","./src/core/global-styles.ts","./src/core/initiate.ts","./src/views/homeview.vue","./env.d.ts"],"version":"5.9.3"}
