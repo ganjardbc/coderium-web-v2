@@ -1,115 +1,171 @@
 <template>
-  <div class="space-y-16">
+  <div class="max-w-5xl mx-auto px-6 py-10 space-y-14">
     <!-- Hero Section -->
-    <section class="text-center py-20 bg-linear-to-r from-blue-50 to-indigo-50 rounded-3xl px-6">
-      <h1 class="text-5xl font-black tracking-tight text-gray-900 mb-6">
-        Coderium <span class="text-blue-600">V2</span>
+    <section class="border-b border-gray-100 pb-12">
+      <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 leading-none">
+        Stay curious.
       </h1>
-      <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-        Discover articles, video tutorials, stack galleries, and curated playlists on modern web development and software architecture.
+      <p class="mt-4 text-lg text-gray-500 max-w-md">
+        Discover stories, thinking, and expertise from writers on web development and software architecture.
       </p>
-      <div class="flex justify-center gap-4">
-        <NuxtLink to="/explore" class="px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors">
-          Explore Content
+      <div class="mt-6 flex gap-3">
+        <NuxtLink
+          to="/explore"
+          class="px-5 py-2 rounded-full bg-gray-900 text-white text-sm font-medium hover:bg-gray-700 transition-colors"
+        >
+          Start reading
         </NuxtLink>
-        <NuxtLink to="/playlists" class="px-6 py-3 bg-white text-gray-700 font-medium rounded-xl border hover:bg-gray-50 transition-colors">
-          Browse Playlists
+        <NuxtLink
+          to="/playlists"
+          class="px-5 py-2 rounded-full border border-gray-300 text-gray-700 text-sm font-medium hover:border-gray-500 transition-colors"
+        >
+          Browse series
         </NuxtLink>
       </div>
     </section>
 
-    <!-- Recent Content Grid -->
-    <section>
-      <div class="flex justify-between items-end mb-8">
-        <div>
-          <h2 class="text-3xl font-bold text-gray-900">Recent Stories</h2>
-          <p class="text-gray-500 mt-1">Our latest publications and guides</p>
-        </div>
-        <NuxtLink to="/explore" class="text-blue-600 hover:underline font-medium text-sm">
-          View all &rarr;
-        </NuxtLink>
-      </div>
-
-      <div v-if="pending" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div v-for="i in 3" :key="i" class="animate-pulse space-y-4">
-          <div class="bg-gray-200 h-48 rounded-2xl w-full"></div>
-          <div class="h-4 bg-gray-200 rounded-sm w-3/4"></div>
-          <div class="h-4 bg-gray-200 rounded-sm w-1/2"></div>
-        </div>
-      </div>
-
-      <div v-else-if="recentPosts.length === 0" class="text-center py-12 text-gray-500">
-        No stories published yet.
-      </div>
-
-      <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <article v-for="post in recentPosts" :key="post.id" class="group flex flex-col bg-white rounded-2xl border overflow-hidden hover:shadow-md transition-shadow">
-          <NuxtLink :to="`/posts/${post.slug}`" class="block aspect-video bg-gray-100 overflow-hidden relative">
-            <img v-if="post.cover" :src="post.cover" :alt="post.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-            <div v-else class="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xl bg-gray-50">CODERIUM</div>
-            <span class="absolute top-3 left-3 px-2.5 py-0.5 text-xs font-semibold uppercase rounded-full bg-white/95 text-gray-800 backdrop-blur-xs shadow-xs">{{ post.type }}</span>
+    <!-- Recent Stories + Sidebar -->
+    <div class="grid lg:grid-cols-3 gap-12">
+      <!-- Main: Recent Stories -->
+      <section class="lg:col-span-2">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-base font-bold text-gray-900 uppercase tracking-wider text-sm">Recent Stories</h2>
+          <NuxtLink to="/explore" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+            See all &rarr;
           </NuxtLink>
-          <div class="p-6 flex-1 flex flex-col justify-between">
-            <div class="space-y-2">
-              <span class="text-xs text-gray-400 font-medium">{{ formatDate(post.publishedAt) }}</span>
-              <h3 class="text-lg font-bold text-gray-900 leading-snug group-hover:text-blue-600 transition-colors">
-                <NuxtLink :to="`/posts/${post.slug}`">{{ post.title }}</NuxtLink>
-              </h3>
-              <p v-if="post.subtitle" class="text-gray-500 text-sm line-clamp-2">{{ post.subtitle }}</p>
+        </div>
+
+        <!-- Skeleton -->
+        <div v-if="pending" class="divide-y divide-gray-100">
+          <div v-for="i in 3" :key="i" class="py-8 first:pt-0 animate-pulse">
+            <div class="flex gap-4 items-start justify-between">
+              <div class="flex-1 space-y-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-full bg-gray-200"></div>
+                  <div class="h-3 bg-gray-200 rounded w-24"></div>
+                </div>
+                <div class="h-5 bg-gray-200 rounded w-3/4"></div>
+                <div class="h-3 bg-gray-200 rounded w-full"></div>
+                <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+              </div>
+              <div class="w-20 h-20 bg-gray-200 rounded flex-shrink-0 ml-4"></div>
             </div>
-            <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
-              <span class="text-xs text-gray-600 font-medium">{{ post.user?.name }}</span>
-              <div class="flex items-center gap-2 text-xs text-gray-400">
-                <span>{{ post.viewsCount }} views</span>
+          </div>
+        </div>
+
+        <!-- Empty -->
+        <div v-else-if="recentPosts.length === 0" class="py-12 text-center text-gray-400 text-sm">
+          No stories published yet.
+        </div>
+
+        <!-- Article list -->
+        <div v-else class="divide-y divide-gray-100">
+          <article v-for="post in recentPosts" :key="post.id" class="py-8 first:pt-0 group">
+            <div class="flex items-start gap-4 justify-between">
+              <div class="flex-1 min-w-0">
+                <!-- Author row -->
+                <div class="flex items-center gap-2 mb-3">
+                  <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 flex-shrink-0">
+                    {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
+                  </div>
+                  <span class="text-sm text-gray-700 font-medium truncate">{{ post.user?.name }}</span>
+                  <span class="text-gray-300 text-sm">·</span>
+                  <span class="text-sm text-gray-400 flex-shrink-0">{{ formatDate(post.publishedAt) }}</span>
+                </div>
+
+                <!-- Title + subtitle -->
+                <NuxtLink :to="`/posts/${post.slug}`" class="block">
+                  <h2 class="text-xl font-bold text-gray-900 leading-snug group-hover:text-gray-600 transition-colors line-clamp-2">
+                    {{ post.title }}
+                  </h2>
+                  <p v-if="post.subtitle" class="mt-1 text-gray-500 text-sm line-clamp-2">
+                    {{ post.subtitle }}
+                  </p>
+                </NuxtLink>
+
+                <!-- Meta row -->
+                <div class="flex items-center gap-3 mt-3 text-xs text-gray-400">
+                  <span class="px-2 py-0.5 rounded-full border border-gray-200 text-gray-500 capitalize">
+                    {{ post.type }}
+                  </span>
+                  <span>{{ readingTime(post.subtitle ?? post.title) }}</span>
+                  <span>{{ post.viewsCount }} views</span>
+                </div>
+              </div>
+
+              <!-- Thumbnail -->
+              <NuxtLink v-if="post.cover" :to="`/posts/${post.slug}`" class="w-20 h-20 md:w-28 md:h-28 rounded-sm overflow-hidden flex-shrink-0 ml-4 bg-gray-100">
+                <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
+              </NuxtLink>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Sidebar -->
+      <aside class="space-y-10">
+        <!-- Popular on Coderium -->
+        <section>
+          <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-5">Popular on Coderium</h3>
+
+          <div v-if="pendingPopular" class="space-y-5">
+            <div v-for="i in 3" :key="i" class="animate-pulse flex gap-3">
+              <div class="w-6 h-4 bg-gray-200 rounded flex-shrink-0 mt-1"></div>
+              <div class="flex-1 space-y-2">
+                <div class="h-3 bg-gray-200 rounded w-full"></div>
+                <div class="h-3 bg-gray-200 rounded w-2/3"></div>
               </div>
             </div>
           </div>
-        </article>
-      </div>
-    </section>
 
-    <!-- Popular and Spotlight Section -->
-    <div class="grid lg:grid-cols-3 gap-12">
-      <!-- Popular Posts -->
-      <section class="lg:col-span-2 space-y-6">
-        <h2 class="text-2xl font-bold text-gray-900">Popular on Coderium</h2>
-        <div v-if="pendingPopular" class="space-y-4">
-          <div v-for="i in 3" :key="i" class="animate-pulse flex gap-4">
-            <div class="bg-gray-200 w-24 h-16 rounded-xl flex-shrink-0"></div>
-            <div class="flex-1 space-y-2 py-1">
-              <div class="h-4 bg-gray-200 rounded-sm w-3/4"></div>
-              <div class="h-3 bg-gray-200 rounded-sm w-1/2"></div>
+          <div v-else-if="popularPosts.length === 0" class="text-sm text-gray-400">
+            No popular posts yet.
+          </div>
+
+          <div v-else class="space-y-5">
+            <div
+              v-for="(post, index) in popularPosts"
+              :key="post.id"
+              class="flex gap-3 group"
+            >
+              <span class="text-2xl font-black text-gray-100 w-7 flex-shrink-0 leading-none mt-0.5 select-none">
+                0{{ index + 1 }}
+              </span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5 mb-1">
+                  <div class="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500 flex-shrink-0">
+                    {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
+                  </div>
+                  <span class="text-xs text-gray-500 truncate">{{ post.user?.name }}</span>
+                </div>
+                <NuxtLink :to="`/posts/${post.slug}`">
+                  <h4 class="text-sm font-bold text-gray-900 group-hover:text-gray-600 transition-colors line-clamp-2 leading-snug">
+                    {{ post.title }}
+                  </h4>
+                </NuxtLink>
+                <p class="text-xs text-gray-400 mt-1">{{ formatDate(post.publishedAt) }} &bull; {{ post.viewsCount }} views</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div v-else-if="popularPosts.length === 0" class="text-gray-500 py-4">No popular posts yet.</div>
-        <div v-else class="divide-y divide-gray-100">
-          <div v-for="(post, index) in popularPosts" :key="post.id" class="flex gap-4 py-4 first:pt-0 last:pb-0 group">
-            <span class="text-3xl font-black text-gray-200 w-8 text-center flex-shrink-0 align-top">{{ index + 1 }}</span>
-            <div class="flex-1 min-w-0">
-              <span class="text-xs text-blue-600 font-semibold uppercase">{{ post.type }}</span>
-              <h3 class="font-bold text-gray-900 group-hover:text-blue-600 transition-colors mt-0.5">
-                <NuxtLink :to="`/posts/${post.slug}`">{{ post.title }}</NuxtLink>
-              </h3>
-              <p class="text-xs text-gray-400 mt-1">{{ formatDate(post.publishedAt) }} &bull; {{ post.viewsCount }} views</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Sidebar Promo -->
-      <section class="bg-slate-900 text-white rounded-3xl p-8 flex flex-col justify-between aspect-square lg:aspect-auto">
-        <div>
-          <span class="px-2.5 py-1 bg-blue-600 text-xs font-semibold rounded-full uppercase tracking-wider">Curated Playlists</span>
-          <h2 class="text-2xl font-bold mt-4 leading-tight">Master Topics with Curated Playlists</h2>
-          <p class="text-slate-400 text-sm mt-3">
-            Accelerate your learning path. Playlists guide you step-by-step from core concepts to advanced production setups.
+        <!-- Series CTA -->
+        <section class="border border-gray-100 rounded-xl p-5">
+          <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Curated Series</p>
+          <h3 class="mt-2 text-base font-bold text-gray-900 leading-snug">
+            Master topics with guided reading paths
+          </h3>
+          <p class="mt-2 text-sm text-gray-500">
+            Step-by-step series guide you from core concepts to advanced production setups.
           </p>
-        </div>
-        <NuxtLink to="/playlists" class="mt-8 px-6 py-3 bg-white text-slate-900 font-semibold rounded-xl text-center hover:bg-slate-100 transition-colors block">
-          Browse Playlists
-        </NuxtLink>
-      </section>
+          <NuxtLink
+            to="/playlists"
+            class="mt-4 inline-block text-sm font-medium text-gray-900 hover:underline"
+          >
+            Browse all series &rarr;
+          </NuxtLink>
+        </section>
+      </aside>
     </div>
   </div>
 </template>
@@ -149,14 +205,12 @@ interface Post {
   user?: Author;
 }
 
-// Fetch recent posts
 const { data: recentRes, pending } = await useAsyncData<{ data: Post[] }>(
   'recentPosts',
   () => $fetch(`${apiBase}/posts/recent`)
 );
 const recentPosts = computed(() => recentRes.value?.data || []);
 
-// Fetch popular posts
 const { data: popularRes, pending: pendingPopular } = await useAsyncData<{ data: Post[] }>(
   'popularPosts',
   () => $fetch(`${apiBase}/posts/popular`)
@@ -170,5 +224,11 @@ function formatDate(dateStr: string): string {
     month: 'short',
     day: 'numeric',
   });
+}
+
+function readingTime(text?: string | null): string {
+  if (!text) return '1 min read';
+  const mins = Math.max(1, Math.round(text.trim().split(/\s+/).length / 200));
+  return `${mins} min read`;
 }
 </script>

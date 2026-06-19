@@ -1,10 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Charter:ital,wght@0,400;0,700;1,400&display=swap');
 @import 'tailwindcss';
 
 @variant dark (&:where(.dark, .dark *));
 
 /* Custom Global Styles */
 body {
-  @apply bg-gray-50 text-gray-900 transition-colors duration-200;
+  @apply bg-white text-gray-900 transition-colors duration-200;
 }
 
 .dark body {
@@ -58,4 +59,123 @@ body {
 
 .dark .text-gray-400 {
   @apply text-slate-500;
+}
+
+/* Reading progress bar */
+.reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  z-index: 100;
+  background: #1a1a1a;
+  pointer-events: none;
+  transition: width 0.1s linear;
+}
+
+.dark .reading-progress-bar {
+  background: #e6e6e6;
+}
+
+/* Medium-style article prose */
+.prose-medium {
+  font-family: 'Charter', Georgia, 'Times New Roman', serif;
+  font-size: 21px;
+  line-height: 1.58;
+  letter-spacing: -0.003em;
+  color: rgba(41, 41, 41, 1);
+}
+
+.prose-medium p {
+  margin-bottom: 2em;
+}
+
+.prose-medium h1,
+.prose-medium h2,
+.prose-medium h3 {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  color: rgba(26, 26, 26, 1);
+  margin-top: 1.72em;
+  margin-bottom: 0.28em;
+}
+
+.prose-medium h2 {
+  font-size: 30px;
+  line-height: 1.22;
+}
+
+.prose-medium h3 {
+  font-size: 24px;
+  line-height: 1.25;
+}
+
+.prose-medium strong {
+  font-weight: 700;
+}
+
+.prose-medium em {
+  font-style: italic;
+}
+
+.prose-medium a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.prose-medium code {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.dark .prose-medium {
+  color: rgba(230, 230, 230, 1);
+}
+
+.dark .prose-medium h1,
+.dark .prose-medium h2,
+.dark .prose-medium h3 {
+  color: rgba(242, 242, 242, 1);
+}
+
+.dark .prose-medium code {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Topic pill active state */
+.topic-pill-active {
+  background: #1a1a1a;
+  color: #ffffff;
+  border-color: #1a1a1a;
+}
+
+.dark .topic-pill-active {
+  background: #e6e6e6;
+  color: #1a1a1a;
+  border-color: #e6e6e6;
+}
+
+/* Clap/like button animation */
+@keyframes clap-burst {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.clap-animate {
+  animation: clap-burst 0.25s ease-out;
+}
+
+/* Hide scrollbar for topic strip */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

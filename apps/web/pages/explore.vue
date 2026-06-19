@@ -1,70 +1,126 @@
 <template>
-  <div class="max-w-4xl mx-auto py-12 px-4">
-    <h1 class="text-3xl font-bold mb-6">Explore</h1>
+  <div class="max-w-3xl mx-auto px-6 py-10">
+    <h1 class="text-3xl font-bold text-gray-900 tracking-tight mb-6">Explore</h1>
 
     <!-- Search bar -->
-    <div class="flex gap-3 mb-8">
+    <div class="relative mb-5">
+      <svg class="absolute left-4 top-3.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
       <input
         v-model="searchQuery"
         type="text"
-        placeholder="Search posts..."
-        class="flex-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+        placeholder="Search stories..."
+        class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:bg-white text-base transition-colors"
         @input="onSearch"
       />
-      <select v-model="filterType" @change="onSearch" class="px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <option value="">All Types</option>
-        <option value="article">Article</option>
-        <option value="carousel">Carousel</option>
-        <option value="video">Video</option>
-        <option value="stack_gallery">Gallery</option>
-      </select>
+    </div>
+
+    <!-- Type filter chips -->
+    <div class="flex gap-2 flex-wrap mb-8">
+      <button
+        v-for="t in types"
+        :key="t.value"
+        @click="setType(t.value)"
+        :class="filterType === t.value ? 'topic-pill-active' : 'border-gray-200 text-gray-600 hover:border-gray-500 hover:text-gray-900'"
+        class="px-4 py-1.5 rounded-full border text-sm font-medium transition-colors"
+      >
+        {{ t.label }}
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div v-if="loading" class="divide-y divide-gray-100">
+      <div v-for="i in 5" :key="i" class="py-8 first:pt-0 animate-pulse">
+        <div class="flex gap-4 items-start justify-between">
+          <div class="flex-1 space-y-3">
+            <div class="flex items-center gap-2">
+              <div class="w-6 h-6 rounded-full bg-gray-200"></div>
+              <div class="h-3 bg-gray-200 rounded w-24"></div>
+            </div>
+            <div class="h-5 bg-gray-200 rounded w-3/4"></div>
+            <div class="h-3 bg-gray-200 rounded w-full"></div>
+          </div>
+          <div class="w-20 h-20 bg-gray-200 rounded flex-shrink-0 ml-4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty -->
+    <div v-else-if="posts.length === 0" class="text-center py-16 text-gray-400">
+      <p v-if="searchQuery" class="text-base">No results for "<strong class="text-gray-600">{{ searchQuery }}</strong>"</p>
+      <p v-else class="text-base">No stories yet. Check back soon.</p>
     </div>
 
     <!-- Results -->
-    <div v-if="loading" class="text-center py-12 text-gray-500">Loading...</div>
-
-    <div v-else-if="posts.length === 0" class="text-center py-12 text-gray-500">
-      <p v-if="searchQuery">No results for "{{ searchQuery }}"</p>
-      <p v-else>No posts yet</p>
-    </div>
-
-    <div v-else class="space-y-6">
-      <NuxtLink
+    <div v-else class="divide-y divide-gray-100">
+      <article
         v-for="post in posts"
         :key="post.id"
-        :to="`/posts/${post.slug}`"
-        class="block bg-white rounded-xl border p-6 hover:shadow-md transition-shadow"
+        class="py-8 first:pt-0 group"
       >
-        <div class="flex gap-4">
-          <div v-if="post.cover" class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
-            <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
-          </div>
+        <div class="flex items-start gap-4 justify-between">
           <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 mb-1">
-              <span class="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600">{{ post.type }}</span>
-              <span class="text-xs text-gray-400">{{ formatDate(post.publishedAt) }}</span>
+            <!-- Author row -->
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 flex-shrink-0">
+                {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
+              </div>
+              <span class="text-sm text-gray-700 font-medium truncate">{{ post.user?.name }}</span>
+              <span class="text-gray-300 text-sm">·</span>
+              <span class="text-sm text-gray-400 flex-shrink-0">{{ formatDate(post.publishedAt) }}</span>
             </div>
-            <h2 class="text-lg font-semibold truncate">{{ post.title }}</h2>
-            <p v-if="post.subtitle" class="text-gray-500 text-sm mt-1 line-clamp-2">{{ post.subtitle }}</p>
-            <div class="flex items-center gap-3 mt-2 text-sm text-gray-400">
-              <span>{{ post.user?.name }}</span>
+
+            <!-- Title + subtitle -->
+            <NuxtLink :to="`/posts/${post.slug}`" class="block">
+              <h2 class="text-xl font-bold text-gray-900 leading-snug group-hover:text-gray-600 transition-colors line-clamp-2">
+                {{ post.title }}
+              </h2>
+              <p v-if="post.subtitle" class="mt-1 text-gray-500 text-sm line-clamp-2">
+                {{ post.subtitle }}
+              </p>
+            </NuxtLink>
+
+            <!-- Meta -->
+            <div class="flex items-center gap-3 mt-3 text-xs text-gray-400">
+              <span class="px-2 py-0.5 rounded-full border border-gray-200 text-gray-500 capitalize">
+                {{ post.type }}
+              </span>
+              <span>{{ readingTime(post.subtitle ?? post.title) }}</span>
               <span>{{ post.viewsCount }} views</span>
               <span>{{ post.likesCount }} likes</span>
             </div>
           </div>
+
+          <!-- Thumbnail -->
+          <NuxtLink v-if="post.cover" :to="`/posts/${post.slug}`" class="w-20 h-20 md:w-28 md:h-28 rounded-sm overflow-hidden flex-shrink-0 ml-4 bg-gray-100">
+            <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
+          </NuxtLink>
         </div>
-      </NuxtLink>
+      </article>
     </div>
 
     <!-- Pagination -->
-    <div v-if="meta.totalPages > 1" class="flex justify-center gap-2 mt-8">
+    <div v-if="meta.totalPages > 1" class="flex justify-between items-center mt-10 pt-6 border-t border-gray-100 text-sm">
       <button
-        v-for="p in meta.totalPages"
-        :key="p"
-        @click="fetchPosts(p)"
-        :class="p === meta.page ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
-        class="px-3 py-1 rounded text-sm transition-colors"
-      >{{ p }}</button>
+        v-if="meta.page > 1"
+        @click="fetchPosts(meta.page - 1)"
+        class="text-gray-600 hover:text-gray-900 transition-colors"
+      >
+        &larr; Previous
+      </button>
+      <span v-else class="text-gray-300">&larr; Previous</span>
+
+      <span class="text-gray-400 text-xs">Page {{ meta.page }} of {{ meta.totalPages }}</span>
+
+      <button
+        v-if="meta.page < meta.totalPages"
+        @click="fetchPosts(meta.page + 1)"
+        class="text-gray-600 hover:text-gray-900 transition-colors"
+      >
+        Next &rarr;
+      </button>
+      <span v-else class="text-gray-300">Next &rarr;</span>
     </div>
   </div>
 </template>
@@ -103,6 +159,14 @@ const posts = ref<SearchResult[]>([]);
 const meta = ref<SearchMeta>({ page: 1, limit: 10, total: 0, totalPages: 0 });
 const loading = ref(false);
 
+const types = [
+  { value: '', label: 'All' },
+  { value: 'article', label: 'Articles' },
+  { value: 'carousel', label: 'Carousels' },
+  { value: 'video', label: 'Videos' },
+  { value: 'stack_gallery', label: 'Galleries' },
+];
+
 let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
 onMounted(() => fetchPosts());
@@ -110,6 +174,11 @@ onMounted(() => fetchPosts());
 function onSearch() {
   if (searchTimeout) clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => fetchPosts(), 300);
+}
+
+function setType(val: string) {
+  filterType.value = val;
+  fetchPosts();
 }
 
 async function fetchPosts(page = 1) {
@@ -132,5 +201,11 @@ async function fetchPosts(page = 1) {
 
 function formatDate(date: string): string {
   return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function readingTime(text?: string | null): string {
+  if (!text) return '1 min read';
+  const mins = Math.max(1, Math.round(text.trim().split(/\s+/).length / 200));
+  return `${mins} min read`;
 }
 </script>

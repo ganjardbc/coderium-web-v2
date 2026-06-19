@@ -1,80 +1,169 @@
 <template>
-  <div class="max-w-3xl mx-auto py-12 px-4">
+  <!-- Reading progress bar -->
+  <div
+    class="reading-progress-bar"
+    :style="{ width: readingProgress + '%' }"
+    aria-hidden="true"
+  />
+
+  <div class="max-w-2xl mx-auto px-6 py-12">
+    <!-- Loading skeleton -->
     <div v-if="pending" class="animate-pulse space-y-6">
-      <div class="h-6 bg-gray-200 rounded-sm w-1/4"></div>
-      <div class="h-10 bg-gray-200 rounded-sm w-3/4"></div>
-      <div class="h-4 bg-gray-200 rounded-sm w-1/2"></div>
-      <div class="h-64 bg-gray-200 rounded-2xl w-full"></div>
+      <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+      <div class="h-8 bg-gray-200 rounded w-3/4"></div>
+      <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+      <div class="h-64 bg-gray-200 rounded-xl w-full"></div>
     </div>
 
-    <div v-else-if="error" class="text-center py-20 bg-gray-50 rounded-2xl border">
+    <!-- Not found -->
+    <div v-else-if="error" class="text-center py-20">
       <h1 class="text-2xl font-bold text-gray-800">Story Not Found</h1>
       <p class="text-gray-500 mt-2">The article you are looking for might have been removed or unpublished.</p>
-      <NuxtLink to="/" class="mt-6 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700">
+      <NuxtLink to="/" class="mt-6 inline-block px-5 py-2 rounded-full bg-gray-900 text-white text-sm font-medium hover:bg-gray-700 transition-colors">
         Back Home
       </NuxtLink>
     </div>
 
-    <article v-else-if="post" class="space-y-8">
-      <!-- Back Link -->
-      <NuxtLink to="/explore" class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-blue-600 transition-colors">
+    <article v-else-if="post">
+      <!-- Back link -->
+      <NuxtLink to="/explore" class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors mb-8">
         &larr; Back to Explore
       </NuxtLink>
 
-      <!-- Post Header -->
-      <header class="space-y-4">
-        <div class="flex items-center gap-2">
-          <span class="px-2.5 py-0.5 text-xs font-semibold uppercase rounded-full bg-blue-50 text-blue-700">
-            {{ post.type }}
-          </span>
-          <span class="text-xs text-gray-400">Published {{ formatDate(post.publishedAt) }}</span>
+      <!-- Post header -->
+      <header class="space-y-4 mb-8">
+        <!-- Author row -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-600 flex-shrink-0">
+            {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-900">{{ post.user?.name }}</p>
+            <p class="text-xs text-gray-400">
+              {{ formatDate(post.publishedAt) }} &bull; {{ readingTimeDisplay }}
+            </p>
+          </div>
         </div>
-        <h1 class="text-4xl font-black text-gray-900 leading-tight">{{ post.title }}</h1>
-        <p v-if="post.subtitle" class="text-xl text-gray-500 font-medium leading-relaxed">{{ post.subtitle }}</p>
 
-        <!-- Author / Views -->
-        <div class="flex items-center justify-between border-y border-gray-100 py-4 mt-6">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-              {{ post.user?.name?.charAt(0).toUpperCase() }}
-            </div>
-            <div>
-              <p class="text-sm font-semibold text-gray-900">{{ post.user?.name }}</p>
-              <p class="text-xs text-gray-400">Author</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-4 text-sm text-gray-500">
+        <!-- Title & subtitle -->
+        <h1 class="text-4xl font-bold text-gray-900 leading-tight tracking-tight">{{ post.title }}</h1>
+        <p v-if="post.subtitle" class="text-xl text-gray-500 leading-relaxed">{{ post.subtitle }}</p>
+
+        <!-- Stats row -->
+        <div class="flex items-center justify-between border-t border-gray-100 pt-4">
+          <div class="flex items-center gap-3 text-sm text-gray-400">
+            <span class="px-2 py-0.5 rounded-full border border-gray-200 text-gray-500 text-xs capitalize">{{ post.type }}</span>
             <span>{{ post.viewsCount }} views</span>
-            <button @click="toggleLike" :disabled="likeLoading" class="inline-flex items-center gap-1 hover:text-red-500 transition-colors" :class="{ 'text-red-500': liked }">
-              <span>❤️</span>
-              <span>{{ post.likesCount }}</span>
-            </button>
           </div>
+          <!-- Mobile like button -->
+          <button
+            @click="toggleLike"
+            :disabled="likeLoading"
+            class="lg:hidden inline-flex items-center gap-1.5 text-sm transition-colors"
+            :class="[liked ? 'text-red-500' : 'text-gray-400 hover:text-red-400', { 'clap-animate': liked }]"
+          >
+            <span class="text-base">♥</span>
+            <span>{{ post.likesCount }}</span>
+          </button>
         </div>
       </header>
 
       <!-- Cover Image -->
-      <div v-if="post.cover" class="rounded-3xl overflow-hidden aspect-video bg-gray-100 border">
+      <div v-if="post.cover" class="rounded-lg overflow-hidden aspect-video bg-gray-100 mb-10 border border-gray-100">
         <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
       </div>
 
       <!-- Content -->
-      <section v-if="post.content" class="prose max-w-none text-gray-800 leading-relaxed space-y-6">
+      <section v-if="post.content" class="prose-medium">
         <div v-html="renderMarkdown(post.content)"></div>
       </section>
 
       <!-- Tags -->
-      <div v-if="post.tags && post.tags.length > 0" class="flex flex-wrap gap-2 pt-6 border-t border-gray-100">
-        <span v-for="tag in post.tags" :key="tag" class="px-2.5 py-1 text-xs rounded-lg bg-gray-50 border text-gray-600">
+      <div v-if="post.tags && post.tags.length > 0" class="flex flex-wrap gap-2 pt-8 mt-8 border-t border-gray-100">
+        <span
+          v-for="tag in post.tags"
+          :key="tag"
+          class="px-3 py-1 text-xs rounded-full border border-gray-200 text-gray-500 hover:border-gray-400 transition-colors"
+        >
           #{{ tag }}
         </span>
       </div>
+
+      <!-- Mobile like button (below content) -->
+      <div class="lg:hidden flex items-center justify-center gap-3 mt-10 py-6 border-t border-gray-100">
+        <button
+          @click="toggleLike"
+          :disabled="likeLoading"
+          class="flex flex-col items-center gap-1 group"
+        >
+          <div
+            class="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center transition-colors"
+            :class="liked ? 'border-red-300 bg-red-50' : 'group-hover:border-gray-400'"
+          >
+            <span class="text-xl" :class="liked ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-700'">♥</span>
+          </div>
+          <span class="text-xs text-gray-500">{{ post.likesCount }}</span>
+        </button>
+      </div>
+
+      <!-- Written by -->
+      <div class="mt-12 pt-8 border-t border-gray-100">
+        <div class="flex items-start gap-5">
+          <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-500 flex-shrink-0">
+            {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
+          </div>
+          <div>
+            <p class="text-xs text-gray-400 uppercase tracking-wider font-medium">Written by</p>
+            <p class="text-lg font-bold text-gray-900 mt-0.5">{{ post.user?.name }}</p>
+            <NuxtLink
+              to="/explore"
+              class="mt-2 inline-block text-sm text-gray-500 hover:text-gray-900 transition-colors"
+            >
+              More stories &rarr;
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
+
+      <!-- More from Coderium -->
+      <div class="mt-10 pt-8 border-t border-gray-100 text-center">
+        <p class="text-sm text-gray-400 mb-3">Enjoyed this story?</p>
+        <NuxtLink
+          to="/explore"
+          class="inline-block px-5 py-2 rounded-full border border-gray-300 text-sm font-medium text-gray-700 hover:border-gray-500 hover:text-gray-900 transition-colors"
+        >
+          Explore all stories
+        </NuxtLink>
+      </div>
     </article>
+  </div>
+
+  <!-- Floating clap button (desktop only) -->
+  <div
+    v-if="post && !pending && !error"
+    class="hidden lg:flex fixed left-8 top-1/2 -translate-y-1/2 flex-col items-center gap-2 z-40"
+  >
+    <button
+      @click="toggleLike"
+      :disabled="likeLoading"
+      class="w-10 h-10 rounded-full border flex items-center justify-center transition-colors group"
+      :class="[
+        liked ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-400',
+        { 'clap-animate': liked }
+      ]"
+      :aria-label="liked ? 'Unlike' : 'Like'"
+    >
+      <span
+        class="text-lg transition-colors"
+        :class="liked ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-700'"
+      >♥</span>
+    </button>
+    <span class="text-xs text-gray-400">{{ post?.likesCount }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 definePageMeta({
   layout: 'default',
@@ -107,14 +196,12 @@ interface PostData {
   user?: Author;
 }
 
-// Fetch post detail
 const { data: postRes, pending, error } = await useAsyncData<{ data: PostData }>(
   `post-${slug}`,
   () => $fetch(`${apiBase}/posts/${slug}`)
 );
 const post = computed(() => postRes.value?.data);
 
-// Setup SEO
 if (postRes.value?.data) {
   const p = postRes.value.data;
   useHead({
@@ -122,7 +209,6 @@ if (postRes.value?.data) {
     meta: [
       { name: 'description', content: p.metaDescription || p.subtitle || '' },
       { name: 'keywords', content: p.metaKeywords || (p.tags || []).join(', ') },
-      // Open Graph
       { property: 'og:title', content: p.title },
       { property: 'og:description', content: p.metaDescription || p.subtitle || '' },
       { property: 'og:image', content: p.cover || '' },
@@ -131,14 +217,35 @@ if (postRes.value?.data) {
   });
 }
 
-// Engagement tracking
-const liked = ref(false);
-const likeLoading = ref(false);
+// Reading progress
+const readingProgress = ref(0);
+
+function updateProgress() {
+  const el = document.documentElement;
+  const scrollTop = el.scrollTop || document.body.scrollTop;
+  const scrollHeight = el.scrollHeight - el.clientHeight;
+  readingProgress.value = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+}
 
 onMounted(() => {
-  // Track view on client mount
+  window.addEventListener('scroll', updateProgress, { passive: true });
   $fetch(`${apiBase}/posts/${slug}/view`, { method: 'POST' }).catch(() => {});
 });
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', updateProgress);
+});
+
+// Reading time
+const readingTimeDisplay = computed(() => {
+  const text = post.value?.content ?? post.value?.subtitle ?? post.value?.title ?? '';
+  const mins = Math.max(1, Math.round(text.trim().split(/\s+/).length / 200));
+  return `${mins} min read`;
+});
+
+// Like/clap
+const liked = ref(false);
+const likeLoading = ref(false);
 
 async function toggleLike() {
   if (likeLoading.value || !post.value) return;
@@ -167,14 +274,13 @@ function formatDate(dateStr?: string): string {
   });
 }
 
-// Very simple raw text to HTML converter (since we don't have markdown parser library installed)
 function renderMarkdown(content: string): string {
   return content
     .replace(/\n\n/g, '</p><p class="mt-4">')
     .replace(/\n/g, '<br />')
-    .replace(/^#\s+(.+)$/gm, '<h1 class="text-3xl font-black text-gray-900 mt-8 mb-4">$1</h1>')
-    .replace(/^##\s+(.+)$/gm, '<h2 class="text-2xl font-bold text-gray-900 mt-6 mb-3">$1</h2>')
-    .replace(/^###\s+(.+)$/gm, '<h3 class="text-xl font-semibold text-gray-900 mt-4 mb-2">$1</h3>')
+    .replace(/^#\s+(.+)$/gm, '<h1 class="text-3xl font-bold mt-8 mb-4">$1</h1>')
+    .replace(/^##\s+(.+)$/gm, '<h2 class="text-2xl font-bold mt-6 mb-3">$1</h2>')
+    .replace(/^###\s+(.+)$/gm, '<h3 class="text-xl font-semibold mt-4 mb-2">$1</h3>')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>');
 }
