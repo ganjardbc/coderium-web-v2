@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex">
+  <div class="min-h-screen bg-gray-50 dark:bg-dark text-gray-900 dark:text-gray-100 flex">
     <ConfirmDialog />
     <Toast />
 
@@ -13,7 +13,7 @@
     <!-- Sidebar -->
     <aside
       :class="[
-        'fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 flex flex-col transition-transform duration-300 md:translate-x-0 md:static md:h-screen md:flex-shrink-0',
+        'fixed inset-y-0 left-0 top-0 z-50 w-64 bg-white dark:bg-dark border-r border-gray-200 dark:border-gray-700 flex flex-col transition-transform duration-300 md:translate-x-0 md:sticky md:h-screen md:flex-shrink-0',
         isMobileOpen ? 'translate-x-0' : '-translate-x-full'
       ]"
     >
@@ -152,7 +152,7 @@
       </nav>
 
       <!-- User Info & Logout -->
-      <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3 bg-gray-50 dark:bg-gray-800">
+      <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3 bg-gray-50 dark:bg-dark">
         <div class="flex items-center gap-3 overflow-hidden">
           <div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
             {{ userInitial }}
@@ -177,7 +177,7 @@
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col min-w-0">
       <!-- Header / Top Bar -->
-      <header class="h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 sticky top-0 z-30">
+      <header class="h-16 bg-white dark:bg-dark border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 sticky top-0 z-30">
         <div class="flex items-center gap-4">
           <!-- Mobile Menu Trigger -->
           <button

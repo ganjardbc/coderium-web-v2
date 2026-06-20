@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-slate-950 px-4 py-12">
+  <div class="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-dark px-4 py-12">
     <div class="w-full max-w-md">
       <Card class="border-0 dark:border-0 shadow-sm">
         <template #content>
