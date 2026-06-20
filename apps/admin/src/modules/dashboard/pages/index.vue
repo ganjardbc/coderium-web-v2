@@ -8,7 +8,7 @@
 
     <template v-else>
       <!-- Stats -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
         <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
           <template #content>
             <p class="text-sm text-gray-500 dark:text-gray-400">Total Posts</p>
