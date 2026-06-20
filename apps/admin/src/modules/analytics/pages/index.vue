@@ -2,85 +2,105 @@
   <div class="p-6">
     <h1 class="text-2xl font-bold mb-6">Analytics Dashboard</h1>
 
-    <div v-if="loading" class="text-center py-12 text-gray-500">Loading...</div>
+    <div v-if="loading" class="flex justify-center py-16">
+      <ProgressSpinner />
+    </div>
 
     <template v-else>
-      <!-- Stats Grid -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div class="bg-white rounded-xl border p-5">
-          <p class="text-sm text-gray-500">Total Posts</p>
-          <p class="text-2xl font-bold mt-1">{{ overview.totalPosts }}</p>
-          <p class="text-xs text-green-600 mt-1">{{ overview.publishedPosts }} published</p>
-        </div>
-        <div class="bg-white rounded-xl border p-5">
-          <p class="text-sm text-gray-500">Total Views</p>
-          <p class="text-2xl font-bold mt-1">{{ formatNumber(overview.totalViews) }}</p>
-        </div>
-        <div class="bg-white rounded-xl border p-5">
-          <p class="text-sm text-gray-500">Total Likes</p>
-          <p class="text-2xl font-bold mt-1">{{ formatNumber(overview.totalLikes) }}</p>
-        </div>
-        <div class="bg-white rounded-xl border p-5">
-          <p class="text-sm text-gray-500">Media & Playlists</p>
-          <p class="text-2xl font-bold mt-1">{{ overview.totalMedia }} / {{ overview.totalPlaylists }}</p>
-        </div>
+        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+          <template #content>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Total Posts</p>
+            <p class="text-2xl font-bold mt-1">{{ overview.totalPosts }}</p>
+            <p class="text-xs text-green-600 mt-1">{{ overview.publishedPosts }} published</p>
+          </template>
+        </Card>
+        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+          <template #content>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Total Views</p>
+            <p class="text-2xl font-bold mt-1">{{ formatNumber(overview.totalViews) }}</p>
+          </template>
+        </Card>
+        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+          <template #content>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Total Likes</p>
+            <p class="text-2xl font-bold mt-1">{{ formatNumber(overview.totalLikes) }}</p>
+          </template>
+        </Card>
+        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+          <template #content>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Media / Playlists</p>
+            <p class="text-2xl font-bold mt-1">{{ overview.totalMedia }} / {{ overview.totalPlaylists }}</p>
+          </template>
+        </Card>
       </div>
 
-      <!-- Top Posts -->
       <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white rounded-xl border p-5">
-          <h2 class="text-lg font-semibold mb-4">Top Posts by Views</h2>
-          <div v-if="topByViews.length === 0" class="text-gray-500 text-sm py-4 text-center">No data yet</div>
-          <div v-else class="space-y-3">
-            <div v-for="(post, i) in topByViews" :key="post.id" class="flex items-center gap-3">
-              <span class="text-gray-400 text-sm w-5">{{ i + 1 }}</span>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium truncate">{{ post.title }}</p>
-                <p class="text-xs text-gray-400">{{ post.type }}</p>
+        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+          <template #title>
+            <span class="text-base font-semibold">Top Posts by Views</span>
+          </template>
+          <template #content>
+            <div v-if="topByViews.length === 0" class="text-gray-400 dark:text-gray-500 text-sm py-4 text-center">No data yet</div>
+            <div v-else class="space-y-3">
+              <div v-for="(post, i) in topByViews" :key="post.id" class="flex items-center gap-3">
+                <span class="text-gray-400 text-sm font-mono w-6">{{ String(i + 1).padStart(2, '0') }}</span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium truncate">{{ post.title }}</p>
+                  <Tag :value="post.type" severity="secondary" class="capitalize text-xs mt-0.5" />
+                </div>
+                <span class="text-sm font-semibold text-blue-600">{{ formatNumber(post.viewsCount) }}</span>
               </div>
-              <span class="text-sm font-semibold text-blue-600">{{ formatNumber(post.viewsCount) }}</span>
             </div>
-          </div>
-        </div>
+          </template>
+        </Card>
 
-        <div class="bg-white rounded-xl border p-5">
-          <h2 class="text-lg font-semibold mb-4">Top Posts by Likes</h2>
-          <div v-if="topByLikes.length === 0" class="text-gray-500 text-sm py-4 text-center">No data yet</div>
-          <div v-else class="space-y-3">
-            <div v-for="(post, i) in topByLikes" :key="post.id" class="flex items-center gap-3">
-              <span class="text-gray-400 text-sm w-5">{{ i + 1 }}</span>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium truncate">{{ post.title }}</p>
-                <p class="text-xs text-gray-400">{{ post.type }}</p>
+        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+          <template #title>
+            <span class="text-base font-semibold">Top Posts by Likes</span>
+          </template>
+          <template #content>
+            <div v-if="topByLikes.length === 0" class="text-gray-400 dark:text-gray-500 text-sm py-4 text-center">No data yet</div>
+            <div v-else class="space-y-3">
+              <div v-for="(post, i) in topByLikes" :key="post.id" class="flex items-center gap-3">
+                <span class="text-gray-400 text-sm font-mono w-6">{{ String(i + 1).padStart(2, '0') }}</span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium truncate">{{ post.title }}</p>
+                  <Tag :value="post.type" severity="secondary" class="capitalize text-xs mt-0.5" />
+                </div>
+                <span class="text-sm font-semibold text-red-600">{{ formatNumber(post.likesCount) }}</span>
               </div>
-              <span class="text-sm font-semibold text-red-600">{{ formatNumber(post.likesCount) }}</span>
             </div>
-          </div>
-        </div>
+          </template>
+        </Card>
       </div>
 
-      <!-- Recent Posts -->
-      <div class="bg-white rounded-xl border p-5 mt-6">
-        <h2 class="text-lg font-semibold mb-4">Recent Posts</h2>
-        <div v-if="overview.recentPosts?.length === 0" class="text-gray-500 text-sm py-4 text-center">No posts yet</div>
-        <div v-else class="space-y-3">
-          <div v-for="post in overview.recentPosts" :key="post.id" class="flex items-center gap-3">
-            <span class="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600">{{ post.type }}</span>
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium truncate">{{ post.title }}</p>
+      <Card class="!shadow-none border border-gray-200 dark:border-gray-700 mt-6">
+        <template #title>
+          <span class="text-base font-semibold">Recent Posts</span>
+        </template>
+        <template #content>
+          <div v-if="!overview.recentPosts?.length" class="text-gray-400 dark:text-gray-500 text-sm py-4 text-center">No posts yet</div>
+          <div v-else class="space-y-3">
+            <div v-for="post in overview.recentPosts" :key="post.id" class="flex items-center gap-3">
+              <Tag :value="post.type" severity="secondary" class="capitalize text-xs shrink-0" />
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium truncate">{{ post.title }}</p>
+              </div>
+              <span class="text-xs text-gray-400 whitespace-nowrap">{{ formatNumber(post.viewsCount) }} views</span>
+              <span class="text-xs text-gray-400 whitespace-nowrap">{{ formatNumber(post.likesCount) }} likes</span>
+              <span class="text-xs text-gray-400 whitespace-nowrap">{{ post.createdAt ? new Date(post.createdAt).toLocaleDateString() : '' }}</span>
             </div>
-            <span class="text-xs text-gray-400">{{ post.viewsCount }} views</span>
-            <span class="text-xs text-gray-400">{{ post.likesCount }} likes</span>
-            <span class="text-xs text-gray-400">{{ post.createdAt ? new Date(post.createdAt).toLocaleDateString() : '' }}</span>
           </div>
-        </div>
-      </div>
+        </template>
+      </Card>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { Card, Tag, ProgressSpinner } from 'primevue';
 import api from '@/lib/api';
 
 interface PostItem {

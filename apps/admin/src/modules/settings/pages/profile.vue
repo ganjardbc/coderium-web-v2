@@ -2,44 +2,52 @@
   <div class="p-6 max-w-2xl mx-auto">
     <h1 class="text-2xl font-bold mb-6">Profile Settings</h1>
 
-    <form @submit.prevent="handleSave" class="space-y-6 bg-white rounded-xl border p-6">
-      <div class="flex items-center gap-4 mb-6">
-        <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl font-bold">
-          {{ (form.name || 'U').charAt(0).toUpperCase() }}
-        </div>
-        <div>
-          <p class="font-medium">{{ form.name || 'User' }}</p>
-          <p class="text-sm text-gray-500">{{ form.email }}</p>
-        </div>
-      </div>
+    <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+      <template #content>
+        <form @submit.prevent="handleSave" class="space-y-5">
+          <div class="flex items-center gap-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+            <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 text-2xl font-bold shrink-0">
+              {{ (form.name || 'U').charAt(0).toUpperCase() }}
+            </div>
+            <div>
+              <p class="font-medium">{{ form.name || 'User' }}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{{ form.email }}</p>
+            </div>
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">Name</label>
-        <input v-model="form.name" type="text" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Name</label>
+            <InputText v-model="form.name" required placeholder="Your name" class="w-full" />
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">Email</label>
-        <input v-model="form.email" type="email" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50" disabled />
-      </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Email</label>
+            <InputText v-model="form.email" type="email" disabled class="w-full opacity-60" />
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">Avatar URL</label>
-        <input v-model="form.avatarUrl" type="url" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Avatar URL</label>
+            <InputGroup>
+              <InputGroupAddon>
+                <i class="pi pi-image text-gray-400"></i>
+              </InputGroupAddon>
+              <InputText v-model="form.avatarUrl" type="url" placeholder="https://..." class="w-full" />
+            </InputGroup>
+          </div>
 
-      <p v-if="message" class="text-green-600 text-sm">{{ message }}</p>
-      <p v-if="error" class="text-red-500 text-sm">{{ error }}</p>
+          <Message v-if="message" severity="success" size="small" variant="simple">{{ message }}</Message>
+          <Message v-if="error" severity="error" size="small" variant="simple">{{ error }}</Message>
 
-      <button type="submit" :disabled="loading" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors">
-        {{ loading ? 'Saving...' : 'Save Changes' }}
-      </button>
-    </form>
+          <Button type="submit" label="Save Changes" icon="pi pi-check" :loading="loading" />
+        </form>
+      </template>
+    </Card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { InputText, InputGroup, InputGroupAddon, Button, Message, Card } from 'primevue';
 import api from '@/lib/api';
 
 const form = ref({ name: '', email: '', avatarUrl: '' });
@@ -62,10 +70,10 @@ async function handleSave() {
   loading.value = true;
   try {
     await api.put('/auth/me', { name: form.value.name, avatarUrl: form.value.avatarUrl });
-    message.value = 'Profile updated';
+    message.value = 'Profile updated successfully';
   } catch (err: unknown) {
     const axiosErr = err as { response?: { data?: { message?: string } } };
-    error.value = axiosErr.response?.data?.message || 'Failed to update';
+    error.value = axiosErr.response?.data?.message || 'Failed to update profile';
   } finally {
     loading.value = false;
   }

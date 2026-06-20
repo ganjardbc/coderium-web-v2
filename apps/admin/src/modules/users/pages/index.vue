@@ -4,50 +4,61 @@
       <h1 class="text-2xl font-bold">Users</h1>
     </div>
 
-    <div v-if="loading" class="text-center py-12 text-gray-500">Loading...</div>
-
-    <div v-else class="bg-white rounded-xl border overflow-hidden">
-      <table class="w-full">
-        <thead class="bg-gray-50 border-b">
-          <tr>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Name</th>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Email</th>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Status</th>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Roles</th>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Joined</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="user in users" :key="user.id" class="border-b last:border-0 hover:bg-gray-50">
-            <td class="px-4 py-3">
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-sm font-medium">
-                  {{ user.name.charAt(0).toUpperCase() }}
-                </div>
-                <span class="font-medium">{{ user.name }}</span>
-              </div>
-            </td>
-            <td class="px-4 py-3 text-sm text-gray-600">{{ user.email }}</td>
-            <td class="px-4 py-3">
-              <span :class="user.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'" class="px-2 py-1 text-xs rounded-full">
-                {{ user.status }}
-              </span>
-            </td>
-            <td class="px-4 py-3">
-              <span v-for="role in user.roles || []" :key="role.roleId" class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-700 mr-1">
-                {{ role.role?.name }}
-              </span>
-            </td>
-            <td class="px-4 py-3 text-sm text-gray-600">{{ new Date(user.createdAt).toLocaleDateString() }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div v-if="loading" class="flex justify-center py-16">
+      <ProgressSpinner />
     </div>
+
+    <DataTable
+      v-else
+      :value="users"
+      class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden"
+      stripedRows
+    >
+      <Column header="Name" class="min-w-48">
+        <template #body="{ data }">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 text-sm font-medium shrink-0">
+              {{ data.name.charAt(0).toUpperCase() }}
+            </div>
+            <span class="font-medium">{{ data.name }}</span>
+          </div>
+        </template>
+      </Column>
+      <Column field="email" header="Email" class="min-w-48" />
+      <Column header="Status" class="w-28">
+        <template #body="{ data }">
+          <Tag
+            :value="data.status"
+            :severity="data.status === 'active' ? 'success' : 'danger'"
+            class="capitalize"
+          />
+        </template>
+      </Column>
+      <Column header="Roles" class="min-w-32">
+        <template #body="{ data }">
+          <div class="flex flex-wrap gap-1">
+            <Tag
+              v-for="role in data.roles || []"
+              :key="role.roleId"
+              :value="role.role?.name"
+              severity="secondary"
+              class="capitalize"
+            />
+          </div>
+        </template>
+      </Column>
+      <Column header="Joined" class="w-36">
+        <template #body="{ data }">
+          {{ new Date(data.createdAt).toLocaleDateString() }}
+        </template>
+      </Column>
+    </DataTable>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { DataTable, Column, Tag, ProgressSpinner } from 'primevue';
 import api from '@/lib/api';
 
 interface UserItem {

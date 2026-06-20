@@ -79,7 +79,7 @@ export function initiate(app: App) {
       preset: customPreset,
       options: {
         prefix: 'p',
-        darkModeSelector: 'system',
+        darkModeSelector: '.dark',
         cssLayer: false,
       },
     },
