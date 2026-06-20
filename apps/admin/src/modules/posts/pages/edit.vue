@@ -2,65 +2,73 @@
   <div class="p-6 max-w-4xl mx-auto">
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">Edit Post</h1>
-      <router-link to="/posts" class="text-sm text-gray-500 hover:underline">Back to list</router-link>
+      <router-link to="/posts" class="text-sm text-gray-500 dark:text-gray-400 hover:underline">
+        &larr; Back to list
+      </router-link>
     </div>
 
-    <div v-if="pageLoading" class="text-center py-12 text-gray-500">Loading post data...</div>
+    <div v-if="pageLoading" class="flex justify-center py-16">
+      <ProgressSpinner />
+    </div>
 
-    <form v-else @submit.prevent="handleSubmit" class="space-y-6 bg-white rounded-xl border p-6">
-      <div>
-        <label class="block text-sm font-medium mb-1">Title</label>
-        <input v-model="form.title" type="text" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+    <Card v-else class="!shadow-none border border-gray-200 dark:border-gray-700">
+      <template #content>
+        <form @submit.prevent="handleSubmit" class="space-y-5">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Title</label>
+            <InputText v-model="form.title" required placeholder="Post title" class="w-full" />
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">Subtitle</label>
-        <input v-model="form.subtitle" type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Subtitle</label>
+            <InputText v-model="form.subtitle" placeholder="Short subtitle or summary" class="w-full" />
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">Type</label>
-        <select v-model="form.type" disabled class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50">
-          <option value="article">Article</option>
-          <option value="carousel">Carousel</option>
-          <option value="video">Video</option>
-          <option value="stack_gallery">Stack Gallery</option>
-        </select>
-      </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Type</label>
+            <Select
+              v-model="form.type"
+              :options="typeOptions"
+              option-label="label"
+              option-value="value"
+              disabled
+              class="w-full"
+            />
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">Content</label>
-        <textarea v-model="form.content" rows="12" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"></textarea>
-      </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Content</label>
+            <Textarea v-model="form.content" rows="12" class="w-full font-mono text-sm" placeholder="Write your content here..." />
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">Tags (comma separated)</label>
-        <input v-model="tagsInput" type="text" placeholder="vue, nuxt, frontend" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Tags</label>
+            <InputChips v-model="form.tags" placeholder="Add tag and press Enter" class="w-full" />
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">Cover Image URL</label>
-        <input v-model="form.cover" type="url" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Cover Image URL</label>
+            <InputGroup>
+              <InputGroupAddon>
+                <i class="pi pi-image text-gray-400"></i>
+              </InputGroupAddon>
+              <InputText v-model="form.cover" type="url" placeholder="https://..." class="w-full" />
+            </InputGroup>
+          </div>
 
-      <p v-if="error" class="text-red-500 text-sm">{{ error }}</p>
+          <Message v-if="error" severity="error" size="small" variant="simple">{{ error }}</Message>
 
-      <div class="flex gap-3">
-        <button
-          type="submit"
-          :disabled="loading"
-          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-        >
-          {{ loading ? 'Saving...' : 'Update' }}
-        </button>
-      </div>
-    </form>
+          <Button type="submit" label="Update Post" icon="pi pi-check" :loading="loading" />
+        </form>
+      </template>
+    </Card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { InputText, Textarea, Select, InputChips, InputGroup, InputGroupAddon, Button, Message, Card, ProgressSpinner } from 'primevue';
 import { usePostStore } from '@/modules/posts/stores/post.store';
 import api from '@/lib/api';
 
@@ -68,15 +76,22 @@ const router = useRouter();
 const route = useRoute();
 const postsStore = usePostStore();
 
+const typeOptions = [
+  { label: 'Article', value: 'article' },
+  { label: 'Carousel', value: 'carousel' },
+  { label: 'Video', value: 'video' },
+  { label: 'Stack Gallery', value: 'stack_gallery' },
+];
+
 const form = ref({
   title: '',
   subtitle: '',
   content: '',
   type: 'article',
   cover: '',
+  tags: [] as string[],
 });
 
-const tagsInput = ref('');
 const pageLoading = ref(true);
 const loading = ref(false);
 const error = ref('');
@@ -92,13 +107,12 @@ onMounted(async () => {
         content: post.content || '',
         type: post.type,
         cover: post.cover || '',
+        tags: post.tags || [],
       };
-      tagsInput.value = (post.tags || []).join(', ');
     } else {
       error.value = 'Post not found';
     }
   } catch (err) {
-    console.error('Failed to load post:', err);
     error.value = 'Failed to load post data';
   } finally {
     pageLoading.value = false;
@@ -108,11 +122,11 @@ onMounted(async () => {
 async function handleSubmit() {
   error.value = '';
   loading.value = true;
-
-  const tags = tagsInput.value.split(',').map(t => t.trim()).filter(Boolean);
-  const payload = { ...form.value, tags: tags.length ? tags : undefined };
-
   try {
+    const payload = {
+      ...form.value,
+      tags: form.value.tags.length ? form.value.tags : undefined,
+    };
     await postsStore.updatePost(route.params.slug as string, payload);
     router.push('/posts');
   } catch (err: unknown) {

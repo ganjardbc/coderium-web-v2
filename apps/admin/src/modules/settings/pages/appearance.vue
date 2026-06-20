@@ -2,43 +2,45 @@
   <div class="p-6 max-w-2xl mx-auto">
     <h1 class="text-2xl font-bold mb-6">Appearance</h1>
 
-    <div class="space-y-6 bg-white rounded-xl border p-6">
-      <div>
-        <label class="block text-sm font-medium mb-3">Theme</label>
-        <div class="flex gap-4">
-          <label class="flex items-center gap-3 px-4 py-3 border rounded-lg cursor-pointer hover:bg-gray-50" :class="theme === 'light' ? 'border-blue-500 bg-blue-50' : ''">
-            <input type="radio" v-model="theme" value="light" class="w-4 h-4 text-blue-600" />
-            <span>Light</span>
-          </label>
-          <label class="flex items-center gap-3 px-4 py-3 border rounded-lg cursor-pointer hover:bg-gray-50" :class="theme === 'dark' ? 'border-blue-500 bg-blue-50' : ''">
-            <input type="radio" v-model="theme" value="dark" class="w-4 h-4 text-blue-600" />
-            <span>Dark</span>
-          </label>
-          <label class="flex items-center gap-3 px-4 py-3 border rounded-lg cursor-pointer hover:bg-gray-50" :class="theme === 'system' ? 'border-blue-500 bg-blue-50' : ''">
-            <input type="radio" v-model="theme" value="system" class="w-4 h-4 text-blue-600" />
-            <span>System</span>
-          </label>
+    <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+      <template #content>
+        <div class="space-y-5">
+          <div class="flex flex-col gap-3">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Theme</label>
+            <SelectButton
+              v-model="theme"
+              :options="themeOptions"
+              option-label="label"
+              option-value="value"
+              @change="onThemeChange"
+            />
+          </div>
+
+          <Message severity="info" size="small" variant="simple">
+            Theme is applied immediately and persists across sessions.
+          </Message>
         </div>
-      </div>
-
-      <p v-if="message" class="text-green-600 text-sm">{{ message }}</p>
-
-      <button @click="saveTheme" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-        Save Preference
-      </button>
-    </div>
+      </template>
+    </Card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { SelectButton, Message, Card } from 'primevue';
+import { useTheme } from '@/composables/useTheme';
 
-const theme = ref(localStorage.getItem('theme') || 'system');
-const message = ref('');
+const { setTheme, currentTheme } = useTheme();
 
-function saveTheme() {
-  localStorage.setItem('theme', theme.value);
-  message.value = 'Theme preference saved';
-  setTimeout(() => message.value = '', 2000);
+const theme = ref(currentTheme());
+
+const themeOptions = [
+  { label: 'Light', value: 'light' },
+  { label: 'Dark', value: 'dark' },
+  { label: 'System', value: 'system' },
+];
+
+function onThemeChange() {
+  setTheme(theme.value);
 }
 </script>

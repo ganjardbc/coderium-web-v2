@@ -2,32 +2,37 @@
   <div class="p-6 max-w-2xl mx-auto">
     <h1 class="text-2xl font-bold mb-6">Change Password</h1>
 
-    <form @submit.prevent="handleSave" class="space-y-6 bg-white rounded-xl border p-6">
-      <div>
-        <label class="block text-sm font-medium mb-1">Current Password</label>
-        <input v-model="form.currentPassword" type="password" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">New Password</label>
-        <input v-model="form.newPassword" type="password" required minlength="8" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Confirm New Password</label>
-        <input v-model="form.confirmPassword" type="password" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+    <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+      <template #content>
+        <form @submit.prevent="handleSave" class="space-y-5">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Current Password</label>
+            <Password v-model="form.currentPassword" required toggleMask :feedback="false" class="w-full" inputClass="w-full" />
+          </div>
 
-      <p v-if="message" class="text-green-600 text-sm">{{ message }}</p>
-      <p v-if="error" class="text-red-500 text-sm">{{ error }}</p>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">New Password</label>
+            <Password v-model="form.newPassword" required toggleMask :feedback="false" class="w-full" inputClass="w-full" />
+          </div>
 
-      <button type="submit" :disabled="loading" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors">
-        {{ loading ? 'Updating...' : 'Update Password' }}
-      </button>
-    </form>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Confirm New Password</label>
+            <Password v-model="form.confirmPassword" required toggleMask :feedback="false" class="w-full" inputClass="w-full" />
+          </div>
+
+          <Message v-if="message" severity="success" size="small" variant="simple">{{ message }}</Message>
+          <Message v-if="error" severity="error" size="small" variant="simple">{{ error }}</Message>
+
+          <Button type="submit" label="Update Password" icon="pi pi-lock" :loading="loading" />
+        </form>
+      </template>
+    </Card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { Password, Button, Message, Card } from 'primevue';
 import api from '@/lib/api';
 
 const form = ref({ currentPassword: '', newPassword: '', confirmPassword: '' });
@@ -45,7 +50,7 @@ async function handleSave() {
   loading.value = true;
   try {
     await api.put('/auth/password', { currentPassword: form.value.currentPassword, newPassword: form.value.newPassword });
-    message.value = 'Password updated';
+    message.value = 'Password updated successfully';
     form.value = { currentPassword: '', newPassword: '', confirmPassword: '' };
   } catch (err: unknown) {
     const axiosErr = err as { response?: { data?: { message?: string } } };

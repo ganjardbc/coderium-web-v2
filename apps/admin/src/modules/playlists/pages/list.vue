@@ -1,69 +1,92 @@
 <template>
   <div class="p-6">
+    <Toast />
+    <ConfirmDialog />
+
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">Playlists</h1>
-      <router-link to="/playlists/create" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-        + New Playlist
+      <router-link v-slot="{ navigate }" to="/playlists/create" custom>
+        <Button label="New Playlist" icon="pi pi-plus" @click="navigate" />
       </router-link>
     </div>
 
-    <div v-if="loading" class="text-center py-12 text-gray-500">Loading...</div>
+    <div v-if="loading" class="flex justify-center py-16">
+      <ProgressSpinner />
+    </div>
 
-    <div v-else-if="playlists.length === 0" class="text-center py-12 text-gray-500">
+    <div v-else-if="playlists.length === 0" class="text-center py-16 text-gray-400 dark:text-gray-500">
       No playlists yet. Create your first playlist!
     </div>
 
-    <div v-else class="bg-white rounded-xl border overflow-hidden">
-      <table class="w-full">
-        <thead class="bg-gray-50 border-b">
-          <tr>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Title</th>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Status</th>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Posts</th>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Created</th>
-            <th class="text-right px-4 py-3 text-sm font-medium text-gray-600">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="pl in playlists" :key="pl.id" class="border-b last:border-0 hover:bg-gray-50">
-            <td class="px-4 py-3">
-              <router-link :to="`/playlists/${pl.slug}/edit`" class="text-blue-600 hover:underline font-medium">
-                {{ pl.title }}
-              </router-link>
-            </td>
-            <td class="px-4 py-3">
-              <span :class="pl.isPublished ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'" class="px-2 py-1 text-xs rounded-full">
-                {{ pl.isPublished ? 'Published' : 'Draft' }}
-              </span>
-            </td>
-            <td class="px-4 py-3 text-sm text-gray-600">{{ pl._count?.posts || 0 }}</td>
-            <td class="px-4 py-3 text-sm text-gray-600">{{ new Date(pl.createdAt).toLocaleDateString() }}</td>
-            <td class="px-4 py-3 text-right">
-              <div class="flex justify-end gap-2">
-                <router-link :to="`/playlists/${pl.slug}/posts`" class="text-xs text-purple-600 hover:underline">Manage Posts</router-link>
-                <router-link :to="`/playlists/${pl.slug}/edit`" class="text-xs text-blue-600 hover:underline">Edit</router-link>
-                <button @click="handleDelete(pl.slug)" class="text-xs text-red-600 hover:underline">Delete</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      v-else
+      :value="playlists"
+      class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden"
+      stripedRows
+    >
+      <Column field="title" header="Title" class="min-w-48">
+        <template #body="{ data }">
+          <router-link :to="`/playlists/${data.slug}/edit`" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+            {{ data.title }}
+          </router-link>
+        </template>
+      </Column>
+      <Column field="isPublished" header="Status" class="w-32">
+        <template #body="{ data }">
+          <Tag :value="data.isPublished ? 'Published' : 'Draft'" :severity="data.isPublished ? 'success' : 'warn'" />
+        </template>
+      </Column>
+      <Column header="Posts" class="w-24">
+        <template #body="{ data }">
+          {{ data._count?.posts || 0 }}
+        </template>
+      </Column>
+      <Column field="createdAt" header="Created" class="w-36">
+        <template #body="{ data }">
+          {{ new Date(data.createdAt).toLocaleDateString() }}
+        </template>
+      </Column>
+      <Column header="Actions" class="w-44">
+        <template #body="{ data }">
+          <div class="flex gap-1">
+            <router-link v-slot="{ navigate }" :to="`/playlists/${data.slug}/posts`" custom>
+              <Button icon="pi pi-list" size="small" text severity="help" title="Manage Posts" @click="navigate" />
+            </router-link>
+            <router-link v-slot="{ navigate }" :to="`/playlists/${data.slug}/edit`" custom>
+              <Button icon="pi pi-pencil" size="small" text severity="info" title="Edit" @click="navigate" />
+            </router-link>
+            <Button
+              icon="pi pi-trash"
+              size="small"
+              text
+              severity="danger"
+              title="Delete"
+              @click="handleDelete(data.slug, data.title)"
+            />
+          </div>
+        </template>
+      </Column>
+    </DataTable>
 
     <div v-if="meta.totalPages > 1" class="flex justify-center gap-2 mt-6">
-      <button
+      <Button
         v-for="p in meta.totalPages"
         :key="p"
+        :label="String(p)"
+        size="small"
+        :severity="p === meta.page ? 'primary' : 'secondary'"
+        :outlined="p !== meta.page"
         @click="fetchPlaylists(p, meta.limit)"
-        :class="p === meta.page ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
-        class="px-3 py-1 rounded text-sm transition-colors"
-      >{{ p }}</button>
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { DataTable, Column, Button, Tag, Toast, ConfirmDialog, ProgressSpinner } from 'primevue';
+import { useConfirm } from 'primevue/useconfirm';
+import { useToast } from 'primevue/usetoast';
 import api from '@/lib/api';
 
 interface PlaylistItem {
@@ -85,6 +108,8 @@ interface PlaylistMeta {
 const playlists = ref<PlaylistItem[]>([]);
 const meta = ref<PlaylistMeta>({ page: 1, limit: 10, total: 0, totalPages: 0 });
 const loading = ref(false);
+const confirm = useConfirm();
+const toast = useToast();
 
 onMounted(() => fetchPlaylists());
 
@@ -99,10 +124,18 @@ async function fetchPlaylists(page = 1, limit = 10) {
   }
 }
 
-async function handleDelete(slug: string) {
-  if (confirm('Are you sure you want to delete this playlist?')) {
-    await api.delete(`/admin/playlists/${slug}`);
-    await fetchPlaylists(meta.value.page, meta.value.limit);
-  }
+function handleDelete(slug: string, title: string) {
+  confirm.require({
+    message: `Delete "${title}"? This cannot be undone.`,
+    header: 'Delete Playlist',
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: { label: 'Cancel', severity: 'secondary', outlined: true },
+    acceptProps: { label: 'Delete', severity: 'danger' },
+    accept: async () => {
+      await api.delete(`/admin/playlists/${slug}`);
+      await fetchPlaylists(meta.value.page, meta.value.limit);
+      toast.add({ severity: 'success', summary: 'Deleted', detail: 'Playlist removed', life: 3000 });
+    },
+  });
 }
 </script>

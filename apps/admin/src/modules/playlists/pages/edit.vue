@@ -2,53 +2,61 @@
   <div class="p-6 max-w-2xl mx-auto">
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">Edit Playlist</h1>
-      <router-link to="/playlists" class="text-sm text-gray-500 hover:underline">Back to list</router-link>
+      <router-link to="/playlists" class="text-sm text-gray-500 dark:text-gray-400 hover:underline">
+        &larr; Back to list
+      </router-link>
     </div>
 
-    <div v-if="pageLoading" class="text-center py-12 text-gray-500">Loading playlist...</div>
+    <div v-if="pageLoading" class="flex justify-center py-16">
+      <ProgressSpinner />
+    </div>
 
-    <form v-else @submit.prevent="handleSubmit" class="space-y-6 bg-white rounded-xl border p-6">
-      <div>
-        <label class="block text-sm font-medium mb-1">Title</label>
-        <input v-model="form.title" type="text" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+    <Card v-else class="!shadow-none border border-gray-200 dark:border-gray-700">
+      <template #content>
+        <form @submit.prevent="handleSubmit" class="space-y-5">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Title</label>
+            <InputText v-model="form.title" required placeholder="Playlist title" class="w-full" />
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">Description</label>
-        <textarea v-model="form.description" rows="4" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-      </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Description</label>
+            <Textarea v-model="form.description" rows="4" placeholder="Describe what this playlist is about..." class="w-full" />
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">Cover Image URL</label>
-        <input v-model="form.cover" type="url" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Cover Image URL</label>
+            <InputGroup>
+              <InputGroupAddon>
+                <i class="pi pi-image text-gray-400"></i>
+              </InputGroupAddon>
+              <InputText v-model="form.cover" type="url" placeholder="https://..." class="w-full" />
+            </InputGroup>
+          </div>
 
-      <div class="flex items-center gap-2">
-        <input v-model="form.isPublished" type="checkbox" id="isPublished" class="w-4 h-4 text-blue-600" />
-        <label for="isPublished" class="text-sm font-medium">Published</label>
-      </div>
+          <div class="flex items-center gap-3">
+            <Checkbox v-model="form.isPublished" :binary="true" input-id="isPublished" />
+            <label for="isPublished" class="text-sm font-medium cursor-pointer">Published</label>
+          </div>
 
-      <p v-if="error" class="text-red-500 text-sm">{{ error }}</p>
+          <Message v-if="error" severity="error" size="small" variant="simple">{{ error }}</Message>
 
-      <div class="flex gap-3">
-        <button
-          type="submit"
-          :disabled="loading"
-          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-        >
-          {{ loading ? 'Saving...' : 'Update' }}
-        </button>
-        <router-link :to="`/playlists/${route.params.slug}/posts`" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-          Manage Posts
-        </router-link>
-      </div>
-    </form>
+          <div class="flex gap-3">
+            <Button type="submit" label="Update Playlist" icon="pi pi-check" :loading="loading" />
+            <router-link v-slot="{ navigate }" :to="`/playlists/${route.params.slug}/posts`" custom>
+              <Button label="Manage Posts" icon="pi pi-list" severity="help" @click="navigate" />
+            </router-link>
+          </div>
+        </form>
+      </template>
+    </Card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { InputText, Textarea, InputGroup, InputGroupAddon, Checkbox, Button, Message, Card, ProgressSpinner } from 'primevue';
 import api from '@/lib/api';
 
 const router = useRouter();
@@ -79,8 +87,7 @@ onMounted(async () => {
     } else {
       error.value = 'Playlist not found';
     }
-  } catch (err) {
-    console.error('Failed to load playlist:', err);
+  } catch {
     error.value = 'Failed to load playlist data';
   } finally {
     pageLoading.value = false;
@@ -90,7 +97,6 @@ onMounted(async () => {
 async function handleSubmit() {
   error.value = '';
   loading.value = true;
-
   try {
     await api.put(`/admin/playlists/${route.params.slug}`, form.value);
     router.push('/playlists');
