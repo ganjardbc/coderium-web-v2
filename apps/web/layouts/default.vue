@@ -19,24 +19,39 @@
               v-model="searchValue"
               type="text"
               placeholder="Search..."
-              class="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:bg-white transition-colors"
+              class="w-full pl-9 pr-8 py-1.5 text-sm border border-gray-300 rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-500 transition-all dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-slate-500/20 dark:focus:border-slate-500"
               @keydown.esc="showSearch = false"
-              @blur="showSearch = false"
+              @blur="onSearchBlur"
             />
-            <svg class="absolute left-3 top-2.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="absolute left-3 top-2.5 w-4 h-4 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
+            <button
+              @mousedown.prevent
+              @click="showSearch = false"
+              class="absolute right-2.5 top-2 p-0.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full text-gray-400 hover:text-gray-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors"
+              title="Close search"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
           </div>
           <button
             v-else
             @click="openSearch"
-            class="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors"
+            class="w-full flex items-center justify-between gap-2 px-3 py-1.5 text-sm text-gray-400 bg-gray-50 hover:bg-gray-100/80 border border-gray-200 rounded-full transition-all duration-200 dark:bg-slate-900/50 dark:border-slate-800/80 dark:text-slate-500 dark:hover:bg-slate-900"
             aria-label="Search"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-            <span class="hidden md:inline text-sm">Search</span>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+              <span class="text-xs">Search...</span>
+            </div>
+            <kbd class="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-medium text-gray-400 bg-white border border-gray-200 rounded-md shadow-xs dark:bg-slate-800 dark:border-slate-700 dark:text-slate-500">
+              {{ isMac ? '⌘K' : 'Ctrl+K' }}
+            </kbd>
           </button>
         </div>
 
@@ -104,11 +119,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 
 const isDark = ref(false);
 const showSearch = ref(false);
 const searchValue = ref('');
+const isMac = ref(false);
 
 const topics = [
   { label: 'For You', href: '/' },
@@ -119,7 +135,16 @@ const topics = [
   { label: 'Series', href: '/playlists' },
 ];
 
+function handleGlobalKeydown(e: KeyboardEvent) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    openSearch();
+  }
+}
+
 onMounted(() => {
+  isMac.value = /Mac|iPod|iPhone|iPad/.test(navigator.userAgent);
+
   const savedTheme = localStorage.getItem('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -130,6 +155,12 @@ onMounted(() => {
     isDark.value = false;
     document.documentElement.classList.remove('dark');
   }
+
+  window.addEventListener('keydown', handleGlobalKeydown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleGlobalKeydown);
 });
 
 function toggleDarkMode() {
@@ -147,5 +178,13 @@ async function openSearch() {
   showSearch.value = true;
   await nextTick();
   (document.querySelector('#header-search') as HTMLInputElement)?.focus();
+}
+
+function onSearchBlur() {
+  setTimeout(() => {
+    if (!searchValue.value) {
+      showSearch.value = false;
+    }
+  }, 150);
 }
 </script>

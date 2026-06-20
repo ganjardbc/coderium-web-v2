@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+@import "primeicons/primeicons.css";
+@import './variables-blue.css';
+@import './variables-dark.css';
+@import './themes.css';
+
+html {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
