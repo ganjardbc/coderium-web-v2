@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import api from '@/lib/api';
+import type { UploadedMedia } from '@/components/MediaUploader.vue';
 
 export interface Post {
   id: string;
@@ -11,6 +12,8 @@ export interface Post {
   type: string;
   tags?: string[];
   cover?: string | null;
+  metaDescription?: string | null;
+  metaKeywords?: string | null;
   isPublished: boolean;
   publishedAt?: string | null;
   viewsCount: number;
@@ -18,6 +21,7 @@ export interface Post {
   createdAt: string;
   updatedAt: string;
   user?: { id: string; name: string; avatarUrl?: string | null };
+  attachedMedia?: UploadedMedia[];
 }
 
 export interface PostMeta {
@@ -25,6 +29,19 @@ export interface PostMeta {
   limit: number;
   total: number;
   totalPages: number;
+}
+
+export interface CreatePostPayload {
+  title: string;
+  type: string;
+  subtitle?: string;
+  content?: string;
+  tags?: string[];
+  cover?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+  isPublished?: boolean;
+  mediaIds?: string[];
 }
 
 export const usePostStore = defineStore('posts', () => {
@@ -43,12 +60,17 @@ export const usePostStore = defineStore('posts', () => {
     }
   }
 
-  async function createPost(payload: { title: string; type: string; content?: string; subtitle?: string; tags?: string[]; cover?: string }) {
+  async function fetchPostBySlug(slug: string): Promise<Post> {
+    const { data } = await api.get(`/admin/posts/${slug}`);
+    return data.data as Post;
+  }
+
+  async function createPost(payload: CreatePostPayload) {
     const { data } = await api.post('/admin/posts', payload);
     return data.data as Post;
   }
 
-  async function updatePost(slug: string, payload: Partial<Post>) {
+  async function updatePost(slug: string, payload: Partial<CreatePostPayload>) {
     const { data } = await api.put(`/admin/posts/${slug}`, payload);
     return data.data as Post;
   }
@@ -67,5 +89,16 @@ export const usePostStore = defineStore('posts', () => {
     return data.data as Post;
   }
 
-  return { posts, meta, loading, fetchPosts, createPost, updatePost, deletePost, publishPost, unpublishPost };
+  return {
+    posts,
+    meta,
+    loading,
+    fetchPosts,
+    fetchPostBySlug,
+    createPost,
+    updatePost,
+    deletePost,
+    publishPost,
+    unpublishPost,
+  };
 });

@@ -80,14 +80,26 @@ body {
 /* Medium-style article prose */
 .prose-medium {
   font-family: 'Charter', Georgia, 'Times New Roman', serif;
-  font-size: 21px;
+  font-size: 18px;
   line-height: 1.58;
   letter-spacing: -0.003em;
   color: rgba(41, 41, 41, 1);
 }
 
+@media (min-width: 768px) {
+  .prose-medium {
+    font-size: 21px;
+  }
+}
+
 .prose-medium p {
-  margin-bottom: 2em;
+  margin-bottom: 1.5em;
+}
+
+@media (min-width: 768px) {
+  .prose-medium p {
+    margin-bottom: 2em;
+  }
 }
 
 .prose-medium h1,
@@ -97,18 +109,36 @@ body {
   font-weight: 700;
   letter-spacing: -0.022em;
   color: rgba(26, 26, 26, 1);
-  margin-top: 1.72em;
+  margin-top: 1.2em;
   margin-bottom: 0.28em;
 }
 
+@media (min-width: 768px) {
+  .prose-medium h1,
+  .prose-medium h2,
+  .prose-medium h3 {
+    margin-top: 1.72em;
+  }
+}
+
 .prose-medium h2 {
-  font-size: 30px;
+  font-size: 24px;
   line-height: 1.22;
 }
 
 .prose-medium h3 {
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.25;
+}
+
+@media (min-width: 768px) {
+  .prose-medium h2 {
+    font-size: 30px;
+  }
+  
+  .prose-medium h3 {
+    font-size: 24px;
+  }
 }
 
 .prose-medium strong {

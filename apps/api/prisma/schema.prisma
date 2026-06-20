@@ -126,7 +126,6 @@ model Post {
   playlists PlaylistPost[]
   views     PostView[]
   likes     PostLike[]
-  // mediables Mediable[]
 
   @@index([slug])
   @@index([type])

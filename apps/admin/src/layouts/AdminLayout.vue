@@ -215,7 +215,7 @@
           </button>
 
           <a
-            href="/"
+            :href="webUrl"
             target="_blank"
             class="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white flex items-center gap-1.5 py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           >
@@ -249,6 +249,8 @@ const authStore = useAuthStore();
 const confirm = useConfirm();
 const toast = useToast();
 const { setTheme, currentTheme } = useTheme();
+
+const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:3000';
 
 const isMobileOpen = ref(false);
 const isDark = ref(document.documentElement.classList.contains('dark'));

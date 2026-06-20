@@ -1,4 +1,12 @@
-import { IsString, IsOptional, IsEnum, IsArray, MinLength } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEnum,
+  IsArray,
+  IsBoolean,
+  IsUUID,
+  MinLength,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum PostTypeEnum {
@@ -33,8 +41,32 @@ export class CreatePostDto {
   @IsOptional()
   tags?: string[];
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ description: 'Cover image URL' })
   @IsString()
   @IsOptional()
   cover?: string;
+
+  @ApiPropertyOptional({ description: 'SEO meta description' })
+  @IsString()
+  @IsOptional()
+  metaDescription?: string;
+
+  @ApiPropertyOptional({ description: 'SEO meta keywords' })
+  @IsString()
+  @IsOptional()
+  metaKeywords?: string;
+
+  @ApiPropertyOptional({ description: 'Publish status' })
+  @IsBoolean()
+  @IsOptional()
+  isPublished?: boolean;
+
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'Array of media UUIDs to associate with this post via mediables',
+  })
+  @IsArray()
+  @IsUUID('4', { each: true })
+  @IsOptional()
+  mediaIds?: string[];
 }

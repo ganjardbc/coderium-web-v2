@@ -13,6 +13,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     ConfirmDialog: typeof import('primevue/confirmdialog')['default']
     MediaUploader: typeof import('./src/components/MediaUploader.vue')['default']
+    RichTextEditor: typeof import('./src/components/RichTextEditor.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Toast: typeof import('primevue/toast')['default']

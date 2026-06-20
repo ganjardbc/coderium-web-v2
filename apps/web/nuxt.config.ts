@@ -29,4 +29,8 @@ export default defineNuxtConfig({
       apiBase: '/api',
     },
   },
+
+  routeRules: {
+    '/api/**': { proxy: 'http://localhost:3030/api/v1/**' },
+  },
 });

@@ -65,6 +65,20 @@ export class PostsController {
   }
 
   @ApiBearerAuth()
+  @Get('admin/posts/:slug')
+  @ApiOperation({ summary: 'Get post by slug (admin) — used by edit page' })
+  async findAdminBySlug(
+    @Param('slug') slug: string,
+    @CurrentUser() user: Record<string, unknown>,
+  ) {
+    return this.postsService.findAdminBySlug(
+      slug,
+      user.id as string,
+      user.roles as Record<string, unknown>[],
+    );
+  }
+
+  @ApiBearerAuth()
   @Permissions('manage_own_posts', 'manage_all_posts')
   @Post('admin/posts')
   @ApiOperation({ summary: 'Create post' })

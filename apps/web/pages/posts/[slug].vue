@@ -6,61 +6,61 @@
     aria-hidden="true"
   />
 
-  <div class="max-w-2xl mx-auto px-6 py-12">
+  <div class="max-w-2xl mx-auto px-4 md:px-6 py-6 md:py-12">
     <!-- Loading skeleton -->
     <div v-if="pending" class="animate-pulse space-y-6">
-      <div class="h-4 bg-gray-200 rounded w-1/4"></div>
-      <div class="h-8 bg-gray-200 rounded w-3/4"></div>
-      <div class="h-4 bg-gray-200 rounded w-1/2"></div>
-      <div class="h-64 bg-gray-200 rounded-xl w-full"></div>
+      <div class="h-4 bg-gray-200 dark:bg-slate-800 rounded w-1/4"></div>
+      <div class="h-8 bg-gray-200 dark:bg-slate-800 rounded w-3/4"></div>
+      <div class="h-4 bg-gray-200 dark:bg-slate-800 rounded w-1/2"></div>
+      <div class="h-64 bg-gray-200 dark:bg-slate-800 rounded-xl w-full"></div>
     </div>
 
     <!-- Not found -->
-    <div v-else-if="error" class="text-center py-20">
-      <h1 class="text-2xl font-bold text-gray-800">Story Not Found</h1>
-      <p class="text-gray-500 mt-2">The article you are looking for might have been removed or unpublished.</p>
-      <NuxtLink to="/" class="mt-6 inline-block px-5 py-2 rounded-full bg-gray-900 text-white text-sm font-medium hover:bg-gray-700 transition-colors">
+    <div v-else-if="error" class="text-center py-10 md:py-20">
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Story Not Found</h1>
+      <p class="text-gray-500 dark:text-slate-400 mt-2">The article you are looking for might have been removed or unpublished.</p>
+      <NuxtLink to="/" class="mt-6 inline-block px-5 py-2 rounded-full bg-gray-900 dark:bg-slate-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-slate-200 transition-colors">
         Back Home
       </NuxtLink>
     </div>
 
     <article v-else-if="post">
       <!-- Back link -->
-      <NuxtLink to="/explore" class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors mb-8">
+      <NuxtLink to="/explore" class="inline-flex items-center gap-1.5 text-sm text-gray-400 dark:text-slate-455 hover:text-gray-700 dark:hover:text-white transition-colors mb-6 md:mb-8">
         &larr; Back to Explore
       </NuxtLink>
 
       <!-- Post header -->
-      <header class="space-y-4 mb-8">
+      <header class="space-y-3 md:space-y-4 mb-6 md:mb-8">
         <!-- Author row -->
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-600 flex-shrink-0">
+          <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-slate-800 flex items-center justify-center text-sm font-bold text-gray-600 dark:text-slate-350 flex-shrink-0">
             {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
           </div>
           <div>
-            <p class="text-sm font-semibold text-gray-900">{{ post.user?.name }}</p>
-            <p class="text-xs text-gray-400">
+            <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ post.user?.name }}</p>
+            <p class="text-xs text-gray-400 dark:text-slate-500">
               {{ formatDate(post.publishedAt) }} &bull; {{ readingTimeDisplay }}
             </p>
           </div>
         </div>
 
         <!-- Title & subtitle -->
-        <h1 class="text-4xl font-bold text-gray-900 leading-tight tracking-tight">{{ post.title }}</h1>
-        <p v-if="post.subtitle" class="text-xl text-gray-500 leading-relaxed">{{ post.subtitle }}</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight tracking-tight">{{ post.title }}</h1>
+        <p v-if="post.subtitle" class="text-lg md:text-xl text-gray-500 dark:text-slate-400 leading-relaxed">{{ post.subtitle }}</p>
 
         <!-- Stats row -->
-        <div class="flex items-center justify-between border-t border-gray-100 pt-4">
-          <div class="flex items-center gap-3 text-sm text-gray-400">
-            <span class="px-2 py-0.5 rounded-full border border-gray-200 text-gray-500 text-xs capitalize">{{ post.type }}</span>
+        <div class="flex items-center justify-between border-t border-gray-100 dark:border-slate-800 pt-4">
+          <div class="flex items-center gap-3 text-sm text-gray-400 dark:text-slate-500">
+            <span class="px-2 py-0.5 rounded-full border border-gray-200 dark:border-slate-800 text-gray-500 dark:text-slate-400 text-xs capitalize">{{ post.type }}</span>
             <span>{{ post.viewsCount }} views</span>
           </div>
           <!-- Mobile like button -->
           <button
             @click="toggleLike"
             :disabled="likeLoading"
-            class="lg:hidden inline-flex items-center gap-1.5 text-sm transition-colors"
-            :class="[liked ? 'text-red-500' : 'text-gray-400 hover:text-red-400', { 'clap-animate': liked }]"
+            class="lg:hidden inline-flex items-center gap-1.5 text-sm transition-colors cursor-pointer"
+            :class="[liked ? 'text-red-500' : 'text-gray-400 dark:text-slate-500 hover:text-red-400', { 'clap-animate': liked }]"
           >
             <span class="text-base">♥</span>
             <span>{{ post.likesCount }}</span>
@@ -69,7 +69,7 @@
       </header>
 
       <!-- Cover Image -->
-      <div v-if="post.cover" class="rounded-lg overflow-hidden aspect-video bg-gray-100 mb-10 border border-gray-100">
+      <div v-if="post.cover" class="rounded-lg overflow-hidden aspect-video bg-gray-100 dark:bg-slate-900 mb-10 border border-gray-100 dark:border-slate-800">
         <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
       </div>
 
@@ -79,45 +79,45 @@
       </section>
 
       <!-- Tags -->
-      <div v-if="post.tags && post.tags.length > 0" class="flex flex-wrap gap-2 pt-8 mt-8 border-t border-gray-100">
+      <div v-if="post.tags && post.tags.length > 0" class="flex flex-wrap gap-2 pt-8 mt-8 border-t border-gray-100 dark:border-slate-800">
         <span
           v-for="tag in post.tags"
           :key="tag"
-          class="px-3 py-1 text-xs rounded-full border border-gray-200 text-gray-500 hover:border-gray-400 transition-colors"
+          class="px-3 py-1 text-xs rounded-full border border-gray-200 dark:border-slate-800 text-gray-500 dark:text-slate-400 hover:border-gray-450 dark:hover:border-slate-600 transition-colors"
         >
           #{{ tag }}
         </span>
       </div>
 
       <!-- Mobile like button (below content) -->
-      <div class="lg:hidden flex items-center justify-center gap-3 mt-10 py-6 border-t border-gray-100">
+      <div class="lg:hidden flex items-center justify-center gap-3 mt-10 py-6 border-t border-gray-100 dark:border-slate-800">
         <button
           @click="toggleLike"
           :disabled="likeLoading"
-          class="flex flex-col items-center gap-1 group"
+          class="flex flex-col items-center gap-1 group cursor-pointer"
         >
           <div
-            class="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center transition-colors"
-            :class="liked ? 'border-red-300 bg-red-50' : 'group-hover:border-gray-400'"
+            class="w-12 h-12 rounded-full border border-gray-200 dark:border-slate-800 flex items-center justify-center transition-colors"
+            :class="liked ? 'border-red-300 dark:border-red-900 bg-red-50 dark:bg-red-950/20' : 'group-hover:border-gray-400 dark:group-hover:border-slate-700'"
           >
-            <span class="text-xl" :class="liked ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-700'">♥</span>
+            <span class="text-xl" :class="liked ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-700 dark:group-hover:text-slate-200'">♥</span>
           </div>
-          <span class="text-xs text-gray-500">{{ post.likesCount }}</span>
+          <span class="text-xs text-gray-500 dark:text-slate-400">{{ post.likesCount }}</span>
         </button>
       </div>
 
       <!-- Written by -->
-      <div class="mt-12 pt-8 border-t border-gray-100">
+      <div class="mt-12 pt-8 border-t border-gray-100 dark:border-slate-800">
         <div class="flex items-start gap-5">
-          <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-500 flex-shrink-0">
+          <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-slate-800 flex items-center justify-center text-2xl font-bold text-gray-500 dark:text-slate-405 flex-shrink-0">
             {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
           </div>
           <div>
-            <p class="text-xs text-gray-400 uppercase tracking-wider font-medium">Written by</p>
-            <p class="text-lg font-bold text-gray-900 mt-0.5">{{ post.user?.name }}</p>
+            <p class="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wider font-medium">Written by</p>
+            <p class="text-lg font-bold text-gray-900 dark:text-white mt-0.5">{{ post.user?.name }}</p>
             <NuxtLink
               to="/explore"
-              class="mt-2 inline-block text-sm text-gray-500 hover:text-gray-900 transition-colors"
+              class="mt-2 inline-block text-sm text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
               More stories &rarr;
             </NuxtLink>
@@ -126,11 +126,11 @@
       </div>
 
       <!-- More from Coderium -->
-      <div class="mt-10 pt-8 border-t border-gray-100 text-center">
-        <p class="text-sm text-gray-400 mb-3">Enjoyed this story?</p>
+      <div class="mt-10 pt-8 border-t border-gray-100 dark:border-slate-800 text-center">
+        <p class="text-sm text-gray-400 dark:text-slate-500 mb-3">Enjoyed this story?</p>
         <NuxtLink
           to="/explore"
-          class="inline-block px-5 py-2 rounded-full border border-gray-300 text-sm font-medium text-gray-700 hover:border-gray-500 hover:text-gray-900 transition-colors"
+          class="inline-block px-5 py-2 rounded-full border border-gray-300 dark:border-slate-700 text-sm font-medium text-gray-700 dark:text-slate-300 hover:border-gray-500 dark:hover:border-slate-500 hover:text-gray-900 dark:hover:text-white transition-colors"
         >
           Explore all stories
         </NuxtLink>
@@ -146,19 +146,19 @@
     <button
       @click="toggleLike"
       :disabled="likeLoading"
-      class="w-10 h-10 rounded-full border flex items-center justify-center transition-colors group"
+      class="w-10 h-10 rounded-full border flex items-center justify-center transition-colors group cursor-pointer"
       :class="[
-        liked ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-400',
+        liked ? 'border-red-300 dark:border-red-900 bg-red-50 dark:bg-red-950/20' : 'border-gray-200 dark:border-slate-800 hover:border-gray-400 dark:hover:border-slate-600',
         { 'clap-animate': liked }
       ]"
       :aria-label="liked ? 'Unlike' : 'Like'"
     >
       <span
         class="text-lg transition-colors"
-        :class="liked ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-700'"
+        :class="liked ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-700 dark:group-hover:text-slate-200'"
       >♥</span>
     </button>
-    <span class="text-xs text-gray-400">{{ post?.likesCount }}</span>
+    <span class="text-xs text-gray-400 dark:text-slate-550">{{ post?.likesCount }}</span>
   </div>
 </template>
 

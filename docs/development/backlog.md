@@ -986,3 +986,39 @@ Status: `DONE`
 Task: Production Deployment
 
 Status: `DONE`
+
+---
+
+# Phase 11 - Cross-App Integration
+
+## INT-001
+
+Task: Add environment variables for cross-app redirection (VITE_WEB_URL for admin, VITE_ADMIN_URL for web)
+
+Status: `DONE`
+
+Details:
+```txt
+- Create .env and .env.example files for apps/admin and apps/web
+- Update AdminLayout.vue in apps/admin to use dynamic VITE_WEB_URL
+- Update default.vue layout in apps/web to use dynamic VITE_ADMIN_URL
+- Type environment variables in apps/admin/env.d.ts
+```
+
+---
+
+## INT-002
+
+Task: Fix apps/web API calls, Prisma schema validation, database seed, and light/dark mode implementation
+
+Status: `DONE`
+
+Details:
+```txt
+- Remove invalid mediables relation from Post model in schema.prisma to allow successful prisma generation
+- Run db seed to populate mock posts, tags, and users in local PostgreSQL
+- Add Nitro routeRules proxy to apps/web/nuxt.config.ts to forward relative /api requests to NestJS server (port 3030)
+- Add dark: classes to layouts/default.vue and all pages under apps/web/pages for full dark/light mode compatibility
+```
+
+

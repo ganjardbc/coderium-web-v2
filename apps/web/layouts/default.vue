@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen flex flex-col transition-colors duration-200">
+  <div class="min-h-screen flex flex-col bg-white text-gray-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-200">
     <!-- Header -->
-    <header class="border-b border-gray-100 bg-white/95 backdrop-blur-md sticky top-0 z-50 transition-colors duration-200">
+    <header class="border-b border-gray-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md sticky top-0 z-50 transition-colors duration-200">
       <!-- Main nav row -->
       <nav class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
         <!-- Left: Logo -->
         <div class="flex items-center gap-6 flex-shrink-0">
-          <NuxtLink to="/" class="text-xl font-bold tracking-tight text-gray-900">
+          <NuxtLink to="/" class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
             Coderium
           </NuxtLink>
         </div>
@@ -58,8 +58,9 @@
         <!-- Right: Write + Dark mode -->
         <div class="flex items-center gap-3 flex-shrink-0">
           <NuxtLink
-            to="/admin"
-            class="hidden md:inline-flex items-center px-4 py-1.5 rounded-full bg-gray-900 text-white text-sm font-medium hover:bg-gray-700 transition-colors"
+            :to="adminUrl"
+            external
+            class="hidden md:inline-flex items-center px-4 py-1.5 rounded-full bg-gray-900 dark:bg-slate-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-slate-200 transition-colors"
           >
             Write
           </NuxtLink>
@@ -67,7 +68,7 @@
           <!-- Dark Mode Toggle -->
           <button
             @click="toggleDarkMode"
-            class="p-2 text-gray-500 hover:text-gray-900 transition-colors"
+            class="p-2 text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-100 transition-colors"
             aria-label="Toggle dark mode"
           >
             <!-- Sun icon (shown in dark mode) -->
@@ -83,13 +84,13 @@
       </nav>
 
       <!-- Topic strip -->
-      <div class="no-scrollbar overflow-x-auto border-t border-gray-100">
+      <div class="no-scrollbar overflow-x-auto border-t border-gray-100 dark:border-slate-800">
         <div class="max-w-7xl mx-auto px-4 flex items-center gap-1 py-2">
           <NuxtLink
             v-for="topic in topics"
             :key="topic.label"
             :to="topic.href"
-            class="flex-shrink-0 px-4 py-1.5 rounded-full border border-transparent text-sm text-gray-600 hover:text-gray-900 hover:border-gray-200 transition-colors whitespace-nowrap"
+            class="flex-shrink-0 px-4 py-1.5 rounded-full border border-transparent text-sm text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-200 dark:hover:border-slate-850 transition-colors whitespace-nowrap"
           >
             {{ topic.label }}
           </NuxtLink>
@@ -103,15 +104,15 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-100 bg-white mt-16">
-      <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+    <footer class="border-t border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 mt-16">
+      <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-400 dark:text-slate-500">
         <div>&copy; {{ new Date().getFullYear() }} Coderium. All rights reserved.</div>
         <div class="flex gap-6">
-          <NuxtLink to="/explore" class="hover:text-gray-600 transition-colors">Explore</NuxtLink>
-          <NuxtLink to="/playlists" class="hover:text-gray-600 transition-colors">Series</NuxtLink>
-          <a href="#" class="hover:text-gray-600 transition-colors">About</a>
-          <a href="#" class="hover:text-gray-600 transition-colors">Privacy</a>
-          <a href="#" class="hover:text-gray-600 transition-colors">Terms</a>
+          <NuxtLink to="/explore" class="hover:text-gray-600 dark:hover:text-slate-350 transition-colors">Explore</NuxtLink>
+          <NuxtLink to="/playlists" class="hover:text-gray-600 dark:hover:text-slate-350 transition-colors">Series</NuxtLink>
+          <a href="#" class="hover:text-gray-600 dark:hover:text-slate-350 transition-colors">About</a>
+          <a href="#" class="hover:text-gray-600 dark:hover:text-slate-350 transition-colors">Privacy</a>
+          <a href="#" class="hover:text-gray-600 dark:hover:text-slate-350 transition-colors">Terms</a>
         </div>
       </div>
     </footer>
@@ -120,6 +121,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+
+const adminUrl = import.meta.env.VITE_ADMIN_URL || 'http://localhost:5173';
 
 const isDark = ref(false);
 const showSearch = ref(false);
