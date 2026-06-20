@@ -1,43 +1,66 @@
 <template>
-  <div class="max-w-4xl mx-auto py-12 px-4">
-    <div class="mb-8">
-      <h1 class="text-3xl font-black text-gray-900">Curated Playlists</h1>
-      <p class="text-gray-500 mt-1">Accelerate your knowledge with structured learning paths</p>
+  <div class="max-w-4xl mx-auto px-6 py-10">
+    <!-- Header -->
+    <div class="border-b border-gray-100 pb-6 mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Series</h1>
+      <p class="text-gray-500 mt-1 text-sm">Curated reading paths on web development and architecture</p>
     </div>
 
-    <div v-if="pending" class="grid sm:grid-cols-2 gap-8">
-      <div v-for="i in 4" :key="i" class="animate-pulse space-y-4">
-        <div class="bg-gray-200 h-48 rounded-2xl w-full"></div>
-        <div class="h-4 bg-gray-200 rounded-sm w-3/4"></div>
+    <!-- Skeleton -->
+    <div v-if="pending" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="i in 6" :key="i" class="animate-pulse border border-gray-100 rounded-lg overflow-hidden">
+        <div class="aspect-[4/3] bg-gray-200 w-full"></div>
+        <div class="p-4 space-y-2">
+          <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+          <div class="h-3 bg-gray-200 rounded w-full"></div>
+          <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+        </div>
       </div>
     </div>
 
-    <div v-else-if="playlists.length === 0" class="text-center py-12 text-gray-500">
-      No playlists created yet. Check back later!
+    <!-- Empty -->
+    <div v-else-if="playlists.length === 0" class="text-center py-16 text-gray-400">
+      <p>No series created yet. Check back later!</p>
     </div>
 
-    <div v-else class="grid sm:grid-cols-2 gap-8">
+    <!-- Grid -->
+    <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <NuxtLink
         v-for="pl in playlists"
         :key="pl.id"
         :to="`/playlists/${pl.slug}`"
-        class="group flex flex-col bg-white rounded-2xl border overflow-hidden hover:shadow-md transition-shadow"
+        class="group block border border-gray-200 rounded-lg overflow-hidden hover:border-gray-400 transition-colors"
       >
-        <div class="aspect-video bg-gray-100 overflow-hidden relative">
-          <img v-if="pl.cover" :src="pl.cover" :alt="pl.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-          <div v-else class="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xl bg-gray-50">PLAYLIST</div>
-          <span class="absolute bottom-3 right-3 px-3 py-1 bg-black/60 text-white text-xs font-semibold rounded-lg backdrop-blur-xs">
+        <!-- Cover -->
+        <div class="aspect-[4/3] bg-gray-100 overflow-hidden relative">
+          <img
+            v-if="pl.cover"
+            :src="pl.cover"
+            :alt="pl.title"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          <div
+            v-else
+            class="w-full h-full flex items-center justify-center"
+          >
+            <span class="text-5xl font-black text-gray-200 select-none">
+              {{ pl.title.charAt(0).toUpperCase() }}
+            </span>
+          </div>
+          <span class="absolute top-3 left-3 px-2 py-0.5 bg-black/60 text-white text-xs font-medium rounded">
             {{ pl._count?.posts || 0 }} stories
           </span>
         </div>
-        <div class="p-6">
-          <h2 class="text-xl font-bold text-gray-900 leading-snug group-hover:text-blue-600 transition-colors">
+
+        <!-- Body -->
+        <div class="p-4">
+          <h2 class="font-bold text-gray-900 leading-snug group-hover:text-gray-600 transition-colors line-clamp-2">
             {{ pl.title }}
           </h2>
-          <p v-if="pl.description" class="text-gray-500 text-sm mt-2 line-clamp-2">{{ pl.description }}</p>
-          <div class="flex items-center gap-2 mt-4 text-xs text-gray-400">
-            <span>By {{ pl.user?.name }}</span>
-          </div>
+          <p v-if="pl.description" class="text-sm text-gray-500 mt-1 line-clamp-2">
+            {{ pl.description }}
+          </p>
+          <p class="text-xs text-gray-400 mt-3">By {{ pl.user?.name }}</p>
         </div>
       </NuxtLink>
     </div>
@@ -52,7 +75,7 @@ definePageMeta({
 });
 
 useHead({
-  title: 'Playlists - Curated Tech Guides',
+  title: 'Series - Curated Tech Guides | Coderium',
   meta: [
     { name: 'description', content: 'Browse step-by-step guides and curated stories on web development and architecture.' },
   ],
