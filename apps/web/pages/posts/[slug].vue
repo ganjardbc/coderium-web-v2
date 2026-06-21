@@ -6,7 +6,7 @@
     aria-hidden="true"
   />
 
-  <div class="max-w-2xl mx-auto px-4 md:px-6 py-6 md:py-12">
+  <div class="max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-12">
     <!-- Loading skeleton -->
     <div v-if="pending" class="animate-pulse space-y-6">
       <div class="h-4 bg-gray-200 dark:bg-slate-800 rounded w-1/4"></div>
@@ -89,32 +89,17 @@
         </span>
       </div>
 
-      <!-- Mobile like button (below content) -->
-      <div class="lg:hidden flex items-center justify-center gap-3 mt-10 py-6 border-t border-gray-100 dark:border-slate-800">
-        <button
-          @click="toggleLike"
-          :disabled="likeLoading"
-          class="flex flex-col items-center gap-1 group cursor-pointer"
-        >
-          <div
-            class="w-12 h-12 rounded-full border border-gray-200 dark:border-slate-800 flex items-center justify-center transition-colors"
-            :class="liked ? 'border-red-300 dark:border-red-900 bg-red-50 dark:bg-red-950/20' : 'group-hover:border-gray-400 dark:group-hover:border-slate-700'"
-          >
-            <span class="text-xl" :class="liked ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-700 dark:group-hover:text-slate-200'">♥</span>
-          </div>
-          <span class="text-xs text-gray-500 dark:text-slate-400">{{ post.likesCount }}</span>
-        </button>
-      </div>
-
       <!-- Written by -->
-      <div class="mt-12 pt-8 border-t border-gray-100 dark:border-slate-800">
-        <div class="flex items-start gap-5">
-          <div class="w-16 h-16 rounded-full bg-gray-200 dark:bg-slate-800 flex items-center justify-center text-2xl font-bold text-gray-500 dark:text-slate-405 flex-shrink-0">
+      <div class="mt-8 pt-8 border-t border-gray-100 dark:border-slate-800">
+        <div class="flex items-center gap-5">
+          <div class="w-14 h-14 rounded-full bg-gray-200 dark:bg-slate-800 flex items-center justify-center text-2xl font-bold text-gray-500 dark:text-slate-405 flex-shrink-0">
             {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
           </div>
-          <div>
-            <p class="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wider font-medium">Written by</p>
-            <p class="text-lg font-bold text-gray-900 dark:text-white mt-0.5">{{ post.user?.name }}</p>
+          <div class="flex justify-between items-center flex-1">
+            <div class="flex-1">
+              <p class="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wider font-medium">Written by</p>
+              <p class="text-lg font-bold text-gray-900 dark:text-white mt-0.5">{{ post.user?.name }}</p>
+            </div>
             <NuxtLink
               to="/explore"
               class="mt-2 inline-block text-sm text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white transition-colors"
@@ -126,7 +111,7 @@
       </div>
 
       <!-- More from Coderium -->
-      <div class="mt-10 pt-8 border-t border-gray-100 dark:border-slate-800 text-center">
+      <div class="mt-8 pt-8 border-t border-gray-100 dark:border-slate-800 text-center">
         <p class="text-sm text-gray-400 dark:text-slate-500 mb-3">Enjoyed this story?</p>
         <NuxtLink
           to="/explore"

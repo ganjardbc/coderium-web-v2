@@ -104,7 +104,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 mt-16">
+    <footer class="border-t border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900">
       <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-400 dark:text-slate-500">
         <div>&copy; {{ new Date().getFullYear() }} Coderium. All rights reserved.</div>
         <div class="flex gap-6">

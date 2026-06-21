@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-5xl mx-auto px-4 md:px-6 py-6 md:py-10 space-y-10 md:space-y-14">
+  <div class="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10 space-y-10 md:space-y-14">
     <!-- Hero Section -->
     <section class="border-b border-gray-100 dark:border-slate-800 pb-8 md:pb-12">
       <h1 class="text-4xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white leading-none">

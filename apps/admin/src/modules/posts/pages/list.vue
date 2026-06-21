@@ -6,17 +6,8 @@
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">Posts</h1>
       <div class="flex gap-2 flex-wrap">
-        <router-link v-slot="{ navigate }" to="/posts/create?type=article" custom>
-          <Button label="Article" icon="pi pi-plus" size="small" @click="navigate" />
-        </router-link>
-        <router-link v-slot="{ navigate }" to="/posts/create?type=carousel" custom>
-          <Button label="Carousel" icon="pi pi-plus" size="small" severity="secondary" @click="navigate" />
-        </router-link>
-        <router-link v-slot="{ navigate }" to="/posts/create?type=video" custom>
-          <Button label="Video" icon="pi pi-plus" size="small" severity="danger" @click="navigate" />
-        </router-link>
-        <router-link v-slot="{ navigate }" to="/posts/create?type=stack_gallery" custom>
-          <Button label="Gallery" icon="pi pi-plus" size="small" severity="success" @click="navigate" />
+        <router-link v-slot="{ navigate }" to="/posts/create" custom>
+          <Button label="Create New Post" icon="pi pi-plus" size="small" @click="navigate" />
         </router-link>
       </div>
     </div>
