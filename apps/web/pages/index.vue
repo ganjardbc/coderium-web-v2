@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-10 space-y-10 md:space-y-14">
+  <div class="max-w-4xl mx-auto px-4 md:px-6 py-6 md:py-10 space-y-10 md:space-y-14">
     <!-- Hero Section -->
     <section class="border-b border-gray-100 dark:border-slate-800 pb-8 md:pb-12">
       <h1 class="text-4xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white leading-none">
@@ -128,7 +128,7 @@
               :key="post.id"
               class="flex gap-3 group"
             >
-              <span class="text-2xl font-black text-gray-100 dark:text-slate-800 w-7 flex-shrink-0 leading-none mt-0.5 select-none">
+              <span class="text-2xl font-black text-gray-300 dark:text-slate-700 w-7 flex-shrink-0 leading-none mt-0.5 select-none">
                 0{{ index + 1 }}
               </span>
               <div class="flex-1 min-w-0">

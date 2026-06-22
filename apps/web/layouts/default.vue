@@ -132,10 +132,7 @@ const isMac = ref(false);
 
 const topics = [
   { label: 'For You', href: '/' },
-  { label: 'Articles', href: '/explore?type=article' },
-  { label: 'Carousels', href: '/explore?type=carousel' },
-  { label: 'Videos', href: '/explore?type=video' },
-  { label: 'Galleries', href: '/explore?type=stack_gallery' },
+  { label: 'Explore', href: '/explore' },
   { label: 'Series', href: '/playlists' },
 ];
 

@@ -8,7 +8,9 @@ export class SearchService {
 
   async search(dto: SearchDto) {
     const { q, type, tags, page = 1, limit = 10 } = dto;
-    const skip = (page - 1) * limit;
+    const pageNum = Number(page);
+    const limitNum = Number(limit);
+    const skip = (pageNum - 1) * limitNum;
 
     const where: Record<string, unknown> = {
       isPublished: true,
@@ -45,7 +47,7 @@ export class SearchService {
     const [data, total] = await this.prisma.$transaction([
       this.prisma.post.findMany({
         skip,
-        take: limit,
+        take: limitNum,
         where,
         orderBy: { publishedAt: 'desc' },
         select: {
@@ -70,7 +72,7 @@ export class SearchService {
       success: true,
       message: 'Search results',
       data,
-      meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
+      meta: { page: pageNum, limit: limitNum, total, totalPages: Math.ceil(total / limitNum) },
     };
   }
 }

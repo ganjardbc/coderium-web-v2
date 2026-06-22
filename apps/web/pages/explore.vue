@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-10">
+  <div class="max-w-4xl mx-auto px-4 md:px-6 py-6 md:py-10">
     <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-4 md:mb-6">Explore</h1>
 
     <!-- Search bar -->
