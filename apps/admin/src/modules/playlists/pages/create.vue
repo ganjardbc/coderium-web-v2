@@ -21,13 +21,13 @@
           </div>
 
           <div class="flex flex-col gap-1.5">
-            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Cover Image URL</label>
-            <InputGroup>
-              <InputGroupAddon>
-                <i class="pi pi-image text-gray-400"></i>
-              </InputGroupAddon>
-              <InputText v-model="form.cover" type="url" placeholder="https://..." class="w-full" />
-            </InputGroup>
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Cover Image</label>
+            <MediaUploader
+              v-model="form.cover"
+              accept="image/*"
+              :multiple="false"
+              :max-size="10"
+            />
           </div>
 
           <div class="flex items-center gap-3">
@@ -47,15 +47,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { InputText, Textarea, InputGroup, InputGroupAddon, Checkbox, Button, Message, Card } from 'primevue';
+import { InputText, Textarea, Checkbox, Button, Message, Card } from 'primevue';
 import api from '@/lib/api';
+import MediaUploader from '@/components/MediaUploader.vue';
+import type { UploadedMedia } from '@/components/MediaUploader.vue';
 
 const router = useRouter();
 
 const form = ref({
   title: '',
   description: '',
-  cover: '',
+  cover: [] as UploadedMedia[],
   isPublished: false,
 });
 
@@ -66,7 +68,13 @@ async function handleSubmit() {
   error.value = '';
   loading.value = true;
   try {
-    await api.post('/admin/playlists', form.value);
+    const payload = {
+      title: form.value.title,
+      description: form.value.description || undefined,
+      cover: form.value.cover.length > 0 ? form.value.cover[0].url : undefined,
+      isPublished: form.value.isPublished,
+    };
+    await api.post('/admin/playlists', payload);
     router.push('/playlists');
   } catch (err: unknown) {
     const axiosErr = err as { response?: { data?: { message?: string } } };

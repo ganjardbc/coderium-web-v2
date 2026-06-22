@@ -25,13 +25,13 @@
           </div>
 
           <div class="flex flex-col gap-1.5">
-            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Cover Image URL</label>
-            <InputGroup>
-              <InputGroupAddon>
-                <i class="pi pi-image text-gray-400"></i>
-              </InputGroupAddon>
-              <InputText v-model="form.cover" type="url" placeholder="https://..." class="w-full" />
-            </InputGroup>
+            <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">Cover Image</label>
+            <MediaUploader
+              v-model="form.cover"
+              accept="image/*"
+              :multiple="false"
+              :max-size="10"
+            />
           </div>
 
           <div class="flex items-center gap-3">
@@ -56,8 +56,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { InputText, Textarea, InputGroup, InputGroupAddon, Checkbox, Button, Message, Card, ProgressSpinner } from 'primevue';
+import { InputText, Textarea, Checkbox, Button, Message, Card, ProgressSpinner } from 'primevue';
 import api from '@/lib/api';
+import MediaUploader from '@/components/MediaUploader.vue';
+import type { UploadedMedia } from '@/components/MediaUploader.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -65,7 +67,7 @@ const route = useRoute();
 const form = ref({
   title: '',
   description: '',
-  cover: '',
+  cover: [] as UploadedMedia[],
   isPublished: false,
 });
 
@@ -81,7 +83,14 @@ onMounted(async () => {
       form.value = {
         title: playlist.title,
         description: playlist.description || '',
-        cover: playlist.cover || '',
+        cover: playlist.cover ? [{
+          id: playlist.cover,
+          url: playlist.cover,
+          filename: playlist.cover.split('/').pop() || 'cover.jpg',
+          originalName: playlist.cover.split('/').pop() || 'cover.jpg',
+          mimeType: 'image/jpeg',
+          size: 0
+        }] : [],
         isPublished: playlist.isPublished,
       };
     } else {
@@ -98,7 +107,13 @@ async function handleSubmit() {
   error.value = '';
   loading.value = true;
   try {
-    await api.put(`/admin/playlists/${route.params.slug}`, form.value);
+    const payload = {
+      title: form.value.title,
+      description: form.value.description || undefined,
+      cover: form.value.cover.length > 0 ? form.value.cover[0].url : undefined,
+      isPublished: form.value.isPublished,
+    };
+    await api.put(`/admin/playlists/${route.params.slug}`, payload);
     router.push('/playlists');
   } catch (err: unknown) {
     const axiosErr = err as { response?: { data?: { message?: string } } };

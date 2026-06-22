@@ -20,7 +20,8 @@
       <!-- Brand Logo -->
       <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-700 justify-between">
         <router-link to="/" class="flex items-center gap-2" @click="isMobileOpen = false">
-          <span class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">Coderium</span>
+          <img src="@/assets/logo-fill.png" alt="Coderium Logo" class="h-8 w-auto object-contain dark:hidden" />
+          <img src="@/assets/logo-white.png" alt="Coderium Logo" class="h-8 w-auto object-contain hidden dark:block" />
           <span class="px-1.5 py-0.5 text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md border border-gray-200 dark:border-gray-700">Admin</span>
         </router-link>
         <!-- Mobile close button -->
@@ -154,8 +155,9 @@
       <!-- User Info & Logout -->
       <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3 bg-gray-50 dark:bg-dark">
         <div class="flex items-center gap-3 overflow-hidden">
-          <div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
-            {{ userInitial }}
+          <div class="w-9 h-9 rounded-full overflow-hidden bg-blue-600 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
+            <img v-if="authStore.user?.avatarUrl" :src="authStore.user.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
+            <span v-else>{{ userInitial }}</span>
           </div>
           <div class="overflow-hidden">
             <p class="text-xs font-semibold text-gray-900 dark:text-white truncate">{{ authStore.user?.name || 'Admin User' }}</p>

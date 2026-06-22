@@ -17,8 +17,9 @@
       <Column header="Name" class="min-w-48">
         <template #body="{ data }">
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 text-sm font-medium shrink-0">
-              {{ data.name.charAt(0).toUpperCase() }}
+            <div class="w-8 h-8 rounded-full overflow-hidden bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 text-sm font-medium shrink-0">
+              <img v-if="data.avatarUrl" :src="data.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
+              <span v-else>{{ data.name.charAt(0).toUpperCase() }}</span>
             </div>
             <span class="font-medium">{{ data.name }}</span>
           </div>
@@ -65,6 +66,7 @@ interface UserItem {
   id: string;
   name: string;
   email: string;
+  avatarUrl?: string;
   status: string;
   createdAt: string;
   roles?: { roleId: string; role?: { name: string } }[];

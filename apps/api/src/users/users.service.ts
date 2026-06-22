@@ -13,6 +13,7 @@ export class UsersService {
         id: true,
         name: true,
         email: true,
+        avatarUrl: true,
         status: true,
         createdAt: true,
         updatedAt: true,

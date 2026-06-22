@@ -61,3 +61,6 @@ coverage
 *.db
 *.db-journal
 *.sqlite
+
+# API Uploads
+/apps/api/uploads/
