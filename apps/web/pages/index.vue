@@ -103,7 +103,7 @@
       </section>
 
       <!-- Sidebar -->
-      <aside class="mt-10 lg:mt-0 space-y-10">
+      <aside class="space-y-10">
         <!-- Popular on Coderium -->
         <section>
           <h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-5">Popular on Coderium</h3>

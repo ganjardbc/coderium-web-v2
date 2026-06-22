@@ -248,12 +248,11 @@ const router = useRouter();
 const authStore = useAuthStore();
 const confirm = useConfirm();
 const toast = useToast();
-const { setTheme, currentTheme } = useTheme();
+const { setTheme, currentTheme, isDark } = useTheme();
 
-const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:3000';
+const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:5174';
 
 const isMobileOpen = ref(false);
-const isDark = ref(document.documentElement.classList.contains('dark'));
 
 const userInitial = computed(() => {
   const name = authStore.user?.name || 'A';
@@ -270,7 +269,6 @@ const currentSectionName = computed(() => {
 
 function toggleDark() {
   const next = isDark.value ? 'light' : 'dark';
-  isDark.value = !isDark.value;
   setTheme(next);
 }
 

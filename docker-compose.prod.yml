@@ -32,7 +32,7 @@ services:
       NODE_ENV: production
       JWT_SECRET: "production_jwt_secret_here"
       JWT_EXPIRES_IN: "7d"
-      CORS_ORIGIN: "http://localhost,http://localhost:3000"
+      CORS_ORIGIN: "http://localhost,http://localhost:5174"
     ports:
       - "3030:3030"
     volumes:
@@ -54,11 +54,11 @@ services:
     container_name: coderium-web-prod
     restart: always
     environment:
-      PORT: 3000
+      PORT: 5174
       NODE_ENV: production
       NUXT_PUBLIC_API_BASE: "http://localhost:3030/api/v1"
     ports:
-      - "3000:3000"
+      - "5174:5174"
 
 volumes:
   postgres_prod_data:

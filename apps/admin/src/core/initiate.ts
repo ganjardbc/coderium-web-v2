@@ -71,7 +71,7 @@ const customPreset = definePreset(Aura, {
 
 export function initiate(app: App) {
   setupStores(app);
-  setupRouter(app);
+  const router = setupRouter(app);
   setupStyles(app);
 
   app.use(PrimeVue, {
@@ -87,4 +87,6 @@ export function initiate(app: App) {
 
   app.use(ToastService);
   app.use(ConfirmationService);
+
+  return router;
 }

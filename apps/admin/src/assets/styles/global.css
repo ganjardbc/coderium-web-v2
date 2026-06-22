@@ -5,6 +5,8 @@
 @import './variables-dark.css';
 @import './themes.css';
 
+@variant dark (&:where(.dark, .dark *));
+
 html {
   box-sizing: border-box;
   margin: 0;

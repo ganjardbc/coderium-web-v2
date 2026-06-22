@@ -62,7 +62,7 @@ Demo Checklist:
 ```txt
 [ ] apps/api running di port 3030
 [ ] apps/admin running di port 5174
-[ ] apps/web running di port 3000
+[ ] apps/web running di port 5174
 [ ] database connected
 [ ] prisma generate berhasil
 ```

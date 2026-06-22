@@ -32,9 +32,9 @@ WORKDIR /app
 
 COPY --from=builder /app/apps/web/.output ./.output
 
-EXPOSE 3000
+EXPOSE 5174
 
-ENV PORT=3000
+ENV PORT=5174
 ENV NODE_ENV=production
 
 CMD ["node", ".output/server/index.mjs"]

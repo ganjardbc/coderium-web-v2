@@ -6,8 +6,9 @@
       <nav class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
         <!-- Left: Logo -->
         <div class="flex items-center gap-6 flex-shrink-0">
-          <NuxtLink to="/" class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Coderium
+          <NuxtLink to="/" class="flex items-center">
+            <img src="~/assets/logo-fill.png" class="h-8 dark:hidden" alt="Coderium" />
+            <img src="~/assets/logo-white.png" class="h-8 hidden dark:block" alt="Coderium" />
           </NuxtLink>
         </div>
 

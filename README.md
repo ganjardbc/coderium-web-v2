@@ -95,7 +95,7 @@ Access:
 
 * **API**: http://localhost:3030/api/v1
 * **Admin**: http://localhost:5174
-* **Web**: http://localhost:3000
+* **Web**: http://localhost:5174
 
 ---
 
