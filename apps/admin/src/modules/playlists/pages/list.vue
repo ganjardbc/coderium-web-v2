@@ -6,7 +6,7 @@
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">Playlists</h1>
       <router-link v-slot="{ navigate }" to="/playlists/create" custom>
-        <Button label="New Playlist" icon="pi pi-plus" @click="navigate" />
+        <Button label="New Playlist" icon="pi pi-plus" size="small" @click="navigate" />
       </router-link>
     </div>
 

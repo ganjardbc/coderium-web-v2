@@ -37,117 +37,49 @@
 
       <!-- Navigation Links -->
       <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-1.5">
-        <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 tracking-wider uppercase px-3 mb-2">Main Menu</div>
-
-        <router-link
-          to="/"
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-          :class="{ 'bg-gray-100! dark:bg-gray-800! text-gray-900! dark:text-white!': $route.path === '/' }"
-          @click="isMobileOpen = false"
+        <div
+          v-for="(section, idx) in menuSections"
+          :key="section.title"
+          :class="{ 'pt-4': idx > 0 }"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
-          </svg>
-          Dashboard
-        </router-link>
+          <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 tracking-wider uppercase px-3 mb-2">
+            {{ section.title }}
+          </div>
 
-        <router-link
-          to="/posts"
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-          :class="{ 'bg-gray-100! dark:bg-gray-800! text-gray-900! dark:text-white!': $route.path.startsWith('/posts') }"
-          @click="isMobileOpen = false"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-          </svg>
-          Posts
-        </router-link>
+          <div class="space-y-1.5">
+            <div v-for="item in section.items" :key="item.to">
+              <router-link
+                :to="item.to"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                :class="{ 'bg-gray-100! dark:bg-gray-800! text-gray-900! dark:text-white!': isMenuItemActive(item) }"
+                @click="isMobileOpen = false"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    v-for="(path, pIdx) in item.iconPaths"
+                    :key="pIdx"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    :d="path"
+                  />
+                </svg>
+                {{ item.label }}
+              </router-link>
 
-        <router-link
-          to="/playlists"
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-          :class="{ 'bg-gray-100! dark:bg-gray-800! text-gray-900! dark:text-white!': $route.path.startsWith('/playlists') }"
-          @click="isMobileOpen = false"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-          </svg>
-          Playlists
-        </router-link>
-
-        <router-link
-          to="/media"
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-          :class="{ 'bg-gray-100! dark:bg-gray-800! text-gray-900! dark:text-white!': $route.path.startsWith('/media') }"
-          @click="isMobileOpen = false"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          Media Library
-        </router-link>
-
-        <router-link
-          to="/analytics"
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-          :class="{ 'bg-gray-100! dark:bg-gray-800! text-gray-900! dark:text-white!': $route.path.startsWith('/analytics') }"
-          @click="isMobileOpen = false"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
-          Analytics
-        </router-link>
-
-        <router-link
-          to="/users"
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-          :class="{ 'bg-gray-100! dark:bg-gray-800! text-gray-900! dark:text-white!': $route.path.startsWith('/users') }"
-          @click="isMobileOpen = false"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-          Users
-        </router-link>
-
-        <div class="pt-4">
-          <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 tracking-wider uppercase px-3 mb-2">Settings</div>
-
-          <router-link
-            to="/settings/profile"
-            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-            :class="{ 'bg-gray-100! dark:bg-gray-800! text-gray-900! dark:text-white!': $route.path.startsWith('/settings/') }"
-            @click="isMobileOpen = false"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            System Settings
-          </router-link>
-
-          <div v-if="$route.path.startsWith('/settings/')" class="pl-7 mt-1.5 space-y-1">
-            <router-link
-              to="/settings/profile"
-              class="block px-3 py-1.5 text-xs font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
-              :class="{ 'text-blue-600! dark:text-blue-400! font-semibold': $route.path === '/settings/profile' }"
-            >Profile</router-link>
-            <router-link
-              to="/settings/password"
-              class="block px-3 py-1.5 text-xs font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
-              :class="{ 'text-blue-600! dark:text-blue-400! font-semibold': $route.path === '/settings/password' }"
-            >Password</router-link>
-            <router-link
-              to="/settings/appearance"
-              class="block px-3 py-1.5 text-xs font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
-              :class="{ 'text-blue-600! dark:text-blue-400! font-semibold': $route.path === '/settings/appearance' }"
-            >Appearance</router-link>
-            <router-link
-              to="/settings/two-factor"
-              class="block px-3 py-1.5 text-xs font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
-              :class="{ 'text-blue-600! dark:text-blue-400! font-semibold': $route.path === '/settings/two-factor' }"
-            >Two-Factor Auth</router-link>
+              <!-- Submenu (if any and active) -->
+              <div v-if="item.submenu && isMenuItemActive(item)" class="pl-7 mt-1.5 space-y-1">
+                <router-link
+                  v-for="subItem in item.submenu"
+                  :key="subItem.to"
+                  :to="subItem.to"
+                  class="block px-3 py-1.5 text-xs font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+                  :class="{ 'text-blue-600! dark:text-blue-400! font-semibold': isSubmenuItemActive(subItem) }"
+                >
+                  {{ subItem.label }}
+                </router-link>
+              </div>
+            </div>
           </div>
         </div>
       </nav>
@@ -253,6 +185,101 @@ const toast = useToast();
 const { setTheme, currentTheme, isDark } = useTheme();
 
 const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:5174';
+
+interface SubmenuItem {
+  label: string;
+  to: string;
+}
+
+interface MenuItem {
+  label: string;
+  to: string;
+  iconPaths: string[];
+  activeMatch?: string;
+  submenu?: SubmenuItem[];
+}
+
+interface MenuSection {
+  title: string;
+  items: MenuItem[];
+}
+
+const menuSections: MenuSection[] = [
+  {
+    title: 'Main Menu',
+    items: [
+      {
+        label: 'Dashboard',
+        to: '/',
+        iconPaths: [
+          'M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z'
+        ]
+      },
+      {
+        label: 'Posts',
+        to: '/posts',
+        iconPaths: [
+          'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z'
+        ]
+      },
+      {
+        label: 'Playlists',
+        to: '/playlists',
+        iconPaths: [
+          'M4 6h16M4 10h16M4 14h16M4 18h16'
+        ]
+      },
+      {
+        label: 'Media Library',
+        to: '/media',
+        iconPaths: [
+          'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
+        ]
+      },
+      {
+        label: 'Users',
+        to: '/users',
+        iconPaths: [
+          'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
+        ]
+      }
+    ]
+  },
+  {
+    title: 'Settings',
+    items: [
+      {
+        label: 'System Settings',
+        to: '/settings/profile',
+        activeMatch: '/settings/',
+        iconPaths: [
+          'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z',
+          'M15 12a3 3 0 11-6 0 3 3 0 016 0z'
+        ],
+        submenu: [
+          { label: 'Profile', to: '/settings/profile' },
+          { label: 'Password', to: '/settings/password' },
+          { label: 'Appearance', to: '/settings/appearance' },
+          { label: 'Two-Factor Auth', to: '/settings/two-factor' }
+        ]
+      }
+    ]
+  }
+];
+
+function isMenuItemActive(item: MenuItem) {
+  if (item.activeMatch) {
+    return route.path.startsWith(item.activeMatch);
+  }
+  if (item.to === '/') {
+    return route.path === '/';
+  }
+  return route.path.startsWith(item.to);
+}
+
+function isSubmenuItemActive(subItem: SubmenuItem) {
+  return route.path === subItem.to;
+}
 
 const isMobileOpen = ref(false);
 

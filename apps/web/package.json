@@ -21,6 +21,8 @@
   },
   "devDependencies": {
     "@coderium/tsconfig": "workspace:*",
+    "@iconify-json/lucide": "^1.2.114",
+    "@nuxt/icon": "^1.15.0",
     "@tailwindcss/vite": "^4.0.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.4.5",

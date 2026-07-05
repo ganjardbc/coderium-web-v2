@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Charter:ital,wght@0,400;0,700;1,400&display=swap');
 @import 'tailwindcss';
 
+@theme {
+  --color-dark: #0e0e0f;
+  --color-dark-secondary: #18181b;
+}
+
 @variant dark (&:where(.dark, .dark *));
 
 /* Custom Global Styles */
@@ -9,56 +14,56 @@ body {
 }
 
 .dark body {
-  @apply bg-slate-950 text-slate-50;
+  @apply bg-dark text-gray-100;
 }
 
 /* Custom styles for dark mode compatibility */
 .dark .bg-white {
-  @apply bg-slate-900 border-slate-800 text-slate-100;
+  @apply bg-dark-secondary border-gray-800 text-gray-100;
 }
 
 .dark .border {
-  @apply border-slate-800;
+  @apply border-gray-800;
 }
 
 .dark .border-b {
-  @apply border-slate-800;
+  @apply border-gray-800;
 }
 
 .dark .border-t {
-  @apply border-slate-800;
+  @apply border-gray-800;
 }
 
 .dark .border-y {
-  @apply border-slate-800;
+  @apply border-gray-800;
 }
 
 .dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
-  @apply border-slate-800;
+  @apply border-gray-800;
 }
 
 .dark .bg-gray-50 {
-  @apply bg-slate-900/50;
+  @apply bg-dark-secondary/50;
 }
 
 .dark .bg-gray-100 {
-  @apply bg-slate-800 text-slate-300;
+  @apply bg-gray-800 text-gray-300;
 }
 
 .dark .text-gray-900 {
-  @apply text-slate-100;
+  @apply text-gray-100;
 }
 
 .dark .text-gray-600 {
-  @apply text-slate-400;
+  @apply text-gray-400;
 }
 
 .dark .text-gray-500 {
-  @apply text-slate-400;
+  @apply text-gray-400;
 }
 
 .dark .text-gray-400 {
-  @apply text-slate-500;
+  @apply text-gray-500;
 }
 
 /* Reading progress bar */

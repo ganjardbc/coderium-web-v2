@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 max-w-4xl mx-auto">
+  <div class="w-full mx-auto p-6">
     <Toast />
 
     <div class="flex items-center justify-between mb-6">

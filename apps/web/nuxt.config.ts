@@ -8,7 +8,11 @@ export default defineNuxtConfig({
     port: 5174,
   },
 
-  modules: ['@pinia/nuxt'],
+  modules: ['@pinia/nuxt', '@nuxt/icon'],
+
+  icon: {
+    localApiEndpoint: '/_nuxt_icon',
+  },
 
   css: ['~/assets/css/main.css'],
 

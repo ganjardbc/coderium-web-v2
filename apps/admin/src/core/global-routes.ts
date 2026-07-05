@@ -7,7 +7,6 @@ import { dashboardRoutes } from '@/modules/dashboard/router';
 import { postsRoutes } from '@/modules/posts/router';
 import { playlistsRoutes } from '@/modules/playlists/router';
 import { mediaRoutes } from '@/modules/media/router';
-import { analyticsRoutes } from '@/modules/analytics/router';
 import { usersRoutes } from '@/modules/users/router';
 import { settingsRoutes } from '@/modules/settings/router';
 
@@ -17,7 +16,6 @@ const routes: RouteRecordRaw[] = [
   ...postsRoutes,
   ...playlistsRoutes,
   ...mediaRoutes,
-  ...analyticsRoutes,
   ...usersRoutes,
   ...settingsRoutes,
 ];
