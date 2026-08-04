@@ -13,7 +13,7 @@
     <!-- Sidebar -->
     <aside
       :class="[
-        'fixed inset-y-0 left-0 top-0 z-50 w-64 bg-white dark:bg-dark border-r border-gray-200 dark:border-gray-700 flex flex-col transition-transform duration-300 md:translate-x-0 md:sticky md:h-screen md:flex-shrink-0',
+        'fixed inset-y-0 left-0 top-0 z-50 w-64 bg-white dark:bg-dark border-r border-gray-200 dark:border-gray-700 flex flex-col transition-transform duration-300 md:translate-x-0 md:sticky md:h-screen md:shrink-0',
         isMobileOpen ? 'translate-x-0' : '-translate-x-full'
       ]"
     >
@@ -87,7 +87,7 @@
       <!-- User Info & Logout -->
       <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3 bg-gray-50 dark:bg-dark">
         <div class="flex items-center gap-3 overflow-hidden">
-          <div class="w-9 h-9 rounded-full overflow-hidden bg-blue-600 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
+          <div class="w-9 h-9 rounded-full overflow-hidden bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
             <img v-if="authStore.user?.avatarUrl" :src="authStore.user.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
             <span v-else>{{ userInitial }}</span>
           </div>

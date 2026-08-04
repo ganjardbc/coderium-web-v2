@@ -19,22 +19,22 @@
     <div v-else-if="error" class="text-center py-10 md:py-20">
       <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Story Not Found</h1>
       <p class="text-gray-500 dark:text-gray-400 mt-2">The article you are looking for might have been removed or unpublished.</p>
-      <NuxtLink to="/" class="mt-6 inline-block px-5 py-2 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors">
+      <button @click="router.back()" class="mt-6 inline-block px-5 py-2 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors">
         Back Home
-      </NuxtLink>
+      </button>
     </div>
 
     <article v-else-if="post">
       <!-- Back link -->
-      <NuxtLink to="/explore" class="inline-flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-colors mb-6 md:mb-8">
-        &larr; Back to Explore
-      </NuxtLink>
+      <button @click="router.back()" class="inline-flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-colors mb-6 md:mb-8 cursor-pointer">
+        <Icon name="lucide:arrow-left" class="w-4 h-4" /> Back to Explore
+      </button>
 
       <!-- Post header -->
       <header class="space-y-3 md:space-y-4 mb-6">
         <!-- Author row -->
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-sm font-bold text-gray-600 dark:text-gray-400 flex-shrink-0">
+          <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-sm font-bold text-gray-600 dark:text-gray-400 shrink-0">
             <img v-if="post.user?.avatarUrl" :src="post.user.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
             <span v-else>{{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}</span>
           </div>
@@ -143,7 +143,7 @@
       <!-- Written by -->
       <div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
         <div class="flex items-center gap-5">
-          <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-2xl font-bold text-gray-500 dark:text-gray-400 flex-shrink-0">
+          <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-2xl font-bold text-gray-500 dark:text-gray-400 shrink-0">
             <img v-if="post.user?.avatarUrl" :src="post.user.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
             <span v-else>{{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}</span>
           </div>
@@ -156,7 +156,7 @@
               to="/explore"
               class="mt-2 inline-block text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
-              More stories &rarr;
+              More stories <Icon name="lucide:arrow-right" class="w-4 h-4 inline" />
             </NuxtLink>
           </div>
         </div>
@@ -184,6 +184,7 @@ definePageMeta({
 });
 
 const route = useRoute();
+const router = useRouter();
 const slug = route.params.slug as string;
 
 const config = useRuntimeConfig();

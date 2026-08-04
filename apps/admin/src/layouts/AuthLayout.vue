@@ -18,8 +18,10 @@
 
     <div class="w-full max-w-md space-y-4">
       <div class="flex justify-center">
-        <img src="@/assets/logo-fill.png" alt="Coderium Logo" class="h-12 w-auto object-contain dark:hidden" />
-        <img src="@/assets/logo-white.png" alt="Coderium Logo" class="h-12 w-auto object-contain hidden dark:block" />
+        <a :href="webUrl" target="_blank">
+          <img src="@/assets/logo-fill.png" alt="Coderium Logo" class="h-12 w-auto object-contain dark:hidden" />
+          <img src="@/assets/logo-white.png" alt="Coderium Logo" class="h-12 w-auto object-contain hidden dark:block" />
+        </a>
       </div>
 
       <Card class="border-0 dark:border-0 shadow-sm py-4">
@@ -36,6 +38,7 @@ import Card from 'primevue/card';
 import { useTheme } from '@/composables/useTheme';
 
 const { setTheme, isDark } = useTheme();
+const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:5174';
 
 function toggleDark() {
   const next = isDark.value ? 'light' : 'dark';

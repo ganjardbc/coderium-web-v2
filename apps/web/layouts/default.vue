@@ -5,9 +5,9 @@
       <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-4">
         <!-- Left: Logo & Search Bar -->
         <div class="flex items-center gap-4 md:gap-6 flex-1 max-w-xl">
-          <NuxtLink to="/" class="flex items-center flex-shrink-0">
-            <img src="~/assets/logo-fill.png" class="h-6 md:h-7 dark:hidden" alt="Coderium" />
-            <img src="~/assets/logo-white.png" class="h-6 md:h-7 hidden dark:block" alt="Coderium" />
+          <NuxtLink to="/" class="flex items-center shrink-0">
+            <img src="~/assets/logo-fill.png" class="h-8 md:h-10 dark:hidden" alt="Coderium" />
+            <img src="~/assets/logo-white.png" class="h-8 md:h-10 hidden dark:block" alt="Coderium" />
           </NuxtLink>
 
           <!-- Search Input -->
@@ -25,7 +25,7 @@
         </div>
 
         <!-- Right: Actions -->
-        <div class="flex items-center gap-3 md:gap-4 flex-shrink-0">
+        <div class="flex items-center gap-3 md:gap-4 shrink-0">
           <NuxtLink
             :to="adminUrl"
             external
@@ -51,7 +51,7 @@
     <!-- Main Outer Wrapper -->
     <div class="max-w-7xl w-full mx-auto px-4 md:px-6 flex flex-1">
       <!-- Left Sidebar (Desktop Only) -->
-      <aside class="hidden md:block w-52 md:w-60 py-8 border-r border-gray-100 dark:border-gray-800 sticky top-16 h-[calc(105vh-4rem)] flex-shrink-0">
+      <aside class="hidden md:block w-52 md:w-60 py-8 border-r border-gray-100 dark:border-gray-800 sticky top-16 h-[calc(105vh-4rem)] shrink-0">
         <nav class="space-y-1.5 pr-4">
           <NuxtLink
             to="/"

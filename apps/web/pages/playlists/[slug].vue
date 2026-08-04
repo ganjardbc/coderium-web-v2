@@ -10,20 +10,20 @@
     <div v-else-if="error" class="text-center py-10 md:py-20 bg-gray-50 dark:bg-dark-secondary rounded-2xl border dark:border-gray-800">
       <h1 class="text-2xl font-bold text-gray-880 dark:text-white">Playlist Not Found</h1>
       <p class="text-gray-500 dark:text-gray-400 mt-2">The playlist you are looking for might have been removed or unpublished.</p>
-      <NuxtLink to="/playlists" class="mt-6 inline-block px-6 py-2.5 bg-blue-600 dark:bg-blue-700 text-white font-medium rounded-xl hover:bg-blue-700 dark:hover:bg-blue-650">
-        Back to Playlists
-      </NuxtLink>
+      <button @click="router.back()" class="mt-6 inline-flex items-center gap-1.5 px-6 py-2.5 bg-blue-600 dark:bg-blue-700 text-white font-medium rounded-xl hover:bg-blue-700 dark:hover:bg-blue-650 cursor-pointer">
+        <Icon name="lucide:arrow-left" class="w-4 h-4" /> Back to Playlists
+      </button>
     </div>
 
     <div v-else-if="playlist" class="space-y-8 md:space-y-12">
       <!-- Back Link -->
-      <NuxtLink to="/playlists" class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-        &larr; Back to Playlists
-      </NuxtLink>
+      <button @click="router.back()" class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+        <Icon name="lucide:arrow-left" class="w-4 h-4" /> Back to Playlists
+      </button>
 
       <!-- Playlist Info Header -->
       <header class="flex flex-col md:flex-row gap-4 md:gap-8 items-start pb-6 md:pb-8 border-b dark:border-gray-800">
-        <div v-if="playlist.cover" class="w-full md:w-64 aspect-video md:aspect-square rounded-2xl overflow-hidden border dark:border-gray-800 flex-shrink-0 bg-gray-50 dark:bg-dark-secondary">
+        <div v-if="playlist.cover" class="w-full md:w-64 aspect-video md:aspect-square rounded-2xl overflow-hidden border dark:border-gray-800 shrink-0 bg-gray-50 dark:bg-dark-secondary">
           <img :src="playlist.cover" :alt="playlist.title" class="w-full h-full object-cover" />
         </div>
         <div class="space-y-3 md:space-y-4 flex-1">
@@ -52,10 +52,10 @@
             :key="item.id"
             class="group flex gap-3 md:gap-4 p-3 md:p-4 rounded-2xl border dark:border-gray-800 bg-white dark:bg-dark-secondary hover:shadow-sm transition-shadow relative"
           >
-            <div class="text-xl md:text-2xl font-black text-gray-200 dark:text-gray-800 w-6 md:w-8 text-center flex-shrink-0 flex items-center justify-center">
+            <div class="text-xl md:text-2xl font-black text-gray-200 dark:text-gray-800 w-6 md:w-8 text-center shrink-0 flex items-center justify-center">
               {{ index + 1 }}
             </div>
-            <div v-if="item.post.cover" class="w-14 h-14 md:w-20 md:h-20 rounded-xl overflow-hidden flex-shrink-0 border dark:border-gray-800 bg-gray-50 dark:bg-dark-secondary">
+            <div v-if="item.post.cover" class="w-14 h-14 md:w-20 md:h-20 rounded-xl overflow-hidden shrink-0 border dark:border-gray-800 bg-gray-50 dark:bg-dark-secondary">
               <img :src="item.post.cover" :alt="item.post.title" class="w-full h-full object-cover" />
             </div>
             <div class="flex-1 min-w-0 flex flex-col justify-center">
@@ -64,8 +64,8 @@
                 <NuxtLink :to="`/posts/${item.post.slug}`" class="after:absolute after:inset-0">{{ item.post.title }}</NuxtLink>
               </h3>
             </div>
-            <div class="flex items-center flex-shrink-0 pr-1 md:pr-2">
-              <span class="text-gray-400 dark:text-gray-700 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-lg md:text-xl font-bold">&rarr;</span>
+            <div class="flex items-center shrink-0 pr-1 md:pr-2">
+              <Icon name="lucide:arrow-right" class="w-5 h-5 text-gray-400 dark:text-gray-700 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
             </div>
           </div>
         </div>
@@ -82,6 +82,7 @@ definePageMeta({
 });
 
 const route = useRoute();
+const router = useRouter();
 const slug = route.params.slug as string;
 
 const config = useRuntimeConfig();

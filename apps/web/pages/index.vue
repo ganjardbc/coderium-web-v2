@@ -29,9 +29,9 @@
       <!-- Main: Recent Stories -->
       <section class="lg:col-span-2">
         <div class="flex justify-between items-center mb-6">
-          <h2 class="text-base font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm">Recent Stories</h2>
+          <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm">Recent Stories</h2>
           <NuxtLink to="/explore" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
-            See all &rarr;
+            See all <Icon name="lucide:arrow-right" class="w-4 h-4 inline" />
           </NuxtLink>
         </div>
 
@@ -48,7 +48,7 @@
                 <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
                 <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-1/2"></div>
               </div>
-              <div class="w-16 h-16 rounded bg-gray-200 dark:bg-gray-800 flex-shrink-0 ml-4"></div>
+              <div class="w-16 h-16 rounded bg-gray-200 dark:bg-gray-800 shrink-0 ml-4"></div>
             </div>
           </div>
         </div>
@@ -65,12 +65,12 @@
               <div class="flex-1 min-w-0">
                 <!-- Author row -->
                 <div class="flex items-center gap-2 mb-3">
-                  <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-400 flex-shrink-0">
+                  <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-400 shrink-0">
                     {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
                   </div>
                   <span class="text-sm text-gray-700 dark:text-gray-300 font-medium truncate">{{ post.user?.name }}</span>
                   <span class="text-gray-300 dark:text-gray-700 text-sm">·</span>
-                  <span class="text-sm text-gray-400 dark:text-gray-400 flex-shrink-0">{{ formatDate(post.publishedAt) }}</span>
+                  <span class="text-sm text-gray-400 dark:text-gray-400 shrink-0">{{ formatDate(post.publishedAt) }}</span>
                 </div>
 
                 <!-- Title + subtitle -->
@@ -94,7 +94,7 @@
               </div>
 
               <!-- Thumbnail -->
-              <NuxtLink v-if="post.cover" :to="`/posts/${post.slug}`" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 rounded-sm overflow-hidden flex-shrink-0 ml-3 sm:ml-4 bg-gray-100 dark:bg-dark-secondary border dark:border-gray-800">
+              <NuxtLink v-if="post.cover" :to="`/posts/${post.slug}`" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 rounded-sm overflow-hidden shrink-0 ml-3 sm:ml-4 bg-gray-100 dark:bg-dark-secondary border dark:border-gray-800">
                 <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
               </NuxtLink>
             </div>
@@ -110,7 +110,7 @@
 
           <div v-if="pendingPopular" class="space-y-5">
             <div v-for="i in 3" :key="i" class="animate-pulse flex gap-3">
-              <div class="w-6 h-4 bg-gray-200 dark:bg-gray-800 rounded flex-shrink-0 mt-1"></div>
+              <div class="w-6 h-4 bg-gray-200 dark:bg-gray-800 rounded shrink-0 mt-1"></div>
               <div class="flex-1 space-y-2">
                 <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
                 <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-2/3"></div>
@@ -128,12 +128,12 @@
               :key="post.id"
               class="flex gap-3 group"
             >
-              <span class="text-2xl font-black text-gray-300 dark:text-gray-700 w-7 flex-shrink-0 leading-none mt-0.5 select-none">
+              <span class="text-2xl font-black text-gray-300 dark:text-gray-700 w-7 shrink-0 leading-none mt-0.5 select-none">
                 0{{ index + 1 }}
               </span>
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-1.5 mb-1">
-                  <div class="w-4 h-4 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-500 dark:text-gray-400 flex-shrink-0">
+                  <div class="w-4 h-4 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-500 dark:text-gray-400 shrink-0">
                     {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
                   </div>
                   <span class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ post.user?.name }}</span>
@@ -162,7 +162,7 @@
             to="/playlists"
             class="mt-4 inline-block text-sm font-medium text-gray-900 dark:text-white hover:underline"
           >
-            Browse all series &rarr;
+            Browse all series <Icon name="lucide:arrow-right" class="w-4 h-4 inline" />
           </NuxtLink>
         </section>
       </aside>

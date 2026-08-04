@@ -9,7 +9,7 @@
     <!-- Skeleton -->
     <div v-if="pending" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
       <div v-for="i in 6" :key="i" class="animate-pulse border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden bg-white dark:bg-dark-secondary">
-        <div class="aspect-[4/3] bg-gray-200 dark:bg-gray-800 w-full"></div>
+        <div class="aspect-4/3 bg-gray-200 dark:bg-gray-800 w-full"></div>
         <div class="p-4 space-y-2">
           <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-3/4"></div>
           <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
@@ -32,7 +32,7 @@
         class="group block border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden hover:border-gray-400 dark:hover:border-gray-600 bg-white dark:bg-dark-secondary transition-colors"
       >
         <!-- Cover -->
-        <div class="aspect-[4/3] bg-gray-100 dark:bg-dark overflow-hidden relative">
+        <div class="aspect-4/3 bg-gray-100 dark:bg-dark overflow-hidden relative">
           <img
             v-if="pl.cover"
             :src="pl.cover"

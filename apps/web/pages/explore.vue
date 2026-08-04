@@ -3,8 +3,8 @@
     <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-4 md:mb-6">Explore</h1>
 
     <!-- Search bar -->
-    <div class="relative mb-5">
-      <Icon name="lucide:search" class="absolute left-4 top-3 md:top-3.5 w-5 h-5 text-gray-400 dark:text-gray-400" />
+    <div class="relative mb-5 flex items-center">
+      <Icon name="lucide:search" class="absolute left-4 top-3 md:top-4 w-5 h-5 text-gray-400 dark:text-gray-400" />
       <input
         v-model="searchQuery"
         type="text"
@@ -39,7 +39,7 @@
             <div class="h-5 bg-gray-200 dark:bg-gray-800 rounded w-3/4"></div>
             <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
           </div>
-          <div class="w-16 h-16 bg-gray-200 dark:bg-gray-800 rounded flex-shrink-0 ml-4"></div>
+          <div class="w-16 h-16 bg-gray-200 dark:bg-gray-800 rounded shrink-0 ml-4"></div>
         </div>
       </div>
     </div>
@@ -61,12 +61,12 @@
           <div class="flex-1 min-w-0">
             <!-- Author row -->
             <div class="flex items-center gap-2 mb-3">
-              <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-400 flex-shrink-0">
+              <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-400 shrink-0">
                 {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
               </div>
               <span class="text-sm text-gray-700 dark:text-gray-300 font-medium truncate">{{ post.user?.name }}</span>
               <span class="text-gray-300 dark:text-gray-700 text-sm">·</span>
-              <span class="text-sm text-gray-400 dark:text-gray-500 flex-shrink-0">{{ formatDate(post.publishedAt) }}</span>
+              <span class="text-sm text-gray-400 dark:text-gray-500 shrink-0">{{ formatDate(post.publishedAt) }}</span>
             </div>
 
             <!-- Title + subtitle -->
@@ -91,7 +91,7 @@
           </div>
 
           <!-- Thumbnail -->
-          <NuxtLink v-if="post.cover" :to="`/posts/${post.slug}`" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 rounded-sm overflow-hidden flex-shrink-0 ml-3 sm:ml-4 bg-gray-100 dark:bg-dark-secondary border dark:border-gray-800">
+          <NuxtLink v-if="post.cover" :to="`/posts/${post.slug}`" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 rounded-sm overflow-hidden shrink-0 ml-3 sm:ml-4 bg-gray-100 dark:bg-dark-secondary border dark:border-gray-800">
             <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
           </NuxtLink>
         </div>
@@ -105,9 +105,9 @@
         @click="fetchPosts(meta.page - 1)"
         class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer"
       >
-        &larr; Previous
+        <Icon name="lucide:arrow-left" class="w-4 h-4 inline" /> Previous
       </button>
-      <span v-else class="text-gray-300 dark:text-gray-700">&larr; Previous</span>
+      <span v-else class="text-gray-300 dark:text-gray-700"><Icon name="lucide:arrow-left" class="w-4 h-4 inline" /> Previous</span>
 
       <span class="text-gray-400 dark:text-gray-500 text-xs">Page {{ meta.page }} of {{ meta.totalPages }}</span>
 
@@ -116,15 +116,15 @@
         @click="fetchPosts(meta.page + 1)"
         class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer"
       >
-        Next &rarr;
+        Next <Icon name="lucide:arrow-right" class="w-4 h-4 inline" />
       </button>
-      <span v-else class="text-gray-300 dark:text-gray-700">Next &rarr;</span>
+      <span v-else class="text-gray-300 dark:text-gray-700">Next <Icon name="lucide:arrow-right" class="w-4 h-4 inline" /></span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 
 useHead({ title: 'Explore - Coderium' });
 
@@ -148,10 +148,11 @@ interface SearchMeta {
   totalPages: number;
 }
 
+const route = useRoute();
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase as string;
 
-const searchQuery = ref('');
+const searchQuery = ref((route.query.q as string) ?? '');
 const filterType = ref('');
 const posts = ref<SearchResult[]>([]);
 const meta = ref<SearchMeta>({ page: 1, limit: 10, total: 0, totalPages: 0 });
@@ -168,6 +169,14 @@ const types = [
 let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
 onMounted(() => fetchPosts());
+
+watch(
+  () => route.query.q,
+  (q) => {
+    searchQuery.value = (q as string) ?? '';
+    fetchPosts();
+  }
+);
 
 function onSearch() {
   if (searchTimeout) clearTimeout(searchTimeout);
