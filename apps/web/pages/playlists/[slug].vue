@@ -1,25 +1,21 @@
 <template>
   <div class="w-full mx-auto py-6 md:py-12 px-4 md:px-6">
-    <div v-if="pending" class="animate-pulse space-y-6">
-      <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded-sm w-1/4"></div>
-      <div class="h-10 bg-gray-200 dark:bg-gray-800 rounded-sm w-3/4"></div>
-      <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded-sm w-1/2"></div>
-      <div class="h-64 bg-gray-200 dark:bg-gray-800 rounded-2xl w-full"></div>
+    <div v-if="pending" class="space-y-6">
+      <SkeletonBlock class="h-6 rounded-sm w-1/4" />
+      <SkeletonBlock class="h-10 rounded-sm w-3/4" />
+      <SkeletonBlock class="h-4 rounded-sm w-1/2" />
+      <SkeletonBlock class="h-64 rounded-2xl w-full" />
     </div>
 
     <div v-else-if="error" class="text-center py-10 md:py-20 bg-gray-50 dark:bg-dark-secondary rounded-2xl border dark:border-gray-800">
-      <h1 class="text-2xl font-bold text-gray-880 dark:text-white">Playlist Not Found</h1>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Playlist Not Found</h1>
       <p class="text-gray-500 dark:text-gray-400 mt-2">The playlist you are looking for might have been removed or unpublished.</p>
-      <button @click="router.back()" class="mt-6 inline-flex items-center gap-1.5 px-6 py-2.5 bg-blue-600 dark:bg-blue-700 text-white font-medium rounded-xl hover:bg-blue-700 dark:hover:bg-blue-650 cursor-pointer">
-        <Icon name="lucide:arrow-left" class="w-4 h-4" /> Back to Playlists
-      </button>
+      <BackButton label="Back to Playlists" variant="solid-blue" class="mt-6" />
     </div>
 
     <div v-else-if="playlist" class="space-y-8 md:space-y-12">
       <!-- Back Link -->
-      <button @click="router.back()" class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
-        <Icon name="lucide:arrow-left" class="w-4 h-4" /> Back to Playlists
-      </button>
+      <BackButton label="Back to Playlists" link-class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400" />
 
       <!-- Playlist Info Header -->
       <header class="flex flex-col md:flex-row gap-4 md:gap-8 items-start pb-6 md:pb-8 border-b dark:border-gray-800">
@@ -42,9 +38,11 @@
       <section class="space-y-4 md:space-y-6">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white">Curated Stories in this Playlist</h2>
 
-        <div v-if="!playlist.posts || playlist.posts.length === 0" class="text-gray-500 dark:text-gray-400 py-6 md:py-8 text-center bg-gray-50 dark:bg-dark-secondary rounded-2xl border dark:border-gray-800">
-          No stories added to this playlist yet.
-        </div>
+        <EmptyState
+          v-if="!playlist.posts || playlist.posts.length === 0"
+          message="No stories added to this playlist yet."
+          padding="py-6 md:py-8 bg-gray-50 dark:bg-dark-secondary rounded-2xl border dark:border-gray-800"
+        />
 
         <div v-else class="space-y-4">
           <div

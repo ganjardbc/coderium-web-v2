@@ -37,68 +37,28 @@
 
         <!-- Skeleton -->
         <div v-if="pending" class="divide-y divide-gray-100 dark:divide-gray-800">
-          <div v-for="i in 3" :key="i" class="py-6 md:py-8 first:pt-0 animate-pulse">
+          <div v-for="i in 3" :key="i" class="py-6 md:py-8 first:pt-0">
             <div class="flex gap-4 items-start justify-between">
               <div class="flex-1 space-y-3">
                 <div class="flex items-center gap-2">
-                  <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-800"></div>
-                  <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-24"></div>
+                  <SkeletonBlock class="w-6 h-6 rounded-full" />
+                  <SkeletonBlock class="h-3 rounded w-24" />
                 </div>
-                <div class="h-5 bg-gray-200 dark:bg-gray-800 rounded w-3/4"></div>
-                <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
-                <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-1/2"></div>
+                <SkeletonBlock class="h-5 rounded w-3/4" />
+                <SkeletonBlock class="h-3 rounded w-full" />
+                <SkeletonBlock class="h-3 rounded w-1/2" />
               </div>
-              <div class="w-16 h-16 rounded bg-gray-200 dark:bg-gray-800 shrink-0 ml-4"></div>
+              <SkeletonBlock class="w-16 h-16 rounded shrink-0 ml-4" />
             </div>
           </div>
         </div>
 
         <!-- Empty -->
-        <div v-else-if="recentPosts.length === 0" class="py-8 md:py-12 text-center text-gray-400 dark:text-gray-500 text-sm">
-          No stories published yet.
-        </div>
+        <EmptyState v-else-if="recentPosts.length === 0" message="No stories published yet." padding="py-8 md:py-12" />
 
         <!-- Article list -->
         <div v-else class="divide-y divide-gray-100 dark:divide-gray-800">
-          <article v-for="post in recentPosts" :key="post.id" class="py-6 md:py-8 first:pt-0 group">
-            <div class="flex items-start gap-4 justify-between">
-              <div class="flex-1 min-w-0">
-                <!-- Author row -->
-                <div class="flex items-center gap-2 mb-3">
-                  <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-400 shrink-0">
-                    {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
-                  </div>
-                  <span class="text-sm text-gray-700 dark:text-gray-300 font-medium truncate">{{ post.user?.name }}</span>
-                  <span class="text-gray-300 dark:text-gray-700 text-sm">·</span>
-                  <span class="text-sm text-gray-400 dark:text-gray-400 shrink-0">{{ formatDate(post.publishedAt) }}</span>
-                </div>
-
-                <!-- Title + subtitle -->
-                <NuxtLink :to="`/posts/${post.slug}`" class="block">
-                  <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white leading-snug group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors line-clamp-2">
-                    {{ post.title }}
-                  </h2>
-                  <p v-if="post.subtitle" class="mt-1 text-gray-500 dark:text-gray-400 text-sm line-clamp-2">
-                    {{ post.subtitle }}
-                  </p>
-                </NuxtLink>
-
-                <!-- Meta row -->
-                <div class="flex items-center gap-3 mt-3 text-xs text-gray-400 dark:text-gray-400">
-                  <span class="px-2 py-0.5 rounded-full border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 capitalize">
-                    {{ post.type }}
-                  </span>
-                  <span>{{ readingTime(post.subtitle ?? post.title) }}</span>
-                  <span>{{ post.viewsCount }} views</span>
-                </div>
-              </div>
-
-              <!-- Thumbnail -->
-              <NuxtLink v-if="post.cover" :to="`/posts/${post.slug}`" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 rounded-sm overflow-hidden shrink-0 ml-3 sm:ml-4 bg-gray-100 dark:bg-dark-secondary border dark:border-gray-800">
-                <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
-              </NuxtLink>
-            </div>
-          </article>
+          <PostListItem v-for="post in recentPosts" :key="post.id" :post="post" />
         </div>
       </section>
 
@@ -109,18 +69,16 @@
           <h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-5">Popular on Coderium</h3>
 
           <div v-if="pendingPopular" class="space-y-5">
-            <div v-for="i in 3" :key="i" class="animate-pulse flex gap-3">
-              <div class="w-6 h-4 bg-gray-200 dark:bg-gray-800 rounded shrink-0 mt-1"></div>
+            <div v-for="i in 3" :key="i" class="flex gap-3">
+              <SkeletonBlock class="w-6 h-4 rounded shrink-0 mt-1" />
               <div class="flex-1 space-y-2">
-                <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
-                <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-2/3"></div>
+                <SkeletonBlock class="h-3 rounded w-full" />
+                <SkeletonBlock class="h-3 rounded w-2/3" />
               </div>
             </div>
           </div>
 
-          <div v-else-if="popularPosts.length === 0" class="text-sm text-gray-400 dark:text-gray-500">
-            No popular posts yet.
-          </div>
+          <EmptyState v-else-if="popularPosts.length === 0" message="No popular posts yet." padding="" :center="false" />
 
           <div v-else class="space-y-5">
             <div
@@ -133,9 +91,7 @@
               </span>
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-1.5 mb-1">
-                  <div class="w-4 h-4 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-500 dark:text-gray-400 shrink-0">
-                    {{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}
-                  </div>
+                  <UserAvatar :name="post.user?.name" size="xs" />
                   <span class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ post.user?.name }}</span>
                 </div>
                 <NuxtLink :to="`/posts/${post.slug}`">
@@ -216,19 +172,4 @@ const { data: popularRes, pending: pendingPopular } = await useAsyncData<{ data:
   () => $fetch(`${apiBase}/posts/popular`)
 );
 const popularPosts = computed(() => popularRes.value?.data || []);
-
-function formatDate(dateStr: string): string {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-}
-
-function readingTime(text?: string | null): string {
-  if (!text) return '1 min read';
-  const mins = Math.max(1, Math.round(text.trim().split(/\s+/).length / 200));
-  return `${mins} min read`;
-}
 </script>

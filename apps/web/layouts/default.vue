@@ -54,30 +54,14 @@
       <aside class="hidden md:block w-52 md:w-60 py-8 border-r border-gray-100 dark:border-gray-800 sticky top-16 h-[calc(105vh-4rem)] shrink-0">
         <nav class="space-y-1.5 pr-4">
           <NuxtLink
-            to="/"
+            v-for="item in navItems"
+            :key="item.to"
+            :to="item.to"
             class="flex items-center gap-3 px-3 py-2.5 rounded-full text-base font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-dark-secondary/50 transition-all"
-            :class="{ 'bg-gray-50 dark:bg-dark-secondary text-gray-900! dark:text-gray-100!': $route.path === '/' }"
+            :class="{ 'bg-gray-50 dark:bg-dark-secondary text-gray-900! dark:text-gray-100!': item.isActive($route) }"
           >
-            <Icon name="lucide:home" class="w-5 h-5" />
-            <span>Home</span>
-          </NuxtLink>
-
-          <NuxtLink
-            to="/explore"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-full text-base font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-dark-secondary/50 transition-all"
-            :class="{ 'bg-gray-50 dark:bg-dark-secondary text-gray-900! dark:text-gray-100!': $route.path === '/explore' }"
-          >
-            <Icon name="lucide:compass" class="w-8" />
-            <span>Explore</span>
-          </NuxtLink>
-
-          <NuxtLink
-            to="/playlists"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-full text-base font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-dark-secondary/50 transition-all"
-            :class="{ 'bg-gray-50 dark:bg-dark-secondary text-gray-900! dark:text-gray-100!': $route.path.startsWith('/playlists') }"
-          >
-            <Icon name="lucide:library" class="w-8" />
-            <span>Series</span>
+            <Icon :name="item.icon" class="w-8" />
+            <span>{{ item.label }}</span>
           </NuxtLink>
         </nav>
       </aside>
@@ -104,30 +88,14 @@
     <!-- Mobile Bottom Navigation Bar -->
     <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-dark/95 border-t border-gray-200 dark:border-gray-800 backdrop-blur-md md:hidden flex justify-around items-center py-2 px-6">
       <NuxtLink
-        to="/"
+        v-for="item in navItems"
+        :key="item.to"
+        :to="item.to"
         class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
-        :class="{ 'text-gray-900 dark:text-gray-100 font-semibold': $route.path === '/' }"
+        :class="{ 'text-gray-900 dark:text-gray-100 font-semibold': item.isActive($route) }"
       >
-        <Icon name="lucide:home" class="w-5 h-5" />
-        <span class="text-[10px]">Home</span>
-      </NuxtLink>
-
-      <NuxtLink
-        to="/explore"
-        class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
-        :class="{ 'text-gray-900 dark:text-gray-100 font-semibold': $route.path === '/explore' }"
-      >
-        <Icon name="lucide:compass" class="w-5 h-5" />
-        <span class="text-[10px]">Explore</span>
-      </NuxtLink>
-
-      <NuxtLink
-        to="/playlists"
-        class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
-        :class="{ 'text-gray-900 dark:text-gray-100 font-semibold': $route.path.startsWith('/playlists') }"
-      >
-        <Icon name="lucide:library" class="w-5 h-5" />
-        <span class="text-[10px]">Series</span>
+        <Icon :name="item.icon" class="w-5 h-5" />
+        <span class="text-[10px]">{{ item.label }}</span>
       </NuxtLink>
     </nav>
   </div>
@@ -139,6 +107,12 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const adminUrl = import.meta.env.VITE_ADMIN_URL || 'http://localhost:5173';
+
+const navItems = [
+  { to: '/', icon: 'lucide:home', label: 'Home', isActive: (route: { path: string }) => route.path === '/' },
+  { to: '/explore', icon: 'lucide:compass', label: 'Explore', isActive: (route: { path: string }) => route.path === '/explore' },
+  { to: '/playlists', icon: 'lucide:library', label: 'Series', isActive: (route: { path: string }) => route.path.startsWith('/playlists') },
+];
 
 const isDark = ref(false);
 const searchValue = ref('');

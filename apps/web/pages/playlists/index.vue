@@ -8,20 +8,18 @@
 
     <!-- Skeleton -->
     <div v-if="pending" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-      <div v-for="i in 6" :key="i" class="animate-pulse border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden bg-white dark:bg-dark-secondary">
-        <div class="aspect-4/3 bg-gray-200 dark:bg-gray-800 w-full"></div>
+      <div v-for="i in 6" :key="i" class="border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden bg-white dark:bg-dark-secondary">
+        <SkeletonBlock class="aspect-4/3 w-full" />
         <div class="p-4 space-y-2">
-          <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-3/4"></div>
-          <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
-          <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-1/2"></div>
+          <SkeletonBlock class="h-4 rounded w-3/4" />
+          <SkeletonBlock class="h-3 rounded w-full" />
+          <SkeletonBlock class="h-3 rounded w-1/2" />
         </div>
       </div>
     </div>
 
     <!-- Empty -->
-    <div v-else-if="playlists.length === 0" class="text-center py-16 text-gray-400 dark:text-gray-500">
-      <p>No series created yet. Check back later!</p>
-    </div>
+    <EmptyState v-else-if="playlists.length === 0" message="No series created yet. Check back later!" padding="py-16" />
 
     <!-- Grid -->
     <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">

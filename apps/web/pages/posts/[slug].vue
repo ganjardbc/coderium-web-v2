@@ -8,40 +8,37 @@
 
   <div class="max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-12">
     <!-- Loading skeleton -->
-    <div v-if="pending" class="animate-pulse space-y-6">
-      <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/4"></div>
-      <div class="h-8 bg-gray-200 dark:bg-gray-800 rounded w-3/4"></div>
-      <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/2"></div>
-      <div class="h-64 bg-gray-200 dark:bg-gray-800 rounded-xl w-full"></div>
+    <div v-if="pending" class="space-y-6">
+      <SkeletonBlock class="h-4 rounded w-1/4" />
+      <SkeletonBlock class="h-8 rounded w-3/4" />
+      <SkeletonBlock class="h-4 rounded w-1/2" />
+      <SkeletonBlock class="h-64 rounded-xl w-full" />
     </div>
 
     <!-- Not found -->
     <div v-else-if="error" class="text-center py-10 md:py-20">
       <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Story Not Found</h1>
       <p class="text-gray-500 dark:text-gray-400 mt-2">The article you are looking for might have been removed or unpublished.</p>
-      <button @click="router.back()" class="mt-6 inline-block px-5 py-2 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors">
-        Back Home
-      </button>
+      <BackButton label="Back Home" variant="solid-dark" class="mt-6" />
     </div>
 
     <article v-else-if="post">
       <!-- Back link -->
-      <button @click="router.back()" class="inline-flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-colors mb-6 md:mb-8 cursor-pointer">
-        <Icon name="lucide:arrow-left" class="w-4 h-4" /> Back to Explore
-      </button>
+      <BackButton
+        label="Back to Explore"
+        link-class="text-gray-400 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
+        class="mb-6 md:mb-8"
+      />
 
       <!-- Post header -->
       <header class="space-y-3 md:space-y-4 mb-6">
         <!-- Author row -->
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-sm font-bold text-gray-600 dark:text-gray-400 shrink-0">
-            <img v-if="post.user?.avatarUrl" :src="post.user.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
-            <span v-else>{{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}</span>
-          </div>
+          <UserAvatar :name="post.user?.name" :avatar-url="post.user?.avatarUrl" size="md" />
           <div>
             <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ post.user?.name }}</p>
             <p class="text-xs text-gray-400 dark:text-gray-500">
-              {{ formatDate(post.publishedAt) }} &bull; {{ readingTimeDisplay }}
+              {{ formatDate(post.publishedAt, 'long') }} &bull; {{ readingTimeDisplay }}
             </p>
           </div>
         </div>
@@ -51,38 +48,15 @@
         <p v-if="post.subtitle" class="text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed">{{ post.subtitle }}</p>
 
         <!-- Action Bar (Top) -->
-        <div class="flex items-center justify-between border-y border-gray-100 dark:border-gray-800 py-3 my-6">
-          <div class="flex items-center gap-6">
-            <!-- Like Button -->
-            <button
-              @click="toggleLike"
-              :disabled="likeLoading"
-              class="flex items-center gap-2 text-sm transition-colors cursor-pointer text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-              :class="{ 'text-red-500!': liked, 'clap-animate': liked }"
-            >
-              <Icon name="lucide:heart" class="w-5 h-5" :class="{ 'fill-current': liked }" />
-              <span>{{ post.likesCount }}</span>
-            </button>
-
-            <!-- Views Count -->
-            <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-              <Icon name="lucide:eye" class="w-5 h-5" />
-              <span>{{ post.viewsCount }} views</span>
-            </div>
-          </div>
-
-          <!-- Right Side: Share / Copy Link -->
-          <div class="flex items-center gap-3">
-            <button
-              @click="copyShareLink"
-              class="p-1.5 rounded-full hover:bg-gray-50 dark:hover:bg-dark-secondary text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors cursor-pointer"
-              title="Copy Link"
-            >
-              <Icon name="lucide:share-2" class="w-5 h-5" />
-            </button>
-            <span v-if="copiedLink" class="text-xs text-green-600 dark:text-green-400 font-medium">Link copied!</span>
-          </div>
-        </div>
+        <PostActionBar
+          :likes-count="post.likesCount"
+          :views-count="post.viewsCount"
+          :liked="liked"
+          :like-loading="likeLoading"
+          :copied-link="copiedLink"
+          @toggle-like="toggleLike"
+          @share="copyShareLink"
+        />
       </header>
 
       <!-- Cover Image -->
@@ -107,46 +81,20 @@
       </div>
 
       <!-- Action Bar (Bottom) -->
-      <div class="flex items-center justify-between border-y border-gray-100 dark:border-gray-800 py-3 my-6">
-        <div class="flex items-center gap-6">
-          <!-- Like Button -->
-          <button
-            @click="toggleLike"
-            :disabled="likeLoading"
-            class="flex items-center gap-2 text-sm transition-colors cursor-pointer text-gray-500 hover:text-gray-955 dark:text-gray-400 dark:hover:text-white"
-            :class="{ 'text-red-500!': liked, 'clap-animate': liked }"
-          >
-            <Icon name="lucide:heart" class="w-5 h-5" :class="{ 'fill-current': liked }" />
-            <span>{{ post.likesCount }}</span>
-          </button>
-
-          <!-- Views Count -->
-          <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-            <Icon name="lucide:eye" class="w-5 h-5" />
-            <span>{{ post.viewsCount }} views</span>
-          </div>
-        </div>
-
-        <!-- Right Side: Share / Copy Link -->
-        <div class="flex items-center gap-3">
-          <button
-            @click="copyShareLink"
-            class="p-1.5 rounded-full hover:bg-gray-50 dark:hover:bg-dark-secondary text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors cursor-pointer"
-            title="Copy Link"
-          >
-            <Icon name="lucide:share-2" class="w-5 h-5" />
-          </button>
-          <span v-if="copiedLink" class="text-xs text-green-600 dark:text-green-400 font-medium">Link copied!</span>
-        </div>
-      </div>
+      <PostActionBar
+        :likes-count="post.likesCount"
+        :views-count="post.viewsCount"
+        :liked="liked"
+        :like-loading="likeLoading"
+        :copied-link="copiedLink"
+        @toggle-like="toggleLike"
+        @share="copyShareLink"
+      />
 
       <!-- Written by -->
       <div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
         <div class="flex items-center gap-5">
-          <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-2xl font-bold text-gray-500 dark:text-gray-400 shrink-0">
-            <img v-if="post.user?.avatarUrl" :src="post.user.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
-            <span v-else>{{ post.user?.name?.charAt(0).toUpperCase() ?? '?' }}</span>
-          </div>
+          <UserAvatar :name="post.user?.name" :avatar-url="post.user?.avatarUrl" size="lg" />
           <div class="flex justify-between items-center flex-1">
             <div class="flex-1">
               <p class="text-xs text-gray-400 dark:text-gray-400 uppercase tracking-wider font-medium">Written by</p>
@@ -252,11 +200,9 @@ onUnmounted(() => {
 });
 
 // Reading time
-const readingTimeDisplay = computed(() => {
-  const text = post.value?.content ?? post.value?.subtitle ?? post.value?.title ?? '';
-  const mins = Math.max(1, Math.round(text.trim().split(/\s+/).length / 200));
-  return `${mins} min read`;
-});
+const readingTimeDisplay = computed(() =>
+  readingTime(post.value?.content ?? post.value?.subtitle ?? post.value?.title ?? '')
+);
 
 // Like/clap
 const liked = ref(false);
@@ -289,15 +235,6 @@ function copyShareLink() {
       copiedLink.value = false;
     }, 2000);
   }
-}
-
-function formatDate(dateStr?: string): string {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
 }
 
 function renderMarkdown(content: string): string {
