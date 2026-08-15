@@ -1,5 +1,5 @@
 ---
-allowed-tools: Read, Write, Glob, Bash(ls:*), Bash(git status:*), Bash(git branch:*), Bash(git checkout:*), Task
+allowed-tools: Read, Write, Glob, Bash(ls:*), Task
 description: Mulai alur Discovery (Klaster 1) untuk satu fitur — PM Agent menulis prd.md + flow.md di .caf/discovery/{slug}/, tanpa membuat ticket
 argument-hint: [nama fitur, contoh: "checkout tanpa login"]
 ---
@@ -18,21 +18,10 @@ approval per-item.
 `$ARGUMENTS` — nama fitur dalam bahasa manusia. WAJIB diisi. Kalau kosong, tanya user nama
 fiturnya dan STOP sampai dijawab — jangan tebak fitur apa yang dimaksud.
 
-## 1. Siapkan branch
+## 1. Branch
 
-1. Generate slug dari nama fitur (kebab-case).
-2. Cek branch `discovery/{slug}` sudah ada atau belum (`git branch --list`):
-   - **Belum ada** → `git checkout -b discovery/{slug}` dari branch aktif saat ini.
-   - **Sudah ada** → berarti discovery ini pernah dimulai sebelumnya. Checkout ke branch
-     itu (`git checkout discovery/{slug}`), JANGAN buat branch baru menimpa. Lanjut seperti
-     biasa — kalau folder `.caf/discovery/{slug}/` juga sudah ada, ini jadi kasus "lanjutkan
-     discovery yang belum selesai", bukan mulai dari nol.
-3. Kalau working directory tidak bersih (ada perubahan belum commit) SEBELUM checkout,
-   STOP dan laporkan ke user — jangan checkout branch baru dengan uncommitted changes yang
-   bisa ikut terbawa atau hilang.
-4. Command ini TIDAK melakukan push atau buat PR — itu keputusan manusia, dilakukan manual
-   setelah discovery dianggap selesai (biasanya setelah `handoff.md` ditulis oleh
-   `/caf-discovery-to-ticket`).
+Discovery folder (`.caf/discovery/`) sudah di-gitignore — tidak perlu branch terpisah.
+Kerjakan langsung di branch aktif saat ini, tidak ada checkout/branch baru.
 
 ## 2. Bikin slug dan folder
 
