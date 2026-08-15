@@ -3,42 +3,23 @@
     <ConfirmDialog />
     <Toast />
 
-    <!-- Sidebar Backdrop for mobile -->
-    <div
-      v-if="isMobileOpen"
-      class="fixed inset-0 bg-black/40 z-40 md:hidden"
-      @click="isMobileOpen = false"
-    ></div>
-
-    <!-- Sidebar -->
+    <!-- Desktop Sidebar (persistent, always visible md+) -->
     <aside
-      :class="[
-        'fixed inset-y-0 left-0 top-0 z-50 w-64 bg-white dark:bg-dark border-r border-gray-200 dark:border-gray-700 flex flex-col transition-transform duration-300 md:translate-x-0 md:sticky md:h-screen md:shrink-0',
-        isMobileOpen ? 'translate-x-0' : '-translate-x-full'
-      ]"
+      class="hidden md:flex md:sticky md:top-0 md:h-screen md:shrink-0 w-64 bg-white dark:bg-dark border-r border-gray-200 dark:border-gray-700 flex-col"
     >
       <!-- Brand Logo -->
       <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-700 justify-between">
-        <router-link to="/" class="flex items-center gap-2" @click="isMobileOpen = false">
+        <router-link to="/" class="flex items-center gap-2">
           <img src="@/assets/logo-fill.png" alt="Coderium Logo" class="h-8 w-auto object-contain dark:hidden" />
           <img src="@/assets/logo-white.png" alt="Coderium Logo" class="h-8 w-auto object-contain hidden dark:block" />
           <span class="px-1.5 py-0.5 text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md border border-gray-200 dark:border-gray-700">Admin</span>
         </router-link>
-        <!-- Mobile close button -->
-        <button
-          class="md:hidden p-1 rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
-          @click="isMobileOpen = false"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
       </div>
 
       <!-- Navigation Links -->
       <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-1.5">
         <div
-          v-for="(section, idx) in menuSections"
+          v-for="(section, idx) in menuSectionModels"
           :key="section.title"
           :class="{ 'pt-4': idx > 0 }"
         >
@@ -46,67 +27,126 @@
             {{ section.title }}
           </div>
 
-          <div class="space-y-1.5">
-            <div v-for="item in section.items" :key="item.to">
+          <PanelMenu :model="section.items" :expandedKeys="expandedKeys" :pt="panelMenuPt" class="admin-panelmenu">
+            <template #item="{ item, root }">
               <router-link
-                :to="item.to"
+                :to="item.original.to"
                 class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                :class="{ 'bg-gray-100! dark:bg-gray-800! text-gray-900! dark:text-white!': isMenuItemActive(item) }"
-                @click="isMobileOpen = false"
+                :class="root
+                  ? { 'bg-gray-100! dark:bg-gray-800! text-gray-900! dark:text-white!': isMenuItemActive(item.original) }
+                  : ['pl-4! py-1.5! text-xs!', { 'text-blue-600! dark:text-blue-400! font-semibold': isSubmenuItemActive(item.original) }]"
               >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    v-for="(path, pIdx) in item.iconPaths"
-                    :key="pIdx"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    :d="path"
-                  />
-                </svg>
+                <i v-if="root && item.icon" :class="['pi', item.icon, 'text-sm']"></i>
                 {{ item.label }}
               </router-link>
-
-              <!-- Submenu (if any and active) -->
-              <div v-if="item.submenu && isMenuItemActive(item)" class="pl-7 mt-1.5 space-y-1">
-                <router-link
-                  v-for="subItem in item.submenu"
-                  :key="subItem.to"
-                  :to="subItem.to"
-                  class="block px-3 py-1.5 text-xs font-medium rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
-                  :class="{ 'text-blue-600! dark:text-blue-400! font-semibold': isSubmenuItemActive(subItem) }"
-                >
-                  {{ subItem.label }}
-                </router-link>
-              </div>
-            </div>
-          </div>
+            </template>
+          </PanelMenu>
         </div>
       </nav>
 
       <!-- User Info & Logout -->
       <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3 bg-gray-50 dark:bg-dark">
         <div class="flex items-center gap-3 overflow-hidden">
-          <div class="w-9 h-9 rounded-full overflow-hidden bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
-            <img v-if="authStore.user?.avatarUrl" :src="authStore.user.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
-            <span v-else>{{ userInitial }}</span>
-          </div>
+          <Avatar
+            :image="!avatarError ? (authStore.user?.avatarUrl ?? undefined) : undefined"
+            :label="(!authStore.user?.avatarUrl || avatarError) ? userInitial : undefined"
+            shape="circle"
+            class="w-9! h-9! bg-blue-600! text-white! font-bold! text-sm! shrink-0"
+            @error="avatarError = true"
+          />
           <div class="overflow-hidden">
             <p class="text-xs font-semibold text-gray-900 dark:text-white truncate">{{ authStore.user?.name || 'Admin User' }}</p>
             <p class="text-[10px] text-gray-500 dark:text-gray-400 truncate">{{ authStore.user?.email || 'admin@coderium.com' }}</p>
           </div>
         </div>
-        <button
-          class="p-1.5 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors cursor-pointer"
+        <Button
+          icon="pi pi-sign-out"
+          text
+          rounded
+          severity="danger"
+          aria-label="Logout"
           title="Logout"
           @click="handleLogout"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-        </button>
+        />
       </div>
     </aside>
+
+    <!-- Mobile Sidebar Drawer -->
+    <Drawer v-model:visible="isMobileOpen" position="left" class="w-64! md:hidden" :showCloseIcon="false">
+      <template #container="{ closeCallback }">
+        <div class="flex flex-col h-full">
+          <!-- Brand Logo -->
+          <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-700 justify-between shrink-0">
+            <router-link to="/" class="flex items-center gap-2" @click="closeCallback">
+              <img src="@/assets/logo-fill.png" alt="Coderium Logo" class="h-8 w-auto object-contain dark:hidden" />
+              <img src="@/assets/logo-white.png" alt="Coderium Logo" class="h-8 w-auto object-contain hidden dark:block" />
+              <span class="px-1.5 py-0.5 text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md border border-gray-200 dark:border-gray-700">Admin</span>
+            </router-link>
+            <button
+              class="p-1 rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+              @click="closeCallback"
+            >
+              <i class="pi pi-times text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Navigation Links -->
+          <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-1.5">
+            <div
+              v-for="(section, idx) in menuSectionModels"
+              :key="section.title"
+              :class="{ 'pt-4': idx > 0 }"
+            >
+              <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 tracking-wider uppercase px-3 mb-2">
+                {{ section.title }}
+              </div>
+
+              <PanelMenu :model="section.items" :expandedKeys="expandedKeys" :pt="panelMenuPt" class="admin-panelmenu">
+                <template #item="{ item, root }">
+                  <router-link
+                    :to="item.original.to"
+                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                    :class="root
+                      ? { 'bg-gray-100! dark:bg-gray-800! text-gray-900! dark:text-white!': isMenuItemActive(item.original) }
+                      : ['pl-4! py-1.5! text-xs!', { 'text-blue-600! dark:text-blue-400! font-semibold': isSubmenuItemActive(item.original) }]"
+                    @click="closeCallback"
+                  >
+                    <i v-if="root && item.icon" :class="['pi', item.icon, 'text-sm']"></i>
+                    {{ item.label }}
+                  </router-link>
+                </template>
+              </PanelMenu>
+            </div>
+          </nav>
+
+          <!-- User Info & Logout -->
+          <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3 bg-gray-50 dark:bg-dark shrink-0">
+            <div class="flex items-center gap-3 overflow-hidden">
+              <Avatar
+                :image="!avatarError ? (authStore.user?.avatarUrl ?? undefined) : undefined"
+                :label="(!authStore.user?.avatarUrl || avatarError) ? userInitial : undefined"
+                shape="circle"
+                class="w-9! h-9! bg-blue-600! text-white! font-bold! text-sm! shrink-0"
+                @error="avatarError = true"
+              />
+              <div class="overflow-hidden">
+                <p class="text-xs font-semibold text-gray-900 dark:text-white truncate">{{ authStore.user?.name || 'Admin User' }}</p>
+                <p class="text-[10px] text-gray-500 dark:text-gray-400 truncate">{{ authStore.user?.email || 'admin@coderium.com' }}</p>
+              </div>
+            </div>
+            <Button
+              icon="pi pi-sign-out"
+              text
+              rounded
+              severity="danger"
+              aria-label="Logout"
+              title="Logout"
+              @click="handleLogout"
+            />
+          </div>
+        </div>
+      </template>
+    </Drawer>
 
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col min-w-0">
@@ -118,46 +158,44 @@
             class="md:hidden p-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
             @click="isMobileOpen = true"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            <i class="pi pi-bars text-sm"></i>
           </button>
 
           <!-- Breadcrumbs -->
-          <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 font-medium">
-            <span>Admin</span>
-            <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-            <span class="text-gray-900 dark:text-white font-semibold capitalize">{{ currentSectionName }}</span>
-          </div>
+          <Breadcrumb :model="breadcrumbItems" class="admin-breadcrumb">
+            <template #item="{ item }">
+              <span
+                class="text-sm font-medium"
+                :class="item.current ? 'text-gray-900 dark:text-white font-semibold capitalize' : 'text-gray-500 dark:text-gray-400'"
+              >
+                {{ item.label }}
+              </span>
+            </template>
+          </Breadcrumb>
         </div>
 
         <div class="flex items-center gap-3">
           <!-- Dark mode toggle -->
-          <button
-            @click="toggleDark"
-            class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          <Button
+            :icon="isDark ? 'pi pi-sun' : 'pi pi-moon'"
+            text
+            rounded
+            :class="isDark ? 'text-yellow-400!' : 'text-gray-500! dark:text-gray-400!'"
             :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-          >
-            <svg v-if="isDark" class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.166 17.834a.75.75 0 00-1.06 1.06l1.59 1.591a.75.75 0 001.061-1.06l-1.59-1.591zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.166 6.166a.75.75 0 001.06 1.06l1.591-1.59a.75.75 0 00-1.061-1.061L6.166 6.166z"/>
-            </svg>
-            <svg v-else class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clip-rule="evenodd"/>
-            </svg>
-          </button>
+            @click="toggleDark"
+          />
 
-          <a
+          <Button
+            as="a"
             :href="webUrl"
             target="_blank"
-            class="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white flex items-center gap-1.5 py-2 px-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-          >
-            Visit Site
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-          </a>
+            label="Visit Site"
+            icon="pi pi-external-link"
+            iconPos="right"
+            text
+            size="small"
+            class="text-xs! border! border-gray-200! dark:border-gray-700!"
+          />
         </div>
       </header>
 
@@ -194,7 +232,6 @@ interface SubmenuItem {
 interface MenuItem {
   label: string;
   to: string;
-  iconPaths: string[];
   activeMatch?: string;
   submenu?: SubmenuItem[];
 }
@@ -210,38 +247,23 @@ const menuSections: MenuSection[] = [
     items: [
       {
         label: 'Dashboard',
-        to: '/',
-        iconPaths: [
-          'M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z'
-        ]
+        to: '/'
       },
       {
         label: 'Posts',
-        to: '/posts',
-        iconPaths: [
-          'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z'
-        ]
+        to: '/posts'
       },
       {
         label: 'Playlists',
-        to: '/playlists',
-        iconPaths: [
-          'M4 6h16M4 10h16M4 14h16M4 18h16'
-        ]
+        to: '/playlists'
       },
       {
         label: 'Media Library',
-        to: '/media',
-        iconPaths: [
-          'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
-        ]
+        to: '/media'
       },
       {
         label: 'Users',
-        to: '/users',
-        iconPaths: [
-          'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
-        ]
+        to: '/users'
       }
     ]
   },
@@ -252,10 +274,6 @@ const menuSections: MenuSection[] = [
         label: 'System Settings',
         to: '/settings/profile',
         activeMatch: '/settings/',
-        iconPaths: [
-          'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z',
-          'M15 12a3 3 0 11-6 0 3 3 0 016 0z'
-        ],
         submenu: [
           { label: 'Profile', to: '/settings/profile' },
           { label: 'Password', to: '/settings/password' },
@@ -281,7 +299,83 @@ function isSubmenuItemActive(subItem: SubmenuItem) {
   return route.path === subItem.to;
 }
 
+// Mapping from route path -> primeicons class, used only for root menu items
+// (submenu items keep their original text-only styling, no icon in the source data).
+const iconMap: Record<string, string> = {
+  '/': 'pi-th-large',
+  '/posts': 'pi-file-edit',
+  '/playlists': 'pi-list',
+  '/media': 'pi-images',
+  '/users': 'pi-users',
+  '/settings/profile': 'pi-cog'
+};
+
+interface PanelModelItem {
+  key: string;
+  label: string;
+  icon?: string;
+  original: MenuItem | SubmenuItem;
+  items?: PanelModelItem[];
+}
+
+function buildPanelItems(items: MenuItem[]): PanelModelItem[] {
+  return items.map((item) => ({
+    key: item.to,
+    label: item.label,
+    icon: iconMap[item.to],
+    original: item,
+    items: item.submenu?.map((subItem) => ({
+      key: subItem.to,
+      label: subItem.label,
+      original: subItem
+    }))
+  }));
+}
+
+// PrimeVue PanelMenu model built once from menuSections (label/route/icon values
+// are not changed, only re-shaped into the MenuItem[] structure PanelMenu expects).
+const menuSectionModels = menuSections.map((section) => ({
+  title: section.title,
+  items: buildPanelItems(section.items)
+}));
+
+// Route-driven expand state for PanelMenu, passed as a controlled prop (no
+// v-model listener) so that PanelMenu's own header-click toggle has no effect -
+// expansion is derived exclusively from the active route, never from clicking.
+const expandedKeys = computed(() => {
+  const keys: Record<string, boolean> = {};
+  menuSections.forEach((section) => {
+    section.items.forEach((item) => {
+      if (item.submenu) {
+        keys[item.to] = isMenuItemActive(item);
+      }
+    });
+  });
+  return keys;
+});
+
+// Strip PanelMenu's default panel/header chrome (border, background, padding)
+// so the component blends into the existing sidebar look instead of rendering
+// as a boxed accordion panel.
+const panelMenuPt = {
+  root: { class: 'border-0! bg-transparent!' },
+  panel: { class: 'border-0! bg-transparent! mb-0!' },
+  header: { class: 'border-0! bg-transparent!' },
+  headerContent: { class: 'border-0! bg-transparent! p-0!' },
+  contentWrapper: { class: 'bg-transparent!' },
+  content: { class: 'border-0! bg-transparent! p-0!' },
+  submenu: { class: 'p-0! m-0! list-none!' },
+  item: { class: 'border-0!' },
+  itemContent: { class: 'bg-transparent! hover:bg-transparent!' }
+};
+
+const breadcrumbItems = computed(() => [
+  { label: 'Admin' },
+  { label: currentSectionName.value, current: true }
+]);
+
 const isMobileOpen = ref(false);
+const avatarError = ref(false);
 
 const userInitial = computed(() => {
   const name = authStore.user?.name || 'A';

@@ -11,8 +11,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Avatar: typeof import('primevue/avatar')['default']
+    Breadcrumb: typeof import('primevue/breadcrumb')['default']
+    Button: typeof import('primevue/button')['default']
     ConfirmDialog: typeof import('primevue/confirmdialog')['default']
+    Drawer: typeof import('primevue/drawer')['default']
     MediaUploader: typeof import('./src/components/MediaUploader.vue')['default']
+    PanelMenu: typeof import('primevue/panelmenu')['default']
     RichTextEditor: typeof import('./src/components/RichTextEditor.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

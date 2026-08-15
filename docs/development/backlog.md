@@ -1021,4 +1021,41 @@ Details:
 - Add dark: classes to layouts/default.vue and all pages under apps/web/pages for full dark/light mode compatibility
 ```
 
+---
+
+## INT-003
+
+Task: Migrate apps/admin/src/layouts/AdminLayout.vue hand-rolled HTML/SVG UI to PrimeVue components (ticket 3)
+
+Status: `DONE`
+
+Details:
+```txt
+- Sidebar nav (Main Menu + Settings) -> PrimeVue PanelMenu per section, route-driven
+  submenu auto-expand replicated via a one-way controlled expandedKeys prop (no
+  v-model), confirmed to match original v-if="item.submenu && isMenuItemActive(item)"
+  behavior (not click-to-toggle)
+- Menu item icons -> primeicons (pi-*) via an explicit route -> icon map
+- Mobile sidebar -> PrimeVue Drawer (backdrop + click-outside + Escape to close,
+  ~300ms transition, matches previous duration-300/translate-x)
+- Breadcrumb -> PrimeVue Breadcrumb, 2 static levels (Admin / current section)
+- Dark-mode toggle and logout trigger -> PrimeVue Button (icon-only), existing
+  toggleDark/useTheme() and handleLogout/ConfirmDialog logic unchanged
+- Avatar -> PrimeVue Avatar with a manual @error handler fallback to initials
+  (PrimeVue Avatar does not auto-fallback when the image fails to load)
+- "Visit Site" link -> PrimeVue Button as="a" link with pi-external-link icon
+- No new dependencies added (primevue/primeicons already installed in apps/admin)
+- KNOWN TRADE-OFF: PrimeVue Drawer only mounts while visible, so it cannot double
+  as the static desktop sidebar the way the original single <aside> did with pure
+  CSS. Sidebar nav/footer markup is duplicated (desktop <aside> block + mobile
+  <Drawer> block), both reading the same reactive state/functions, so there is no
+  behavioral drift but there is markup duplication. Candidate for a shared
+  component extraction in a follow-up ticket (would require a new file, out of
+  scope for ticket 3). See `.caf/tasks/3/verify-report.md` for full detail.
+- Manual/browser smoke test (tasks.md Task 5) was NOT performed by the
+  implementing agent (no automated UI test suite in apps/admin) — recommended
+  before merge: submenu auto-expand under /settings/*, mobile drawer open/close,
+  avatar broken-image fallback, dark mode persistence, logout confirm flow.
+```
+
 

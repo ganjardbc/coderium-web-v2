@@ -56,7 +56,7 @@ M10 - Production Release Completed
 Last Updated:
 
 ```txt
-2026-06-21
+2026-08-16
 ```
 
 ---
@@ -223,6 +223,7 @@ PROD-004 Docker Setup
 PROD-005 Production Deployment
 INT-001 Add environment variables for cross-app redirection
 INT-002 Fix API calls, Prisma schema validation, database seed, and light/dark mode
+INT-003 Migrate AdminLayout.vue (apps/admin) hand-rolled UI to PrimeVue components (ticket 3)
 ```
 
 ---
@@ -404,6 +405,60 @@ Status:
 
 ```txt
 ACTIVE
+```
+
+---
+
+### DEC-006
+
+Date:
+
+```txt
+2026-08-16
+```
+
+Decision:
+
+```txt
+Use PrimeVue PanelMenu (one-way controlled expandedKeys prop) for
+apps/admin AdminLayout.vue sidebar navigation instead of Menu with a
+fully custom template, and use PrimeVue Drawer for the mobile sidebar
+(duplicating desktop/mobile nav markup within the single-file scope of
+ticket 3 rather than extracting a shared component).
+```
+
+Reason:
+
+```txt
+PanelMenu's expandedKeys prop, when passed one-way (no v-model listener),
+lets a header click update the emitted value without it ever being
+reflected back into the component, so the submenu open/close state stays
+driven entirely by our own route-based isMenuItemActive computed — a 1:1
+replication of the original route-driven auto-expand behavior (not
+click-to-toggle). PrimeVue Drawer is a teleported overlay that only
+mounts while visible, so it cannot also serve as a persistent static
+desktop sidebar; duplicating the nav/footer markup (both blocks reading
+the same reactive state/functions) was chosen over introducing a new
+shared component file, since ticket 3 explicitly scoped the change to a
+single file (AdminLayout.vue only).
+```
+
+Status:
+
+```txt
+ACTIVE
+```
+
+Notes:
+
+```txt
+Markup duplication between the desktop <aside> and mobile <Drawer> blocks
+in AdminLayout.vue is a known trade-off, flagged as a candidate for a
+shared component extraction in a follow-up ticket. See
+.caf/tasks/3/verify-report.md for the full evaluation and
+docs/development/backlog.md INT-003 for a summary. Manual/browser smoke
+test of the migrated nav (submenu auto-expand, mobile drawer, avatar
+fallback, dark mode, logout) is still pending before merge.
 ```
 
 ---
