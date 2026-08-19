@@ -64,8 +64,8 @@ coverage
 
 # API Uploads
 /apps/api/uploads/
-.caf/tasks/*/
-!.caf/tasks/README.md
+
+# CAF Documents
 .caf/discovery/*/
 !.caf/discovery/README.md
 .caf/audits/*/
