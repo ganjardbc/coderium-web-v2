@@ -1141,4 +1141,52 @@ Details:
   utama non-regresi; lihat .caf/tasks/12/verify-report.md untuk detail.
 ```
 
+---
+
+---
+
+# Phase 13 - Product Catalog (Admin UI)
+
+## ADMIN-PROD-001
+
+Task: Create Product List & Form Pages (apps/admin, ticket 13)
+
+Status: `DONE`
+
+Details:
+
+```txt
+- Module baru apps/admin/src/modules/products/{router,pages,stores,components}
+  mengikuti struktur module Posts, terdaftar di core/global-routes.ts
+- Router: /products, /products/create, /products/:id/edit (param id, BUKAN
+  slug — beda dari pola Posts, mengikuti kontrak API admin /admin/products/:id)
+- Pinia store product.store.ts: fetchProducts, fetchProductById, createProduct,
+  updateProduct, publishProduct, unpublishProduct, archiveProduct,
+  restoreProduct + helper konversi form <-> payload (cover UploadedMedia[] <->
+  string url, sama pola dengan Posts)
+- List page: DataTable, kolom name/slug/status(badge)/order/updatedAt, toggle
+  sort order asc <-> updatedAt desc, aksi Publish/Unpublish/Archive/
+  Un-archive(restore) per baris, ConfirmDialog untuk Archive, toast saat
+  publish gagal berisi daftar field yang kurang
+- Form (ProductForm.vue, dipakai bareng oleh create.vue & edit.vue): slug
+  auto-generate dari name (client-side, tetap editable, disabled auto-sync
+  saat edit), reuse RichTextEditor.vue (description) & MediaUploader.vue
+  (cover, :multiple="false"), dua field repeatable (pipelineSteps, features)
+  lewat komponen generik baru RepeatableListField.vue, validasi inline
+  per-row, basic client-side format check untuk ctaUrl, dua tombol submit
+  ("Simpan sebagai Draft" / "Simpan & Publish") — status di-derive dari
+  tombol yang diklik, TIDAK ada dropdown status manual terpisah di form
+- Banner error publish gagal: parse err.response.data.fields (bukan cuma
+  .message, beda dari pola generik postsStore), highlight field terkait,
+  input yang sudah diisi TIDAK hilang, status tetap draft
+- Sidebar AdminLayout.vue: tambah entry "Products" (antara Posts dan
+  Playlists) + icon pi-box
+- Tidak ada script lint/test di apps/admin/package.json — verifikasi pakai
+  typecheck (vue-tsc --noEmit) dan build (vue-tsc -b && vite build), keduanya
+  PASS; lihat .caf/tasks/13/verify-report.md untuk detail lengkap
+  (termasuk konfirmasi bentuk body error 400 publish via read-through
+  AllExceptionsFilter, dan konfirmasi permission manage_products sudah ada
+  di seed sehingga tidak ada blocker)
+```
+
 
