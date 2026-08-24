@@ -18,7 +18,7 @@
           />
         </div>
         <router-link v-slot="{ navigate }" to="/products/create" custom>
-          <Button label="+ Tambah Produk" icon="pi pi-plus" size="small" @click="navigate" />
+          <Button label="Tambah Produk" icon="pi pi-plus" size="small" @click="navigate" />
         </router-link>
       </div>
     </div>
