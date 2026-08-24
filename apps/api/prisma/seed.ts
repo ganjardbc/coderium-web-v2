@@ -326,6 +326,81 @@ async function main() {
   }
   console.log('  Playlists linked to posts successfully');
 
+  // 10. Seed Products
+  const products = [
+    {
+      name: 'Coderium Analytics',
+      tagline: 'Real-time analytics for modern teams',
+      description: 'A powerful analytics platform that helps teams track key metrics, visualize data, and make informed decisions.',
+      status: 'published' as const,
+      cover: createdMedia['sample-cover-1.jpg'],
+      pipelineSteps: [
+        { title: 'Discovery', description: 'Understand your data sources' },
+        { title: 'Integration', description: 'Connect your stack in minutes' },
+        { title: 'Insights', description: 'Get actionable dashboards' },
+      ],
+      features: [
+        { title: 'Real-time dashboards', description: 'Monitor metrics as they happen' },
+        { title: 'Custom alerts', description: 'Get notified when thresholds are hit' },
+        { title: 'Team collaboration', description: 'Share insights across your org' },
+      ],
+      ctaLabel: 'Get Started',
+      ctaUrl: 'https://coderium.com/products/analytics',
+      order: 1,
+      featured: true,
+    },
+    {
+      name: 'Coderium CMS',
+      tagline: 'Headless content management, simplified',
+      description: 'A flexible headless CMS built for developers who want speed and editors who want control.',
+      status: 'published' as const,
+      cover: createdMedia['sample-cover-2.jpg'],
+      pipelineSteps: [
+        { title: 'Model your content', description: 'Define schemas with zero config' },
+        { title: 'Publish', description: 'Push content via API or UI' },
+      ],
+      features: [
+        { title: 'API-first', description: 'REST and GraphQL out of the box' },
+        { title: 'Role-based access', description: 'Fine-grained permissions for teams' },
+      ],
+      ctaLabel: 'Learn More',
+      ctaUrl: 'https://coderium.com/products/cms',
+      order: 2,
+      featured: true,
+    },
+    {
+      name: 'Coderium Pipelines',
+      tagline: 'CI/CD that gets out of your way',
+      description: 'Automate build, test, and deploy pipelines with a simple declarative configuration.',
+      status: 'draft' as const,
+      cover: createdMedia['sample-cover-3.jpg'],
+      pipelineSteps: [
+        { title: 'Configure', description: 'Define your pipeline as code' },
+        { title: 'Run', description: 'Trigger builds on every push' },
+        { title: 'Deploy', description: 'Ship to any environment' },
+      ],
+      features: [
+        { title: 'Parallel jobs', description: 'Speed up builds with parallelism' },
+        { title: 'Deploy previews', description: 'Preview every branch automatically' },
+      ],
+      order: 3,
+      featured: false,
+    },
+  ];
+
+  for (const product of products) {
+    const slug = slugify(product.name);
+    await prisma.product.upsert({
+      where: { slug },
+      update: {},
+      create: {
+        ...product,
+        slug,
+      },
+    });
+    console.log(`  Product: ${product.name}`);
+  }
+
   console.log('Seeding completed!');
 }
 
