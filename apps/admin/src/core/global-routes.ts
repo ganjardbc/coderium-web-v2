@@ -2,6 +2,8 @@ import type { App } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
 
+import { useAuthStore } from '@/modules/auth/stores/auth.store';
+
 import { authRoutes } from '@/modules/auth/router';
 import { dashboardRoutes } from '@/modules/dashboard/router';
 import { postsRoutes } from '@/modules/posts/router';
@@ -28,7 +30,7 @@ export function setupRouter(app: App) {
     routes,
   });
 
-  router.beforeEach((to) => {
+  router.beforeEach(async (to) => {
     const token = localStorage.getItem('token');
 
     if (to.meta.requiresAuth && !token) {
@@ -37,6 +39,13 @@ export function setupRouter(app: App) {
 
     if (to.meta.requiresGuest && token) {
       return { name: 'home' };
+    }
+
+    if (token) {
+      const authStore = useAuthStore();
+      if (!authStore.user) {
+        await authStore.fetchProfile();
+      }
     }
   });
 
