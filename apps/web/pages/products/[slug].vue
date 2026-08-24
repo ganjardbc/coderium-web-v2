@@ -139,7 +139,7 @@
 
       <!-- Section 5: CTA penutup -->
       <section class="py-8 md:py-12 text-center">
-        <p class="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-4">Siap mulai pilot?</p>
+        <p class="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-4">Ready to piloting?</p>
         <a
           :href="product.ctaUrl"
           target="_blank"
