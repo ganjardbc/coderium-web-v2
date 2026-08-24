@@ -258,11 +258,15 @@ Struktur sidebar admin:
 ```txt
 Dashboard
 Posts
+Products
 Playlists
 Media
 Analytics
 Settings (profile, password, appearance, 2FA)
 ```
+
+(Urutan aktual di `AdminLayout.vue`: entry "Products" ditempatkan di antara
+Posts dan Playlists — ticket 13.)
 
 ---
 

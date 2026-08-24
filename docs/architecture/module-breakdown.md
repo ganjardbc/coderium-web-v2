@@ -55,6 +55,7 @@ auth
 dashboard
 posts
 playlists
+products
 media
 analytics
 settings
@@ -661,6 +662,41 @@ apps/admin
 * Playlist CRUD
 * Attach / detach post
 * Reorder post
+
+---
+
+## Products Module
+
+### App
+
+```txt
+apps/admin
+```
+
+### Pages
+
+```txt
+/products
+/products/create
+/products/:id/edit
+```
+
+(Catatan: routing pakai param `:id`, bukan `:slug` seperti module Posts/Playlists,
+mengikuti kontrak API admin `/admin/products/:id` — lihat ticket 13.)
+
+### Features
+
+* Product CRUD (Simpan sebagai Draft / Simpan & Publish, dua tombol submit,
+  status di-derive dari tombol yang diklik — bukan dropdown status manual)
+* Publish / Unpublish / Archive / Un-archive (restore) sebagai aksi baris di list
+* Reuse `RichTextEditor.vue` (description) dan `MediaUploader.vue` (cover, single)
+  dari module Posts
+* `RepeatableListField.vue` — komponen generik baru (`apps/admin/src/components/`)
+  untuk field `pipelineSteps` dan `features` (title + description per row, add/
+  remove/reorder, validasi inline per-row)
+* Banner error publish gagal dengan daftar field yang kurang (di-parse dari
+  `err.response.data.fields`), input tidak hilang saat publish gagal
+* Auto-generate slug dari `name` (client-side, tetap editable manual)
 
 ---
 

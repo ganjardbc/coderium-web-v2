@@ -80,6 +80,7 @@ Last Updated:
 | Phase 10 - Production Ready | DONE        | 100%     |
 | Phase 11 - Cross-App Integration | DONE     | 100%     |
 | Phase 12 - Product Catalog (Backend) | DONE | 100%     |
+| Phase 13 - Product Catalog (Admin UI) | DONE | 100%    |
 
 ---
 
@@ -228,6 +229,7 @@ INT-003 Migrate AdminLayout.vue (apps/admin) hand-rolled UI to PrimeVue componen
 PROD-CRUD-001 Create Product schema (ticket 12)
 PROD-CRUD-002 Implement Product public API (ticket 12)
 PROD-CRUD-003 Implement Product admin API — CRUD + publish/unpublish/archive/restore (ticket 12)
+ADMIN-PROD-001 Create Product List & Form Pages (ticket 13)
 ```
 
 ---
@@ -242,7 +244,7 @@ PROD-CRUD-003 Implement Product admin API — CRUD + publish/unpublish/archive/r
 | Playlists| DONE        |
 | Search   | DONE        |
 | Analytics| DONE        |
-| Products (backend, ticket 12) | DONE |
+| Products (backend ticket 12 + admin UI ticket 13) | DONE |
 
 ---
 
@@ -523,6 +525,59 @@ validation `fields` surfacing, archive→restore round-trip). Also see
 `docs/development/backlog.md` Phase 12 (PROD-CRUD-001..003) and
 `docs/api/api-contract.md` (Products API sections + Permission Summary)
 for the resulting API/permission surface.
+```
+
+---
+
+### DEC-008
+
+Date:
+
+```txt
+2026-08-24
+```
+
+Decision:
+
+```txt
+Add one new generic reusable component, RepeatableListField.vue
+(apps/admin/src/components/), for the Product form's pipelineSteps and
+features fields, instead of two separate ad-hoc implementations; and
+derive Product's `status` purely from which form submit button is
+clicked ("Simpan sebagai Draft" / "Simpan & Publish") rather than
+exposing a manual status <select> in the form.
+```
+
+Reason:
+
+```txt
+pipelineSteps and features are structurally identical (repeatable
+title + description rows with add/remove/reorder + inline per-row
+validation), so a single generic component avoids duplicating the same
+logic twice within one ticket — first reuse case for this pattern in
+the codebase (Posts module has no equivalent repeatable-list field).
+
+A manual status dropdown would duplicate/could conflict with the
+dedicated lifecycle endpoints already implemented server-side in ticket
+12 (/publish, /unpublish, /archive, /restore); deriving status from the
+submit button keeps a single source of truth and stays consistent with
+how the List page's row actions already drive status transitions.
+```
+
+Status:
+
+```txt
+ACTIVE
+```
+
+Notes:
+
+```txt
+See `.caf/tasks/13/requirements.md` ("Pertanyaan Terbuka" #1) and
+`.caf/tasks/13/verify-report.md` ("Design decisions / deviations")
+for full rationale. Also see `docs/development/backlog.md` Phase 13
+(ADMIN-PROD-001) and `docs/architecture/module-breakdown.md` (Products
+Module, apps/admin section) for the resulting frontend module surface.
 ```
 
 ---

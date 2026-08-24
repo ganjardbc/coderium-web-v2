@@ -5,6 +5,7 @@ import type { RouteRecordRaw } from 'vue-router';
 import { authRoutes } from '@/modules/auth/router';
 import { dashboardRoutes } from '@/modules/dashboard/router';
 import { postsRoutes } from '@/modules/posts/router';
+import { productsRoutes } from '@/modules/products/router';
 import { playlistsRoutes } from '@/modules/playlists/router';
 import { mediaRoutes } from '@/modules/media/router';
 import { usersRoutes } from '@/modules/users/router';
@@ -14,6 +15,7 @@ const routes: RouteRecordRaw[] = [
   ...authRoutes,
   ...dashboardRoutes,
   ...postsRoutes,
+  ...productsRoutes,
   ...playlistsRoutes,
   ...mediaRoutes,
   ...usersRoutes,

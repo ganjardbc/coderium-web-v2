@@ -18,6 +18,7 @@ declare module 'vue' {
     Drawer: typeof import('primevue/drawer')['default']
     MediaUploader: typeof import('./src/components/MediaUploader.vue')['default']
     PanelMenu: typeof import('primevue/panelmenu')['default']
+    RepeatableListField: typeof import('./src/components/RepeatableListField.vue')['default']
     RichTextEditor: typeof import('./src/components/RichTextEditor.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
