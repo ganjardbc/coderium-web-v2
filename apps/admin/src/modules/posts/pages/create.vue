@@ -1,17 +1,11 @@
 <template>
   <div class="p-6 max-w-5xl mx-auto space-y-6">
     <!-- Header -->
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-50">
-          New {{ typeLabel }}
-        </h1>
-        <p class="text-sm text-surface-400 mt-0.5">Create and publish new content</p>
-      </div>
-      <router-link to="/posts" class="flex items-center gap-1.5 text-sm text-surface-500 hover:text-primary transition-colors">
-        <i class="pi pi-arrow-left text-xs" />
-        Back to Posts
-      </router-link>
+    <div>
+      <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-50">
+        New {{ typeLabel }}
+      </h1>
+      <p class="text-sm text-surface-400 mt-0.5">Create and publish new content</p>
     </div>
 
     <form @submit.prevent="handleSubmit" class="grid grid-cols-1 gap-6 lg:grid-cols-3">

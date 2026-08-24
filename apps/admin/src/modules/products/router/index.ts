@@ -24,6 +24,7 @@ export const productsRoutes: RouteRecordRaw[] = [
       layout: 'admin',
       requiresAuth: true,
       permission: ['manage_products'],
+      backTo: '/products',
     },
   },
   {
@@ -35,6 +36,7 @@ export const productsRoutes: RouteRecordRaw[] = [
       layout: 'admin',
       requiresAuth: true,
       permission: ['manage_products'],
+      backTo: '/products',
     },
   },
 ];

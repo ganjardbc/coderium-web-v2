@@ -1,10 +1,7 @@
 <template>
   <div class="p-6 max-w-2xl mx-auto">
-    <div class="flex items-center justify-between mb-6">
+    <div class="mb-6">
       <h1 class="text-2xl font-bold">Edit Playlist</h1>
-      <router-link to="/playlists" class="text-sm text-gray-500 dark:text-gray-400 hover:underline">
-        &larr; Back to list
-      </router-link>
     </div>
 
     <div v-if="pageLoading" class="flex justify-center py-16">

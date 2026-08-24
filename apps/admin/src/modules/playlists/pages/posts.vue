@@ -2,11 +2,8 @@
   <div class="w-full mx-auto p-6">
     <Toast />
 
-    <div class="flex items-center justify-between mb-6">
+    <div class="mb-6">
       <h1 class="text-2xl font-bold">Manage Posts</h1>
-      <router-link to="/playlists" class="text-sm text-gray-500 dark:text-gray-400 hover:underline">
-        &larr; Back to playlists
-      </router-link>
     </div>
 
     <Card class="!shadow-none border border-gray-200 dark:border-gray-700 mb-6">

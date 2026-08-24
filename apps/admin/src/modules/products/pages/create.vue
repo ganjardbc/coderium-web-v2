@@ -1,14 +1,8 @@
 <template>
   <div class="p-6 max-w-5xl mx-auto space-y-6">
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-50">New Product</h1>
-        <p class="text-sm text-surface-400 mt-0.5">Create a new product entry</p>
-      </div>
-      <router-link to="/products" class="flex items-center gap-1.5 text-sm text-surface-500 hover:text-primary transition-colors">
-        <i class="pi pi-arrow-left text-xs" />
-        Back to Products
-      </router-link>
+    <div>
+      <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-50">New Product</h1>
+      <p class="text-sm text-surface-400 mt-0.5">Create a new product entry</p>
     </div>
 
     <ProductForm

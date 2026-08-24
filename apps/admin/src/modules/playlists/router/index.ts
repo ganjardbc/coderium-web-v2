@@ -21,6 +21,7 @@ export const playlistsRoutes: RouteRecordRaw[] = [
       layout: 'admin',
       requiresAuth: true,
       permission: ['manage_all_playlists'],
+      backTo: '/playlists',
     },
   },
   {
@@ -32,6 +33,7 @@ export const playlistsRoutes: RouteRecordRaw[] = [
       layout: 'admin',
       requiresAuth: true,
       permission: ['manage_all_playlists'],
+      backTo: '/playlists',
     },
   },
   {
@@ -43,6 +45,7 @@ export const playlistsRoutes: RouteRecordRaw[] = [
       layout: 'admin',
       requiresAuth: true,
       permission: ['manage_all_playlists'],
+      backTo: '/playlists',
     },
   },
 ];

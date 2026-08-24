@@ -21,6 +21,7 @@ export const postsRoutes: RouteRecordRaw[] = [
       layout: 'admin',
       requiresAuth: true,
       permission: ['manage_own_posts'],
+      backTo: '/posts',
     },
   },
   {
@@ -32,6 +33,7 @@ export const postsRoutes: RouteRecordRaw[] = [
       layout: 'admin',
       requiresAuth: true,
       permission: ['manage_own_posts'],
+      backTo: '/posts',
     },
   },
 ];
