@@ -1189,4 +1189,60 @@ Details:
   di seed sehingga tidak ada blocker)
 ```
 
+---
+
+---
+
+# Phase 14 - Product Catalog (Public Site)
+
+## WEB-PROD-001
+
+Task: Create Product Public Pages (apps/web, ticket 14)
+
+Status: `DONE`
+
+Endpoints (konsumsi, tanpa perubahan `apps/api`):
+
+```txt
+GET /products?page&limit
+GET /products/:slug
+GET /playlists/:slug
+GET /search?tags&limit
+```
+
+Details:
+
+```txt
+- Nav item "Products" baru di apps/web/layouts/default.vue (satu entry di
+  array navItems yang dipakai bersama sidebar desktop & bottom nav mobile,
+  icon lucide:box)
+- Komponen baru ProductCard.vue (apps/web/components/) — reusable, props
+  product + size?: 'md' | 'lg', dipakai di grid /products (md) dan featured
+  card homepage (lg), tanpa markup terduplikasi
+- Komponen baru NotFoundState.vue (apps/web/components/) — ekstraksi pola
+  404 inline (title/message/backLabel + BackButton), dipakai khusus untuk
+  /products/:slug; posts/[slug].vue dan playlists/[slug].vue SENGAJA tidak
+  dimigrasikan (di luar scope, tidak ada regresi ke halaman existing)
+- Halaman baru apps/web/pages/products/index.vue — grid produk published
+  (limit 24, tanpa pager UI), skeleton loading, EmptyState dengan link ke
+  /explore atau /playlists
+- Halaman baru apps/web/pages/products/[slug].vue — hero+CTA, pipeline
+  strip, daftar fitur, section "Bukti" (sub-list playlist via
+  GET /playlists/:slug + sub-list post terkait via
+  GET /search?tags={slug}&limit=6, masing-masing v-if independen, section
+  disembunyikan total kalau keduanya kosong), CTA penutup (posisi mengikuti
+  v-if sekuensial), 404 via NotFoundState. Fetch playlist & related-posts
+  pakai useAsyncData dengan default fallback supaya playlist/post yang
+  tidak ada TIDAK ikut men-404-kan seluruh halaman produk
+- apps/web/pages/index.vue — section baru "Featured Product" (setelah Hero,
+  sebelum grid Recent Stories+Sidebar), filter featured dilakukan
+  client-side (.find(p => p.featured) pada array yang sudah order asc dari
+  backend) karena GET /products tidak punya param featured — lihat
+  docs/api/api-contract.md (Products API > List Products) untuk catatan gap
+  kontrak ini
+- Tidak ada script lint/test di apps/web/package.json — verifikasi pakai
+  typecheck (nuxi typecheck) dan build (nuxt build), keduanya PASS; lihat
+  .caf/tasks/14/verify-report.md untuk detail lengkap
+```
+
 

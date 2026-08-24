@@ -81,6 +81,7 @@ Last Updated:
 | Phase 11 - Cross-App Integration | DONE     | 100%     |
 | Phase 12 - Product Catalog (Backend) | DONE | 100%     |
 | Phase 13 - Product Catalog (Admin UI) | DONE | 100%    |
+| Phase 14 - Product Catalog (Public Site) | DONE | 100% |
 
 ---
 
@@ -230,6 +231,7 @@ PROD-CRUD-001 Create Product schema (ticket 12)
 PROD-CRUD-002 Implement Product public API (ticket 12)
 PROD-CRUD-003 Implement Product admin API — CRUD + publish/unpublish/archive/restore (ticket 12)
 ADMIN-PROD-001 Create Product List & Form Pages (ticket 13)
+WEB-PROD-001 Create Product Public Pages (ticket 14)
 ```
 
 ---
@@ -244,7 +246,7 @@ ADMIN-PROD-001 Create Product List & Form Pages (ticket 13)
 | Playlists| DONE        |
 | Search   | DONE        |
 | Analytics| DONE        |
-| Products (backend ticket 12 + admin UI ticket 13) | DONE |
+| Products (backend ticket 12 + admin UI ticket 13 + public pages ticket 14) | DONE |
 
 ---
 
@@ -578,6 +580,63 @@ See `.caf/tasks/13/requirements.md` ("Pertanyaan Terbuka" #1) and
 for full rationale. Also see `docs/development/backlog.md` Phase 13
 (ADMIN-PROD-001) and `docs/architecture/module-breakdown.md` (Products
 Module, apps/admin section) for the resulting frontend module surface.
+```
+
+---
+
+### DEC-009
+
+Date:
+
+```txt
+2026-08-24
+```
+
+Decision:
+
+```txt
+For the new Product public pages (ticket 14, apps/web): filter the
+homepage "Featured Product" section client-side (`.find(p => p.featured)`
+on the `order`-asc array from `GET /products?limit=24`) instead of adding
+a `featured` query param to the public API; and extract a new reusable
+`NotFoundState.vue` component (apps/web/components/) for the product
+detail page's 404 state instead of migrating the existing inline 404
+blocks in `posts/[slug].vue` / `playlists/[slug].vue`.
+```
+
+Reason:
+
+```txt
+`GET /products` (public, ticket 12) only supports `page`/`limit` — no
+`featured` filter param. Adding one would be an `apps/api` change, out of
+scope for a frontend-only ticket; client-side filtering is acceptable
+while the product catalog stays small, and `.find()` on the already
+`order`-asc-sorted array deterministically picks one product even if
+multiple are `featured: true`.
+
+`NotFoundState.vue` gives the new product detail page a reusable 404
+component (title/message/backLabel props + internal `BackButton`) matching
+the existing inline pattern used by Post/Playlist detail pages, without
+touching those already-stable pages — avoiding any regression risk to
+existing routes for a ticket that only needed the pattern once more.
+```
+
+Status:
+
+```txt
+ACTIVE
+```
+
+Notes:
+
+```txt
+See `.caf/tasks/14/requirements.md` (Scope 4, "Scope Komponen Baru — 404
+state") and `.caf/tasks/14/verify-report.md` for full rationale and manual
+verification. Also see `docs/development/backlog.md` Phase 14
+(WEB-PROD-001), `docs/architecture/module-breakdown.md` (Public Pages —
+Product List/Detail Page, Home Page), and `docs/api/api-contract.md`
+(Products API > List Products) for the resulting frontend surface and the
+documented API gap.
 ```
 
 ---

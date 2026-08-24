@@ -64,11 +64,13 @@ settings
 ## apps/web (Nuxt 3 — file-based routing)
 
 ```txt
-pages/index.vue           # Home
-pages/explore.vue         # Explore / browse
-pages/posts/[slug].vue    # Post detail
-pages/playlists/index.vue # Playlist list
+pages/index.vue            # Home (termasuk section "Featured Product", ticket 14)
+pages/explore.vue          # Explore / browse
+pages/posts/[slug].vue     # Post detail
+pages/playlists/index.vue  # Playlist list
 pages/playlists/[slug].vue # Playlist detail
+pages/products/index.vue   # Product list (ticket 14)
+pages/products/[slug].vue  # Product detail (ticket 14)
 ```
 
 ---
@@ -787,6 +789,12 @@ apps/admin
 * Popular posts
 * Featured playlists
 * Infinite scroll
+* Featured Product section (ticket 14) — hairline-divided section setelah
+  Hero, sebelum grid "Recent Stories + Sidebar"; menampilkan satu
+  `ProductCard.vue` (`size="lg"`) untuk produk `featured: true` pertama
+  (`order` asc, filter dilakukan client-side karena `GET /products` tidak
+  punya param `featured`); section tidak dirender sama sekali kalau tidak
+  ada produk `featured`
 
 ---
 
@@ -843,6 +851,52 @@ apps/admin
 
 * Playlist info
 * Daftar post dalam playlist
+
+---
+
+## Product List Page (ticket 14)
+
+```txt
+/products
+```
+
+### Features
+
+* Grid produk `published` (fetch `GET /products?page=1&limit=24`, urutan
+  apa adanya dari backend `order` asc, tanpa pager UI — katalog masih kecil)
+* Tiap card (`ProductCard.vue`, `size="md"`): cover, name, tagline (truncate
+  1 baris)
+* Empty state (reuse `EmptyState.vue`) dengan link keluar ke `/explore` /
+  `/playlists`
+* Skeleton loading (reuse `SkeletonBlock.vue`)
+
+---
+
+## Product Detail Page (ticket 14)
+
+```txt
+/products/:slug
+```
+
+### Features
+
+* Hero + CTA (`ctaLabel`/`ctaUrl`, `target="_blank" rel="noopener noreferrer"`,
+  bukan `NuxtLink` internal)
+* Pipeline strip — numbered vertical list dari `pipelineSteps`
+* Daftar fitur — grid dari `features`
+* Section "Bukti" — dua sub-list independen: "Dipelajari lewat" (playlist
+  tunggal via `GET /playlists/:slug`, exact match by slug) dan "Bacaan &
+  konten terkait" (post lintas tipe via `GET /search?tags={slug}&limit=6`,
+  badge per `post.type`). Section (termasuk heading) disembunyikan total
+  kalau kedua sub-list kosong
+* CTA penutup — repetisi pill button, posisinya mengikuti urutan `v-if`
+  sekuensial (setelah section Bukti kalau dirender, atau langsung setelah
+  Daftar fitur kalau Bukti disembunyikan)
+* 404 state (`NotFoundState.vue`, komponen baru) untuk slug invalid ATAU
+  produk berstatus `draft`/`archived` — backend sudah menyatukan keduanya
+  jadi satu error yang sama, frontend tidak perlu logic pembeda
+* SEO via `useHead()` (title, description dari `tagline`, og:image dari
+  `cover`)
 
 ---
 

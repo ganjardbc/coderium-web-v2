@@ -217,6 +217,24 @@ Post count
 
 ---
 
+# Product Card Design (ticket 14, apps/web)
+
+`ProductCard.vue` (`apps/web/components/`), satu komponen dipakai di grid
+`/products` (`size="md"`) dan section "Featured Product" di homepage
+(`size="lg"`, cover & tipografi lebih dominan):
+
+```txt
+Cover image (fallback bg placeholder kalau kosong)
+Name
+Tagline (truncate 1 baris)
+```
+
+Style: hairline border (`border border-gray-100 dark:border-gray-800`,
+rounded) — bukan drop-shadow besar/gaya SaaS, konsisten dengan card lain di
+codebase.
+
+---
+
 # Loading States
 
 Gunakan:

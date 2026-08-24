@@ -691,6 +691,16 @@ GET /products?page=1&limit=10
 
 Hanya mengembalikan product dengan `status = published`, urut `order` asc.
 
+**Catatan (ticket 14, `apps/web`):** endpoint ini TIDAK punya parameter filter
+`featured` — hanya `page`/`limit`. Konsumen yang butuh "satu featured product"
+(mis. homepage `apps/web/pages/index.vue`) harus fetch daftar lalu filter
+`featured === true` di client (`.find(p => p.featured)` pada array yang sudah
+terurut `order` asc, supaya deterministik kalau ada lebih dari satu produk
+`featured: true`). Ini diterima sebagai gap yang acceptable selama katalog
+produk masih kecil; kalau dibutuhkan filter server-side di masa depan, perlu
+ticket API terpisah untuk menambah param `featured` (lihat
+`.caf/tasks/14/requirements.md` Scope 4).
+
 Response:
 
 ```json
