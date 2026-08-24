@@ -82,12 +82,14 @@
               <img src="@/assets/logo-white.png" alt="Coderium Logo" class="h-8 w-auto object-contain hidden dark:block" />
               <span class="px-1.5 py-0.5 text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md border border-gray-200 dark:border-gray-700">Admin</span>
             </router-link>
-            <button
-              class="p-1 rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+            <Button
+              icon="pi pi-times"
+              text
+              rounded
+              class="text-gray-500! dark:text-gray-400!"
+              aria-label="Close menu"
               @click="closeCallback"
-            >
-              <i class="pi pi-times text-sm"></i>
-            </button>
+            />
           </div>
 
           <!-- Navigation Links -->
@@ -154,12 +156,26 @@
       <header class="h-16 bg-white dark:bg-dark-secondary border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 sticky top-0 z-30">
         <div class="flex items-center gap-4">
           <!-- Mobile Menu Trigger -->
-          <button
-            class="md:hidden p-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+          <Button
+            icon="pi pi-bars"
+            text
+            rounded
+            class="md:hidden! text-gray-600! dark:text-gray-300! border! border-gray-200! dark:border-gray-700!"
+            aria-label="Open menu"
             @click="isMobileOpen = true"
-          >
-            <i class="pi pi-bars text-sm"></i>
-          </button>
+          />
+
+          <!-- Back button -->
+          <Button
+            v-if="backTo"
+            icon="pi pi-arrow-left"
+            text
+            rounded
+            class="text-gray-500! dark:text-gray-400!"
+            aria-label="Back"
+            title="Back"
+            @click="router.push(backTo)"
+          />
 
           <!-- Breadcrumbs -->
           <Breadcrumb :model="breadcrumbItems" class="admin-breadcrumb">
@@ -378,6 +394,8 @@ const breadcrumbItems = computed(() => [
   { label: 'Admin' },
   { label: currentSectionName.value, current: true }
 ]);
+
+const backTo = computed(() => route.meta.backTo as string | undefined);
 
 const isMobileOpen = ref(false);
 const avatarError = ref(false);
