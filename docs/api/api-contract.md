@@ -58,6 +58,12 @@ Public endpoints tidak membutuhkan token.
 }
 ```
 
+Catatan: exception global filter (`AllExceptionsFilter`) meneruskan seluruh
+properti tambahan dari response object `HttpException` (mis. `fields` pada
+error validasi publish Product) apa adanya, di samping field standar
+`success`/`statusCode`/`timestamp`/`path`/`message`. Untuk exception yang
+hanya melempar pesan string biasa, bentuk response tidak berubah.
+
 ---
 
 # Health API
@@ -675,6 +681,204 @@ DELETE /admin/media/:id
 
 ---
 
+# Products API (Public)
+
+## List Products
+
+```http
+GET /products?page=1&limit=10
+```
+
+Hanya mengembalikan product dengan `status = published`, urut `order` asc.
+
+Response:
+
+```json
+{
+  "success": true,
+  "message": "Success",
+  "data": [
+    {
+      "id": "uuid",
+      "slug": "coderium-copilot",
+      "name": "Coderium Copilot",
+      "tagline": "AI pair programmer untuk tim kamu",
+      "status": "published",
+      "cover": "https://cdn.coderium.id/products/cover.jpg",
+      "ctaLabel": "Request pilot",
+      "ctaUrl": "https://coderium.id/contact",
+      "order": 0,
+      "featured": true
+    }
+  ],
+  "meta": { ... }
+}
+```
+
+---
+
+## Get Product Detail
+
+```http
+GET /products/:slug
+```
+
+Hanya mengembalikan product dengan `status = published`. Kalau tidak
+ditemukan ATAU status-nya `draft`/`archived`, response `404` (tidak
+membedakan pesan, supaya tidak bocor existence produk non-published).
+
+Response:
+
+```json
+{
+  "success": true,
+  "message": "Success",
+  "data": {
+    "id": "uuid",
+    "slug": "coderium-copilot",
+    "name": "Coderium Copilot",
+    "tagline": "AI pair programmer untuk tim kamu",
+    "description": "<rich text/markdown mentah>",
+    "status": "published",
+    "cover": "https://cdn.coderium.id/products/cover.jpg",
+    "pipelineSteps": [
+      { "title": "Connect repo", "description": "..." }
+    ],
+    "features": [
+      { "title": "Code review otomatis", "description": "..." }
+    ],
+    "ctaLabel": "Request pilot",
+    "ctaUrl": "https://coderium.id/contact",
+    "order": 0,
+    "featured": true
+  }
+}
+```
+
+---
+
+# Products API (Admin)
+
+Semua endpoint di bawah butuh auth (`Authorization: Bearer <access_token>`)
+dan permission `manage_products`.
+
+## Admin List Products
+
+```http
+GET /admin/products?page=1&limit=10&sort=order&dir=asc
+```
+
+Permission: `manage_products`
+
+Tidak difilter status (menampilkan `draft`/`published`/`archived`). `sort`
+bisa `order` (default) atau `updatedAt`.
+
+---
+
+## Get Admin Product Detail
+
+```http
+GET /admin/products/:id
+```
+
+Permission: `manage_products`
+
+---
+
+## Create Product
+
+```http
+POST /admin/products
+```
+
+Request:
+
+```json
+{
+  "name": "Coderium Copilot",
+  "slug": "coderium-copilot",
+  "tagline": "AI pair programmer untuk tim kamu",
+  "description": "...",
+  "cover": "https://cdn.coderium.id/products/cover.jpg",
+  "pipelineSteps": [{ "title": "Connect repo", "description": "..." }],
+  "features": [{ "title": "Code review otomatis", "description": "..." }],
+  "ctaLabel": "Request pilot",
+  "ctaUrl": "https://coderium.id/contact",
+  "order": 0,
+  "featured": true
+}
+```
+
+`status` default `draft` kalau tidak dikirim. Kalau `status: "published"`
+dikirim langsung, berlaku validasi publish (lihat di bawah).
+
+---
+
+## Update Product
+
+```http
+PATCH /admin/products/:id
+```
+
+Partial update. Kalau body membuat `status` akhir jadi `published` (baik
+dikirim eksplisit maupun status existing sudah `published`), validasi
+publish berlaku terhadap data gabungan (existing + body).
+
+---
+
+## Publish Product
+
+```http
+POST /admin/products/:id/publish
+```
+
+Set `status: published`. Field wajib untuk publish: `cover`, `ctaUrl`
+(format URL valid), minimal 1 `pipelineSteps`, minimal 1 `features`.
+
+Response error (400) kalau validasi gagal:
+
+```json
+{
+  "success": false,
+  "statusCode": 400,
+  "message": "Validasi publish gagal",
+  "fields": ["cover", "ctaUrl", "pipelineSteps", "features"]
+}
+```
+
+---
+
+## Unpublish Product
+
+```http
+POST /admin/products/:id/unpublish
+```
+
+Set `status: draft`. Tanpa validasi field wajib.
+
+---
+
+## Archive Product
+
+```http
+POST /admin/products/:id/archive
+```
+
+Set `status: archived`. Produk hilang dari endpoint publik, data tetap ada.
+
+---
+
+## Restore Product
+
+```http
+POST /admin/products/:id/restore
+```
+
+Set `status: draft` (bukan status sebelum archive — tidak ada tracking
+status sebelumnya). Semua field lain tetap tidak berubah.
+
+---
+
 # Search API
 
 ## Search
@@ -751,12 +955,17 @@ manage_users
 manage_all_posts
 manage_all_playlists
 manage_all_media
+manage_products
 view_analytics
 
 manage_own_posts
 manage_own_playlists
 manage_own_media
 ```
+
+Catatan: `manage_products` adalah permission tunggal (tanpa varian `_own`),
+dipetakan hanya ke role `admin` — Product tidak punya ownership per-user,
+jadi pola-nya mengikuti `manage_users`, bukan pola dua-tier Posts/Playlists/Media.
 
 ---
 

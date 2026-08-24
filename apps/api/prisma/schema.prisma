@@ -176,6 +176,36 @@ model PlaylistPost {
   @@map("playlist_post")
 }
 
+enum ProductStatus {
+  draft
+  published
+  archived
+}
+
+model Product {
+  id            String        @id @default(uuid())
+  slug          String        @unique
+  name          String
+  tagline       String?
+  description   String?
+  status        ProductStatus @default(draft)
+  cover         String?
+  pipelineSteps Json?         @default("[]") @map("pipeline_steps")
+  features      Json?         @default("[]")
+  ctaLabel      String?       @map("cta_label")
+  ctaUrl        String?       @map("cta_url")
+  order         Int           @default(0)
+  featured      Boolean       @default(false)
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  @@index([slug])
+  @@index([status])
+  @@index([status, order])
+  @@index([featured])
+  @@map("products")
+}
+
 model Media {
   id           String   @id @default(uuid())
   userId       String?  @map("user_id")

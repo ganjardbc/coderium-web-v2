@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
 import { MediaModule } from './media/media.module';
 import { PlaylistsModule } from './playlists/playlists.module';
+import { ProductsModule } from './products/products.module';
 import { EngagementModule } from './engagement/engagement.module';
 import { SearchModule } from './search/search.module';
 import { AnalyticsModule } from './analytics/analytics.module';
@@ -30,6 +31,7 @@ import { JwtAuthGuard, PermissionsGuard } from './auth/guards';
     PostsModule,
     MediaModule,
     PlaylistsModule,
+    ProductsModule,
     EngagementModule,
     SearchModule,
     AnalyticsModule,

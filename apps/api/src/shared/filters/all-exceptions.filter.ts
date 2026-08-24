@@ -31,7 +31,17 @@ export class AllExceptionsFilter implements ExceptionFilter {
       exception instanceof Error ? exception.stack : JSON.stringify(exception),
     );
 
+    const rawResponse =
+      exception instanceof HttpException ? exception.getResponse() : null;
+    const extra =
+      rawResponse &&
+      typeof rawResponse === 'object' &&
+      !Array.isArray(rawResponse)
+        ? (rawResponse as Record<string, unknown>)
+        : {};
+
     response.status(status).json({
+      ...extra,
       success: false,
       statusCode: status,
       timestamp: new Date().toISOString(),

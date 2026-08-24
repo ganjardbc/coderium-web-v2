@@ -30,6 +30,7 @@ async function main() {
     { name: 'Manage All Playlists', slug: 'manage_all_playlists', description: 'Manage all playlists' },
     { name: 'Manage All Media', slug: 'manage_all_media', description: 'Manage all media' },
     { name: 'View Analytics', slug: 'view_analytics', description: 'View analytics' },
+    { name: 'Manage Products', slug: 'manage_products', description: 'Manage all products' },
     { name: 'Manage Own Posts', slug: 'manage_own_posts', description: 'Manage own posts' },
     { name: 'Manage Own Playlists', slug: 'manage_own_playlists', description: 'Manage own playlists' },
     { name: 'Manage Own Media', slug: 'manage_own_media', description: 'Manage own media' },
@@ -41,6 +42,7 @@ async function main() {
     'manage_all_playlists',
     'manage_all_media',
     'view_analytics',
+    'manage_products',
   ];
 
   const authorPermissions = [

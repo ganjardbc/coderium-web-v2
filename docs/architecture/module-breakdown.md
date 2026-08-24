@@ -32,6 +32,7 @@ rbac
 
 posts
 playlists
+products
 
 media
 uploads
@@ -311,6 +312,55 @@ DELETE /admin/playlists/:slug/posts       # detach posts
 ```txt
 manage_own_playlists
 manage_all_playlists
+```
+
+---
+
+## Products Module
+
+### Responsibility
+
+Mengelola katalog product (landing page marketing), terpisah dari Post/Playlist —
+tidak ada ownership per-user, admin-only untuk semua operasi tulis.
+
+### Features
+
+* Create / update product
+* Publish / Unpublish product
+* Archive / Restore product (pengganti hard-delete)
+* List product publik (hanya `published`)
+* Admin list semua product (semua status)
+* Validasi field wajib untuk publish (`cover`, `ctaUrl`, `pipelineSteps`,
+  `features`)
+
+### Tables
+
+* products
+
+### Dependencies
+
+* Tidak ada dependency ke Posts/Playlists/Media (tidak ada foreign key baru).
+
+### API Endpoints
+
+```txt
+GET    /products
+GET    /products/:slug
+
+GET    /admin/products
+GET    /admin/products/:id
+POST   /admin/products
+PATCH  /admin/products/:id
+POST   /admin/products/:id/publish
+POST   /admin/products/:id/unpublish
+POST   /admin/products/:id/archive
+POST   /admin/products/:id/restore
+```
+
+### Permissions
+
+```txt
+manage_products   # Admin-only, tanpa varian _own (tidak ada ownership)
 ```
 
 ---
