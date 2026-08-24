@@ -8,26 +8,26 @@
 
     <template v-else>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
-        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+        <Card class="shadow-none! border border-gray-200 dark:border-gray-700">
           <template #content>
             <p class="text-sm text-gray-500 dark:text-gray-400">Total Posts</p>
             <p class="text-2xl font-bold mt-1">{{ overview.totalPosts }}</p>
             <p class="text-xs text-green-600 mt-1">{{ overview.publishedPosts }} published</p>
           </template>
         </Card>
-        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+        <Card class="shadow-none! border border-gray-200 dark:border-gray-700">
           <template #content>
             <p class="text-sm text-gray-500 dark:text-gray-400">Total Views</p>
             <p class="text-2xl font-bold mt-1">{{ formatNumber(overview.totalViews) }}</p>
           </template>
         </Card>
-        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+        <Card class="shadow-none! border border-gray-200 dark:border-gray-700">
           <template #content>
             <p class="text-sm text-gray-500 dark:text-gray-400">Total Likes</p>
             <p class="text-2xl font-bold mt-1">{{ formatNumber(overview.totalLikes) }}</p>
           </template>
         </Card>
-        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+        <Card class="shadow-none! border border-gray-200 dark:border-gray-700">
           <template #content>
             <p class="text-sm text-gray-500 dark:text-gray-400">Media / Playlists</p>
             <p class="text-2xl font-bold mt-1">{{ overview.totalMedia }} / {{ overview.totalPlaylists }}</p>
@@ -36,7 +36,7 @@
       </div>
 
       <div class="grid md:grid-cols-2 gap-6">
-        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+        <Card class="shadow-none! border border-gray-200 dark:border-gray-700">
           <template #title>
             <span class="text-base font-semibold">Top Posts by Views</span>
           </template>
@@ -55,7 +55,7 @@
           </template>
         </Card>
 
-        <Card class="!shadow-none border border-gray-200 dark:border-gray-700">
+        <Card class="shadow-none! border border-gray-200 dark:border-gray-700">
           <template #title>
             <span class="text-base font-semibold">Top Posts by Likes</span>
           </template>
@@ -75,7 +75,7 @@
         </Card>
       </div>
 
-      <Card class="!shadow-none border border-gray-200 dark:border-gray-700 mt-6">
+      <Card class="shadow-none! border border-gray-200 dark:border-gray-700 mt-6">
         <template #title>
           <span class="text-base font-semibold">Recent Posts</span>
         </template>
