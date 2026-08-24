@@ -5,7 +5,7 @@
 
     <!-- Desktop Sidebar (persistent, always visible md+) -->
     <aside
-      class="hidden md:flex md:sticky md:top-0 md:h-screen md:shrink-0 w-64 bg-white dark:bg-dark border-r border-gray-200 dark:border-gray-700 flex-col"
+      class="hidden md:flex md:sticky md:top-0 md:h-screen md:shrink-0 w-64 bg-white dark:bg-dark-secondary border-r border-gray-200 dark:border-gray-700 flex-col"
     >
       <!-- Brand Logo -->
       <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-700 justify-between">
@@ -45,7 +45,7 @@
       </nav>
 
       <!-- User Info & Logout -->
-      <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3 bg-gray-50 dark:bg-dark">
+      <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3 bg-gray-50 dark:bg-dark-secondary">
         <div class="flex items-center gap-3 overflow-hidden">
           <Avatar
             :image="!avatarError ? (authStore.user?.avatarUrl ?? undefined) : undefined"
@@ -55,8 +55,8 @@
             @error="avatarError = true"
           />
           <div class="overflow-hidden">
-            <p class="text-xs font-semibold text-gray-900 dark:text-white truncate">{{ authStore.user?.name || 'Admin User' }}</p>
-            <p class="text-[10px] text-gray-500 dark:text-gray-400 truncate">{{ authStore.user?.email || 'admin@coderium.com' }}</p>
+            <p class="text-xs font-semibold text-gray-900 dark:text-white truncate">{{ authStore.user?.name || '-' }}</p>
+            <p class="text-[10px] text-gray-500 dark:text-gray-400 truncate">{{ authStore.user?.email || '-' }}</p>
           </div>
         </div>
         <Button
@@ -151,7 +151,7 @@
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col min-w-0">
       <!-- Header / Top Bar -->
-      <header class="h-16 bg-white dark:bg-dark border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 sticky top-0 z-30">
+      <header class="h-16 bg-white dark:bg-dark-secondary border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 sticky top-0 z-30">
         <div class="flex items-center gap-4">
           <!-- Mobile Menu Trigger -->
           <button
