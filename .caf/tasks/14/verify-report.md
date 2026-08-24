@@ -79,7 +79,7 @@
 - `NotFoundState.vue` extracted as a new reusable component (per requirements.md
   recommendation); `posts/[slug].vue`/`playlists/[slug].vue` intentionally left
   unmigrated (explicitly out of scope).
-- Closing CTA copy uses placeholder "Siap mulai pilot?" per requirements.md (final
+- Closing CTA copy uses placeholder "Ready to piloting?" per requirements.md (final
   copy is a content-team decision, not a technical blocker).
 - Related posts fetch limit set to 6 (within the 4-6 range recommended in tasks.md).
 - No `apps/api` changes made; `featured` filtering for the homepage section is

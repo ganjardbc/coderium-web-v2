@@ -84,7 +84,7 @@ dark:border-gray-800`, pola persis seperti section homepage/post):
      sub-list kosong. Kalau salah satu ada isi, tampilkan sub-list yang ada saja
      (sembunyikan sub-list yang kosong, tanpa placeholder).
 5. **CTA penutup** — repetisi pill button (`ctaLabel`/`ctaUrl` sama seperti hero),
-   copy statis penutup (mis. "Siap mulai pilot?" — final copy keputusan konten, boleh
+   copy statis penutup (mis. "Ready to piloting?" — final copy keputusan konten, boleh
    pakai placeholder ini). **Posisi computed secara dinamis**: kalau section Bukti
    dirender (ada minimal 1 sub-list berisi) → setelah section Bukti. Kalau section
    Bukti disembunyikan (kedua sub-list kosong) → langsung setelah section "Daftar
@@ -250,7 +250,7 @@ viewsCount, likesCount, user:{id,name,avatarUrl}`. `type` salah satu dari
    Planner sudah diberikan (Scope 4), boleh disesuaikan Implementer.
 3. Ekstraksi `NotFoundState.vue` vs inline block untuk 404 produk — rekomendasi
    Planner: ekstrak komponen baru (Scope Komponen), tapi inline juga valid.
-4. Copy statis CTA penutup ("Siap mulai pilot?") — placeholder dari Planner,
+4. Copy statis CTA penutup ("Ready to piloting?") — placeholder dari Planner,
    final copy keputusan tim konten, tidak blocking implementasi teknis.
 
 Karena semua pertanyaan di atas punya rekomendasi default yang jelas dan tidak

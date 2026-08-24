@@ -110,7 +110,7 @@ None.
   directly against the working tree and passed — but flagging since committing
   is presumably required before PR creation (main-thread responsibility, not
   QA's).
-- Closing CTA copy ("Siap mulai pilot?") is an explicitly-flagged placeholder per
+- Closing CTA copy ("Ready to piloting?") is an explicitly-flagged placeholder per
   requirements.md/tasks.md, pending final content-team copy — not a technical
   defect, carried over as a known non-blocking note from the Planner/Implementer.
 - `apps/web/pages/index.vue`, `apps/web/layouts/default.vue`,

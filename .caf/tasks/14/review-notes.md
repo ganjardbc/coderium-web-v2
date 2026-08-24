@@ -82,7 +82,7 @@ Verdict: **legitimate, ticket-14-scoped documentation, not scope creep.**
   published product; no ticket requirement to hide CTA when `ctaUrl` is empty).
   Flagging only as a forward-looking data-integrity note for admin-side
   validation (Ticket #13 scope), not a defect in this ticket.
-- Closing CTA copy "Siap mulai pilot?" is an explicitly flagged placeholder per
+- Closing CTA copy "Ready to piloting?" is an explicitly flagged placeholder per
   requirements.md/tasks.md — content-team decision, not a technical issue.
 
 ## Verdict
