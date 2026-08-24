@@ -24,6 +24,16 @@
       </div>
     </section>
 
+    <!-- Featured Product -->
+    <section v-if="pendingProducts" class="border-b border-gray-100 dark:border-gray-800 pb-8 md:pb-12">
+      <SkeletonBlock class="h-4 rounded w-40 mb-5" />
+      <SkeletonBlock class="aspect-[16/7] rounded-2xl w-full" />
+    </section>
+    <section v-else-if="featuredProduct" class="border-b border-gray-100 dark:border-gray-800 pb-8 md:pb-12">
+      <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm mb-5">Featured Product</h2>
+      <ProductCard :product="featuredProduct" size="lg" />
+    </section>
+
     <!-- Recent Stories + Sidebar -->
     <div class="grid lg:grid-cols-3 gap-8 md:gap-12">
       <!-- Main: Recent Stories -->
@@ -172,4 +182,20 @@ const { data: popularRes, pending: pendingPopular } = await useAsyncData<{ data:
   () => $fetch(`${apiBase}/posts/popular`)
 );
 const popularPosts = computed(() => popularRes.value?.data || []);
+
+interface Product {
+  id: string;
+  slug: string;
+  name: string;
+  tagline?: string | null;
+  cover?: string | null;
+  featured?: boolean;
+  order?: number;
+}
+
+const { data: productsRes, pending: pendingProducts } = await useAsyncData<{ data: Product[] }>(
+  'homepageProducts',
+  () => $fetch(`${apiBase}/products?limit=24`)
+);
+const featuredProduct = computed(() => productsRes.value?.data?.find((p) => p.featured) ?? null);
 </script>

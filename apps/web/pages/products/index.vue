@@ -1,0 +1,71 @@
+<template>
+  <div class="w-full mx-auto px-4 md:px-6 py-6 md:py-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-2">Products</h1>
+    <p class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-6 md:mb-8">
+      Explore what we've built and the pilots you can start today.
+    </p>
+
+    <!-- Loading -->
+    <div v-if="pending" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="i in 6" :key="i" class="rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+        <SkeletonBlock class="aspect-video w-full" />
+        <div class="p-4 md:p-5 space-y-2">
+          <SkeletonBlock class="h-5 rounded w-3/4" />
+          <SkeletonBlock class="h-4 rounded w-1/2" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty -->
+    <EmptyState v-else-if="products.length === 0" padding="py-16">
+      <p class="text-base">Belum ada produk yang tersedia saat ini.</p>
+      <p class="mt-2 text-sm">
+        Sambil menunggu, jelajahi
+        <NuxtLink to="/explore" class="text-gray-700 dark:text-gray-300 underline hover:text-gray-900 dark:hover:text-white">artikel</NuxtLink>
+        atau
+        <NuxtLink to="/playlists" class="text-gray-700 dark:text-gray-300 underline hover:text-gray-900 dark:hover:text-white">series</NuxtLink>
+        kami.
+      </p>
+    </EmptyState>
+
+    <!-- Grid -->
+    <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <ProductCard v-for="product in products" :key="product.id" :product="product" size="md" />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+
+definePageMeta({
+  layout: 'default',
+});
+
+useHead({ title: 'Products - Coderium' });
+
+const config = useRuntimeConfig();
+const apiBase = config.public.apiBase as string;
+
+interface ProductListItem {
+  id: string;
+  slug: string;
+  name: string;
+  tagline?: string | null;
+  cover?: string | null;
+}
+
+interface ProductListMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+const { data: productsRes, pending } = await useAsyncData<{ data: ProductListItem[]; meta: ProductListMeta }>(
+  'products-index',
+  () => $fetch(`${apiBase}/products?page=1&limit=24`)
+);
+
+const products = computed(() => productsRes.value?.data || []);
+</script>

@@ -10,7 +10,7 @@ Coderium V2 adalah platform modern untuk developer dan content creator mempublik
 - 🎵 **Playlist / Collections**: Organisir konten ke dalam playlist tematik.
 - 🖼️ **Media Management**: Upload dan kelola media terpusat dengan polymorphic attachment.
 - ❤️ **Engagement**: Like dan views tracking untuk setiap konten.
-- 🧩 **Product Catalog**: CRUD product landing page dengan lifecycle draft → published → archived → restore, admin-only. Backend di `apps/api` (ticket 12), UI list & form di `apps/admin` (ticket 13).
+- 🧩 **Product Catalog**: CRUD product landing page dengan lifecycle draft → published → archived → restore, admin-only. Backend di `apps/api` (ticket 12), UI list & form di `apps/admin` (ticket 13), halaman publik `/products` (index) & `/products/[slug]` (detail) plus Featured Product section di homepage — `apps/web` (ticket 14).
 - 🔍 **Full-Text Search**: Cari konten berdasarkan judul, subtitle, dan isi.
 - 📊 **Analytics Dashboard**: Monitor performa konten (top views, top likes).
 - 🌐 **SEO-Optimized**: SSR via Nuxt 3 untuk post detail yang SEO-friendly.
