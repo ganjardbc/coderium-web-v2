@@ -42,6 +42,12 @@ enum PostType {
   video
   stack_gallery
 }
+
+enum ProductStatus {
+  draft
+  published
+  archived
+}
 ```
 
 ---
@@ -277,6 +283,51 @@ model Media {
   @@map("media")
 }
 ```
+
+---
+
+## Product
+
+```prisma
+model Product {
+  id             String        @id @default(uuid())
+  slug           String        @unique
+  name           String
+  tagline        String?
+  description    String?
+  status         ProductStatus @default(draft)
+  cover          String?
+  pipelineSteps  Json?         @default("[]") @map("pipeline_steps")
+  features       Json?         @default("[]")
+  ctaLabel       String?       @map("cta_label")
+  ctaUrl         String?       @map("cta_url")
+  order          Int           @default(0)
+  featured       Boolean       @default(false)
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  @@index([slug])
+  @@index([status])
+  @@index([status, order])
+  @@index([featured])
+  @@map("products")
+}
+```
+
+Catatan:
+
+* Tidak punya `userId`/ownership dan tidak punya `deletedAt` — status
+  `archived` berfungsi sebagai soft-delete (data tetap ada, bisa `restore`
+  kembali ke `draft`), tidak ada hard-delete endpoint.
+* Pakai enum `status` (`draft`/`published`/`archived`), bukan `isPublished`
+  boolean seperti `Post`/`Playlist` — keputusan eksplisit ticket 12 (Product
+  CRUD API) karena butuh state ketiga (`archived`) yang tidak dipetakan ke
+  boolean.
+* `pipelineSteps`/`features` adalah `Json` array of `{ title, description }`,
+  urutan array = urutan render (tidak ada field sorting terpisah).
+* Wajib diisi untuk transisi ke `published`: `cover`, `ctaUrl` (format URL
+  valid), minimal 1 `pipelineSteps`, minimal 1 `features` — divalidasi di
+  service layer (`ProductsService`), bukan di level constraint database.
 
 ---
 

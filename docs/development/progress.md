@@ -56,7 +56,7 @@ M10 - Production Release Completed
 Last Updated:
 
 ```txt
-2026-08-16
+2026-08-24
 ```
 
 ---
@@ -79,6 +79,7 @@ Last Updated:
 | Phase 9 - Public Site       | DONE        | 100%     |
 | Phase 10 - Production Ready | DONE        | 100%     |
 | Phase 11 - Cross-App Integration | DONE     | 100%     |
+| Phase 12 - Product Catalog (Backend) | DONE | 100%     |
 
 ---
 
@@ -224,6 +225,9 @@ PROD-005 Production Deployment
 INT-001 Add environment variables for cross-app redirection
 INT-002 Fix API calls, Prisma schema validation, database seed, and light/dark mode
 INT-003 Migrate AdminLayout.vue (apps/admin) hand-rolled UI to PrimeVue components (ticket 3)
+PROD-CRUD-001 Create Product schema (ticket 12)
+PROD-CRUD-002 Implement Product public API (ticket 12)
+PROD-CRUD-003 Implement Product admin API — CRUD + publish/unpublish/archive/restore (ticket 12)
 ```
 
 ---
@@ -238,6 +242,7 @@ INT-003 Migrate AdminLayout.vue (apps/admin) hand-rolled UI to PrimeVue componen
 | Playlists| DONE        |
 | Search   | DONE        |
 | Analytics| DONE        |
+| Products (backend, ticket 12) | DONE |
 
 ---
 
@@ -459,6 +464,65 @@ shared component extraction in a follow-up ticket. See
 docs/development/backlog.md INT-003 for a summary. Manual/browser smoke
 test of the migrated nav (submenu auto-expand, mobile drawer, avatar
 fallback, dark mode, logout) is still pending before merge.
+```
+
+---
+
+### DEC-007
+
+Date:
+
+```txt
+2026-08-24
+```
+
+Decision:
+
+```txt
+Add a new single permission `manage_products` (admin-only, no `_own`
+variant) for the new Product module (ticket 12) instead of a new role, and
+make an additive fix to `AllExceptionsFilter` (apps/api/src/shared/filters)
+so extra properties on a thrown `HttpException` response object (e.g.
+`fields` on the publish-validation error) are spread into the JSON error
+response instead of being silently dropped.
+```
+
+Reason:
+
+```txt
+Product has no per-user ownership (unlike Post/Playlist's manage_own_*/
+manage_all_* two-tier pattern), so a single admin-only permission mirrors
+the existing `manage_users` pattern rather than introducing a new role —
+consistent with the ticket's "reuse existing admin role, no new role"
+constraint while still gating admin/products/* routes to admin only
+(without any `@Permissions(...)` decorator, `PermissionsGuard` lets any
+logged-in role through, which would not satisfy "admin-only").
+
+The exception filter previously only forwarded `exception.message` as a
+string, dropping any other keys Nest's `HttpException.initMessage()`
+extracts out of a response object — so `BadRequestException({ message,
+fields })` from publish validation lost `fields` before reaching the
+client. The fix spreads the raw response object first, with the standard
+fields (`success`, `statusCode`, `timestamp`, `path`, `message`) applied
+after, so it is backward compatible: exceptions that throw a plain string
+message produce byte-identical responses to before.
+```
+
+Status:
+
+```txt
+ACTIVE
+```
+
+Notes:
+
+```txt
+See `.caf/tasks/12/design.md` (§3, §7, §12) and `.caf/tasks/12/verify-report.md`
+for full rationale and manual verification (401/403 gating, publish
+validation `fields` surfacing, archive→restore round-trip). Also see
+`docs/development/backlog.md` Phase 12 (PROD-CRUD-001..003) and
+`docs/api/api-contract.md` (Products API sections + Permission Summary)
+for the resulting API/permission surface.
 ```
 
 ---

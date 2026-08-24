@@ -10,6 +10,7 @@ Coderium V2 adalah platform modern untuk developer dan content creator mempublik
 - 🎵 **Playlist / Collections**: Organisir konten ke dalam playlist tematik.
 - 🖼️ **Media Management**: Upload dan kelola media terpusat dengan polymorphic attachment.
 - ❤️ **Engagement**: Like dan views tracking untuk setiap konten.
+- 🧩 **Product Catalog** (backend, apps/api): CRUD product landing page dengan lifecycle draft → published → archived → restore, admin-only.
 - 🔍 **Full-Text Search**: Cari konten berdasarkan judul, subtitle, dan isi.
 - 📊 **Analytics Dashboard**: Monitor performa konten (top views, top likes).
 - 🌐 **SEO-Optimized**: SSR via Nuxt 3 untuk post detail yang SEO-friendly.

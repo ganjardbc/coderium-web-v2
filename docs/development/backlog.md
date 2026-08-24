@@ -1058,4 +1058,87 @@ Details:
   avatar broken-image fallback, dark mode persistence, logout confirm flow.
 ```
 
+---
+
+---
+
+# Phase 12 - Product Catalog (Backend)
+
+## PROD-CRUD-001
+
+Task: Create Product schema (ticket 12)
+
+Status: `DONE`
+
+Details:
+
+```txt
+- Tambah enum ProductStatus (draft/published/archived) dan model Product
+  ke schema.prisma (tidak ada userId/deletedAt — status archived berfungsi
+  sebagai soft-delete)
+- Jalankan migration (additive-only, tidak menyentuh table lain)
+```
+
+---
+
+## PROD-CRUD-002
+
+Task: Implement Product public API
+
+Status: `DONE`
+
+Endpoints:
+
+```txt
+GET /products
+GET /products/:slug
+```
+
+Details:
+
+```txt
+- Hanya expose product dengan status = published
+- 404 konsisten untuk not-found maupun draft/archived (tidak bocor existence)
+```
+
+---
+
+## PROD-CRUD-003
+
+Task: Implement Product admin API (CRUD + lifecycle)
+
+Status: `DONE`
+
+Endpoints:
+
+```txt
+GET    /admin/products
+GET    /admin/products/:id
+POST   /admin/products
+PATCH  /admin/products/:id
+POST   /admin/products/:id/publish
+POST   /admin/products/:id/unpublish
+POST   /admin/products/:id/archive
+POST   /admin/products/:id/restore
+```
+
+Details:
+
+```txt
+- Guard: JwtAuthGuard + PermissionsGuard, permission baru manage_products
+  (admin-only, tidak ada varian _own — Product tidak punya ownership)
+- Validasi publish (cover, ctaUrl format URL valid, minimal 1 pipelineSteps,
+  minimal 1 features) berlaku di semua jalur yang menghasilkan
+  status = published (create, update/PATCH, dan endpoint publish dedicated),
+  memakai data gabungan existing + body (bukan cuma field yang dikirim)
+- Tambah permission manage_products ke prisma/seed.ts, dipetakan ke role
+  admin saja
+- Perbaikan additive pada AllExceptionsFilter supaya properti tambahan
+  (mis. fields pada error validasi publish) ikut ter-serialize di response
+  error, tanpa mengubah bentuk response untuk exception lain
+- Lint/test tidak dapat dijalankan untuk apps/api (tidak ada script/config
+  di package ini) — typecheck dan build (nest build) dipakai sebagai bukti
+  utama non-regresi; lihat .caf/tasks/12/verify-report.md untuk detail.
+```
+
 
