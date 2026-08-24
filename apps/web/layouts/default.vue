@@ -111,8 +111,8 @@ const adminUrl = import.meta.env.VITE_ADMIN_URL || 'http://localhost:5173';
 const navItems = [
   { to: '/', icon: 'lucide:home', label: 'Home', isActive: (route: { path: string }) => route.path === '/' },
   { to: '/explore', icon: 'lucide:compass', label: 'Explore', isActive: (route: { path: string }) => route.path === '/explore' },
-  { to: '/playlists', icon: 'lucide:library', label: 'Series', isActive: (route: { path: string }) => route.path.startsWith('/playlists') },
   { to: '/products', icon: 'lucide:box', label: 'Products', isActive: (route: { path: string }) => route.path.startsWith('/products') },
+  { to: '/playlists', icon: 'lucide:library', label: 'Series', isActive: (route: { path: string }) => route.path.startsWith('/playlists') },
 ];
 
 const isDark = ref(false);

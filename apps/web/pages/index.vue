@@ -26,12 +26,10 @@
 
     <!-- Featured Product -->
     <section v-if="pendingProducts" class="border-b border-gray-100 dark:border-gray-800 pb-8 md:pb-12">
-      <SkeletonBlock class="h-4 rounded w-40 mb-5" />
-      <SkeletonBlock class="aspect-[16/7] rounded-2xl w-full" />
+      <SkeletonBlock class="aspect-16/7 rounded-2xl w-full" />
     </section>
     <section v-else-if="featuredProduct" class="border-b border-gray-100 dark:border-gray-800 pb-8 md:pb-12">
-      <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm mb-5">Featured Product</h2>
-      <ProductCard :product="featuredProduct" size="lg" />
+      <FeaturedProductCard :product="featuredProduct" />
     </section>
 
     <!-- Recent Stories + Sidebar -->

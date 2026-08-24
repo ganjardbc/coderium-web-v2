@@ -1,11 +1,11 @@
 <template>
   <NuxtLink
     :to="`/products/${product.slug}`"
-    class="group block rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden hover:border-gray-300 dark:hover:border-gray-700 transition-colors bg-white dark:bg-dark-secondary/30"
+    class="group block rounded-lg border border-gray-100 dark:border-gray-800 overflow-hidden hover:border-gray-300 dark:hover:border-gray-700 transition-colors bg-white dark:bg-dark-secondary/30"
   >
     <div
       class="w-full bg-gray-50 dark:bg-dark-secondary overflow-hidden"
-      :class="size === 'lg' ? 'aspect-[16/7]' : 'aspect-video'"
+      :class="size === 'lg' ? 'aspect-16/7' : 'aspect-video'"
     >
       <img
         v-if="product.cover"
