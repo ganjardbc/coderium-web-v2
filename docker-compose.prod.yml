@@ -45,7 +45,10 @@ services:
     container_name: coderium-admin-prod
     restart: always
     ports:
-      - "8080:80"
+      - "5175:5175"
+    networks:
+      - default
+      - nginx-proxy-manager
 
   web:
     build:
@@ -59,7 +62,15 @@ services:
       NUXT_PUBLIC_API_BASE: "http://localhost:3031/api/v1"
     ports:
       - "8082:5174"
+    networks:
+      - default
+      - nginx-proxy-manager
 
 volumes:
   postgres_prod_data:
   api_uploads:
+
+networks:
+  nginx-proxy-manager:
+    external: true
+    name: nginx-proxy-manager_default

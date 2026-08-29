@@ -30,7 +30,8 @@ RUN pnpm --filter coderium-admin build
 FROM nginx:stable-alpine AS runner
 
 COPY --from=builder /app/apps/admin/dist /usr/share/nginx/html
+COPY apps/admin/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 5175
 
 CMD ["nginx", "-g", "daemon off;"]
