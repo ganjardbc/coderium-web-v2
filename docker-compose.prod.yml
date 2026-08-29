@@ -30,6 +30,7 @@ services:
         DATABASE_URL: ${DATABASE_URL}
         PORT: 3031
         NODE_ENV: production
+        APP_URL: https://api.coderium.id
         JWT_SECRET: ${JWT_SECRET}
         JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
         CORS_ORIGIN: "https://coderium.id,https://www.coderium.id,https://admin.coderium.id,http://localhost,http://localhost:5174"
