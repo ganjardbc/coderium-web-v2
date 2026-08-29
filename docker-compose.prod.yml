@@ -4,9 +4,9 @@ services:
     container_name: coderium-postgres-prod
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: production_password_here
-      POSTGRES_DB: coderium
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-coderium}
     volumes:
       - postgres_prod_data:/var/lib/postgresql/data
     ports:
@@ -27,11 +27,11 @@ services:
         postgres:
           condition: service_healthy
       environment:
-        DATABASE_URL: "postgresql://postgres:production_password_here@postgres:5432/coderium?schema=public"
+        DATABASE_URL: ${DATABASE_URL}
         PORT: 3031
         NODE_ENV: production
-        JWT_SECRET: "production_jwt_secret_here"
-        JWT_EXPIRES_IN: "7d"
+        JWT_SECRET: ${JWT_SECRET}
+        JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
         CORS_ORIGIN: "https://coderium.id,https://www.coderium.id,https://admin.coderium.id,http://localhost,http://localhost:5174"
       ports:
         - "3031:3031"
