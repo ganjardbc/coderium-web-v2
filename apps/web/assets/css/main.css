@@ -126,6 +126,11 @@ body {
   }
 }
 
+.prose-medium h1 {
+  font-size: 28px;
+  line-height: 1.18;
+}
+
 .prose-medium h2 {
   font-size: 24px;
   line-height: 1.22;
@@ -137,26 +142,94 @@ body {
 }
 
 @media (min-width: 768px) {
+  .prose-medium h1 {
+    font-size: 34px;
+  }
+
   .prose-medium h2 {
     font-size: 30px;
   }
-  
+
   .prose-medium h3 {
     font-size: 24px;
   }
 }
 
-.prose-medium strong {
+.prose-medium strong,
+.prose-medium b {
   font-weight: 700;
 }
 
-.prose-medium em {
+.prose-medium em,
+.prose-medium i {
   font-style: italic;
 }
 
-.prose-medium a {
-  color: inherit;
+.prose-medium u {
   text-decoration: underline;
+}
+
+.prose-medium s,
+.prose-medium strike {
+  text-decoration: line-through;
+}
+
+.prose-medium a {
+  color: rgba(41, 41, 41, 1);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-medium ul,
+.prose-medium ol {
+  margin: 0 0 1.5em;
+  padding-left: 1.5em;
+}
+
+@media (min-width: 768px) {
+  .prose-medium ul,
+  .prose-medium ol {
+    margin-bottom: 2em;
+  }
+}
+
+.prose-medium ul {
+  list-style: disc;
+}
+
+.prose-medium ol {
+  list-style: decimal;
+}
+
+.prose-medium li {
+  margin-bottom: 0.5em;
+}
+
+.prose-medium li > ul,
+.prose-medium li > ol {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+
+.prose-medium blockquote {
+  border-left: 3px solid rgba(41, 41, 41, 0.6);
+  padding-left: 1.2em;
+  margin: 0 0 1.5em;
+  font-style: italic;
+  color: rgba(41, 41, 41, 0.7);
+}
+
+.prose-medium hr {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 2em 0;
+}
+
+.prose-medium img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 1.5em 0;
 }
 
 .prose-medium code {
@@ -165,6 +238,21 @@ body {
   background: rgba(0, 0, 0, 0.05);
   padding: 2px 4px;
   border-radius: 3px;
+}
+
+.prose-medium pre {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 1em;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 0 0 1.5em;
+}
+
+.prose-medium pre code {
+  background: none;
+  padding: 0;
 }
 
 .dark .prose-medium {
@@ -177,7 +265,21 @@ body {
   color: rgba(242, 242, 242, 1);
 }
 
-.dark .prose-medium code {
+.dark .prose-medium a {
+  color: rgba(230, 230, 230, 1);
+}
+
+.dark .prose-medium blockquote {
+  border-left-color: rgba(230, 230, 230, 0.5);
+  color: rgba(230, 230, 230, 0.7);
+}
+
+.dark .prose-medium hr {
+  border-top-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark .prose-medium code,
+.dark .prose-medium pre {
   background: rgba(255, 255, 255, 0.1);
 }
 

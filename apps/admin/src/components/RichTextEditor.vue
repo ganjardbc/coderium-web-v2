@@ -276,4 +276,38 @@ function onKeyDown(e: KeyboardEvent) {
   color: var(--p-primary-color, #6366f1);
   text-decoration: underline;
 }
+.rich-editor-content :deep(li) {
+  margin-bottom: 0.25rem;
+}
+.rich-editor-content :deep(hr) {
+  border: none;
+  border-top: 1px solid var(--p-surface-300, #d1d5db);
+  margin: 1rem 0;
+}
+.rich-editor-content :deep(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 0.5rem 0;
+}
+.rich-editor-content :deep(code) {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.rich-editor-content :deep(pre) {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 0.75rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 0.5rem 0;
+}
+.rich-editor-content :deep(pre code) {
+  background: none;
+  padding: 0;
+}
 </style>
