@@ -22,6 +22,8 @@ export interface Post {
   updatedAt: string;
   user?: { id: string; name: string; avatarUrl?: string | null };
   attachedMedia?: UploadedMedia[];
+  sourceUrl?: string | null;
+  externalId?: string | null;
 }
 
 export interface PostMeta {
