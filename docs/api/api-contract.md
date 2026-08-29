@@ -1068,6 +1068,17 @@ ini. Tiga endpoint yang dipakai hermes sebagai API consumer:
 — batas existing, tidak diubah oleh ticket ini. Hermes perlu handle/compress
 gambar di sisi VPS sebelum upload kalau melebihi batas ini.
 
+## Konsumsi `sourceUrl` di `apps/admin` (Ticket #19)
+
+`GET /admin/posts` (list) dan `GET /admin/posts/:slug` (detail) sudah
+mengembalikan `sourceUrl` apa adanya tanpa perubahan tambahan (tidak ada
+`select` whitelist di query Prisma-nya) — endpoint tidak berubah dari kontrak
+di atas. `apps/admin` (frontend, ticket #19, terpisah dari #18) memakai field
+ini untuk: badge "Hermes" di baris post pada halaman list post yang
+`sourceUrl`-nya terisi, dan link read-only (buka tab baru) ke artikel sumber
+di halaman edit post. `sourceUrl` tidak pernah dikirim balik ke
+`PUT /admin/posts/:slug` oleh admin UI (read-only dari sisi frontend).
+
 ---
 
 # HTTP Status Codes

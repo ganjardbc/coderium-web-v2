@@ -82,7 +82,7 @@ Last Updated:
 | Phase 12 - Product Catalog (Backend) | DONE | 100%     |
 | Phase 13 - Product Catalog (Admin UI) | DONE | 100%    |
 | Phase 14 - Product Catalog (Public Site) | DONE | 100% |
-| Phase 15 - Hermes Integration (Backend) | DONE | 100% |
+| Phase 15 - Hermes Integration (Backend & Admin UI) | DONE | 100% |
 
 ---
 
@@ -234,6 +234,7 @@ PROD-CRUD-003 Implement Product admin API — CRUD + publish/unpublish/archive/r
 ADMIN-PROD-001 Create Product List & Form Pages (ticket 13)
 WEB-PROD-001 Create Product Public Pages (ticket 14)
 HERMES-001 Extend Post API — atribusi sumber, dedup, kontrak untuk hermes (ticket 18)
+HERMES-002 Admin UI — tampilkan atribusi sumber draft hermes (ticket 19)
 ```
 
 ---
@@ -249,7 +250,7 @@ HERMES-001 Extend Post API — atribusi sumber, dedup, kontrak untuk hermes (tic
 | Search   | DONE        |
 | Analytics| DONE        |
 | Products (backend ticket 12 + admin UI ticket 13 + public pages ticket 14) | DONE |
-| Hermes Integration — Post API atribusi sumber & dedup (ticket 18, backend only) | DONE |
+| Hermes Integration — Post API atribusi sumber & dedup (ticket 18, backend) + Admin UI atribusi sourceUrl (ticket 19) | DONE |
 
 ---
 
@@ -691,7 +692,9 @@ safety net, multiple NULL externalId not colliding). Also see
 `docs/development/backlog.md` Phase 15 (HERMES-001) and
 `docs/database/prisma-schema-design.md` (Post model — sourceUrl,
 externalId) for the resulting schema/API surface. Ticket 19 (apps/admin,
-displaying sourceUrl) depends on this ticket but is tracked separately.
+displaying sourceUrl) depended on this ticket and is now also DONE — see
+`.caf/tasks/19/verify-report.md`, `docs/development/backlog.md` Phase 15
+(HERMES-002), and `docs/api/api-contract.md` (`# Hermes Integration`).
 ```
 
 ---

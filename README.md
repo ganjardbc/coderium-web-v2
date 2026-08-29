@@ -11,7 +11,7 @@ Coderium V2 adalah platform modern untuk developer dan content creator mempublik
 - 🖼️ **Media Management**: Upload dan kelola media terpusat dengan polymorphic attachment.
 - ❤️ **Engagement**: Like dan views tracking untuk setiap konten.
 - 🧩 **Product Catalog**: CRUD product landing page dengan lifecycle draft → published → archived → restore, admin-only. Backend di `apps/api` (ticket 12), UI list & form di `apps/admin` (ticket 13), halaman publik `/products` (index) & `/products/[slug]` (detail) plus Featured Product section di homepage — `apps/web` (ticket 14).
-- 🤖 **Hermes Integration**: kontrak `POST /admin/posts` untuk agent eksternal "hermes" (VPS terpisah, scrape artikel AI) membuat draft `Post` dengan atribusi sumber (`sourceUrl`) dan dedup otomatis berbasis `externalId` — backend-only, `apps/api` (ticket 18). Lihat `docs/api/api-contract.md` (`# Hermes Integration`) untuk kontrak endpoint lengkap.
+- 🤖 **Hermes Integration**: kontrak `POST /admin/posts` untuk agent eksternal "hermes" (VPS terpisah, scrape artikel AI) membuat draft `Post` dengan atribusi sumber (`sourceUrl`) dan dedup otomatis berbasis `externalId` — backend di `apps/api` (ticket 18). Admin dashboard (`apps/admin`, ticket 19) menampilkan badge "Hermes" di list post dan link read-only ke artikel sumber di halaman edit, supaya reviewer bisa membedakan draft dari hermes vs draft manual. Lihat `docs/api/api-contract.md` (`# Hermes Integration`) untuk kontrak endpoint lengkap.
 - 🔍 **Full-Text Search**: Cari konten berdasarkan judul, subtitle, dan isi.
 - 📊 **Analytics Dashboard**: Monitor performa konten (top views, top likes).
 - 🌐 **SEO-Optimized**: SSR via Nuxt 3 untuk post detail yang SEO-friendly.

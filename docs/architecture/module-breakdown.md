@@ -640,6 +640,9 @@ apps/admin
 * Stack gallery manager
 * Video upload
 * Media attachment
+* Atribusi sumber hermes (ticket 19) — badge "Hermes" di list untuk post
+  dengan `sourceUrl` terisi, dan link read-only ke artikel sumber di halaman
+  edit (`sourceUrl` tidak pernah dikirim balik ke `PUT /admin/posts/:slug`)
 
 ---
 
