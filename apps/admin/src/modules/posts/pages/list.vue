@@ -28,9 +28,18 @@
     >
       <Column field="title" header="Title" class="min-w-48">
         <template #body="{ data }">
-          <router-link :to="`/posts/${data.slug}/edit`" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
-            {{ data.title }}
-          </router-link>
+          <div class="flex items-center gap-2">
+            <router-link :to="`/posts/${data.slug}/edit`" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+              {{ data.title }}
+            </router-link>
+            <Tag
+              v-if="data.sourceUrl"
+              value="Hermes"
+              icon="pi pi-bolt"
+              severity="info"
+              title="Sourced from Hermes"
+            />
+          </div>
         </template>
       </Column>
       <Column field="type" header="Type" class="w-32">

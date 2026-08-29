@@ -1248,7 +1248,7 @@ Details:
 
 ---
 
-# Phase 15 - Hermes Integration (Backend)
+# Phase 15 - Hermes Integration (Backend & Admin UI)
 
 ## HERMES-001
 
@@ -1291,6 +1291,43 @@ Details:
   .caf/tasks/18/verify-report.md untuk detail lengkap.
 - Di luar scope: logic scraping/cronjob di VPS hermes sendiri, tampilan
   sourceUrl di apps/admin (ticket 19, terpisah), auto-publish otomatis.
+```
+
+---
+
+## HERMES-002
+
+Task: Admin UI — tampilkan atribusi sumber draft hermes (apps/admin, ticket 19)
+
+Status: `DONE`
+
+Details:
+
+```txt
+- TIDAK ADA perubahan di apps/api — GET /admin/posts dan GET /admin/posts/:slug
+  sudah mengembalikan sourceUrl apa adanya sejak ticket 18 (tidak ada select
+  whitelist di query Prisma-nya), jadi seluruh scope ticket 19 murni frontend
+- Interface Post di apps/admin/src/modules/posts/stores/post.store.ts: tambah
+  sourceUrl?: string | null dan externalId?: string | null; TIDAK ditambahkan
+  ke CreatePostPayload (field read-only, tidak pernah dikirim dari admin UI)
+- List page (pages/list.vue): kolom Title menampilkan Tag PrimeVue
+  (severity="info", icon pi-bolt, label "Hermes", title "Sourced from Hermes")
+  di samping judul, v-if="data.sourceUrl" — post tanpa sourceUrl (draft manual)
+  tidak berubah tampilannya
+- Edit page (pages/edit.vue): SidebarCard baru (label "Source", icon pi-link)
+  di kolom sidebar, v-if berdasarkan ref sourceUrl (di-set dari post.sourceUrl
+  saat fetch sukses) — berisi link <a target="_blank" rel="noopener noreferrer">
+  ke sourceUrl, teks "View original article ↗"; section ini tidak tampil sama
+  sekali kalau sourceUrl kosong/null (bukan tampil dash/placeholder kosong)
+- sourceUrl TIDAK dimasukkan ke form ref/payload yang dikirim ke
+  PUT /admin/posts/:slug — field read-only, tidak ikut ter-overwrite null
+- Tidak ada script lint/test di apps/admin/package.json — verifikasi pakai
+  typecheck (vue-tsc --noEmit) dan build (vue-tsc -b && vite build), keduanya
+  PASS. 3 item manual/browser checklist (badge tampil di list, link klik-able
+  di edit, submit form tidak menghapus sourceUrl) TIDAK dijalankan oleh
+  Implementer (tidak ada akses dev server/DB seeded di sesi tersebut) —
+  direkomendasikan dicek manual sebelum merge; lihat
+  .caf/tasks/19/verify-report.md untuk detail lengkap.
 ```
 
 

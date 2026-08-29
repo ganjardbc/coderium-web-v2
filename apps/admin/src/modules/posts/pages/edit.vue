@@ -122,6 +122,18 @@
           <p class="text-xs text-surface-400 mt-1.5">Post type cannot be changed after creation</p>
         </SidebarCard>
 
+        <!-- Source (read-only, hermes attribution) -->
+        <SidebarCard v-if="sourceUrl" label="Source" icon="pi-link">
+          <a
+            :href="sourceUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm text-blue-600 dark:text-blue-400 hover:underline break-all"
+          >
+            View original article ↗
+          </a>
+        </SidebarCard>
+
         <!-- Cover Image -->
         <SidebarCard label="Cover Image" icon="pi-image">
           <MediaUploader
@@ -262,6 +274,7 @@ const loadError = ref('');
 const loading = ref(false);
 const error = ref('');
 const seoOpen = ref(false);
+const sourceUrl = ref<string | null>(null);
 
 const showMediaField = computed(() =>
   ['carousel', 'video', 'stack_gallery'].includes(form.value.type),
@@ -318,6 +331,8 @@ onMounted(async () => {
       metaDescription: post.metaDescription || '',
       metaKeywords: post.metaKeywords || '',
     };
+
+    sourceUrl.value = post.sourceUrl || null;
   } catch {
     loadError.value = 'Post not found or you do not have permission to edit it.';
   } finally {
