@@ -86,8 +86,14 @@ export class PostsController {
     @Body() dto: CreatePostDto,
     @CurrentUser() user: { id: string },
   ) {
-    const post = await this.postsService.create(dto, user.id);
-    return { success: true, message: 'Post created', data: post };
+    const { post, wasExisting } = await this.postsService.create(dto, user.id);
+    return {
+      success: true,
+      message: wasExisting
+        ? 'Post already exists for this externalId'
+        : 'Post created',
+      data: post,
+    };
   }
 
   @ApiBearerAuth()

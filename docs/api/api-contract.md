@@ -419,6 +419,8 @@ Permission: `manage_own_posts` or `manage_all_posts`
 POST /admin/posts
 ```
 
+Permission: `manage_own_posts` or `manage_all_posts`
+
 Request:
 
 ```json
@@ -430,9 +432,24 @@ Request:
   "cover": "https://cdn.coderium.id/cover.jpg",
   "type": "article",
   "metaDescription": "Panduan lengkap...",
-  "metaKeywords": "claude,ai,developer"
+  "metaKeywords": "claude,ai,developer",
+  "sourceUrl": "https://source-site.example/article-slug",
+  "externalId": "hermes:2026-08-29:article-slug"
 }
 ```
+
+`sourceUrl` (optional, string) — URL artikel sumber, untuk atribusi asal
+artikel. Nullable, tidak divalidasi format URL di level API.
+
+`externalId` (optional, string, unique) — identifier unik dari sistem
+eksternal (mis. hermes), dipakai sebagai basis dedup create-post. Kalau
+tidak dikirim, behavior create tidak berubah (create normal setiap request,
+tanpa dedup check). Kalau dikirim dan sudah ada post lain (belum
+soft-deleted) dengan `externalId` yang sama, endpoint TIDAK membuat post
+baru — response tetap `200`/sukses, `data` berisi post existing tersebut,
+dan `message` menjadi `"Post already exists for this externalId"` (berbeda
+dari `"Post created"` pada create baru). Lihat `## Hermes Integration` untuk
+detail kontrak lengkap konsumsi endpoint ini dari agent eksternal.
 
 ---
 
@@ -976,6 +993,80 @@ manage_own_media
 Catatan: `manage_products` adalah permission tunggal (tanpa varian `_own`),
 dipetakan hanya ke role `admin` — Product tidak punya ownership per-user,
 jadi pola-nya mengikuti `manage_users`, bukan pola dua-tier Posts/Playlists/Media.
+
+---
+
+# Hermes Integration (Ticket #18)
+
+Kontrak referensi integrasi untuk agent "hermes" (VPS terpisah, di luar repo
+ini) — scrape artikel AI, kirim ke Telegram, dan create draft `Post` via API
+ini. Tiga endpoint yang dipakai hermes sebagai API consumer:
+
+| Method | Path | Guna | Auth |
+|---|---|---|---|
+| POST | `/api/v1/auth/login` | Login bot user, dapat JWT | Public |
+| POST | `/api/v1/uploads/image` | Upload cover image, dapat URL internal | JWT (bot user) |
+| POST | `/api/v1/admin/posts` | Create post/draft, dedup by `externalId` | JWT (bot user, permission `manage_own_posts`) |
+
+## Alur yang direkomendasikan
+
+1. `POST /auth/login` dengan kredensial bot user (sudah diprovision & di luar
+   scope ticket ini) → dapat `access_token`.
+2. Kalau artikel punya gambar cover, `POST /uploads/image` (multipart,
+   `file`) dulu → dapat `data.url` (URL internal, mis.
+   `{APP_URL}/uploads/media/xxx.jpg`).
+3. `POST /admin/posts` dengan body sesuai `CreatePostDto` (lihat field di
+   bawah), `cover` **wajib** diisi dengan URL hasil langkah 2 — bukan
+   hotlink ke domain sumber artikel. Validasi/enforcement "harus URL
+   internal" adalah tanggung jawab hermes sendiri; API tidak menolak string
+   URL eksternal apa adanya (di luar scope ticket ini).
+4. Draft yang dibuat TIDAK auto-publish. Publish manual tetap lewat
+   `POST /admin/posts/:slug/publish` (endpoint existing, tidak berubah oleh
+   ticket ini) — dilakukan oleh reviewer konten di `apps/admin`.
+
+## Field `CreatePostDto` yang relevan untuk hermes
+
+```ts
+{
+  title: string;             // wajib
+  subtitle?: string;
+  content?: string;
+  type: 'article' | 'carousel' | 'video' | 'stack_gallery'; // wajib, hermes pakai 'article'
+  tags?: string[];
+  cover?: string;             // WAJIB berisi URL internal hasil /uploads/image, bukan hotlink eksternal
+  metaDescription?: string;
+  metaKeywords?: string;
+  isPublished?: boolean;      // hermes TIDAK kirim ini — default false
+  mediaIds?: string[];
+  sourceUrl?: string;         // BARU (ticket #18) — URL artikel sumber, wajib diisi hermes
+  externalId?: string;        // BARU (ticket #18) — identifier unik dari hermes, wajib diisi hermes untuk dedup
+}
+```
+
+## Behavior dedup (final, ticket #18)
+
+- Dedup HANYA aktif kalau `externalId` dikirim di request. Post manual dari
+  admin dashboard (tanpa `externalId`) tidak pernah kena dedup check, create
+  normal setiap kali seperti sebelumnya.
+- Kalau `externalId` dikirim dan sudah ada post lain (belum soft-deleted)
+  dengan `externalId` yang sama: API **TIDAK** membuat row baru. Response
+  tetap HTTP sukses (`200`/`201`, bukan `409 Conflict`) dengan `data` berisi
+  post existing (shape sama seperti create biasa) dan
+  `message: "Post already exists for this externalId"`.
+  - Keputusan ini diambil karena hermes adalah cron otomatis tanpa manusia
+    yang membaca error response secara real-time — response
+    sukses-tapi-informatif lebih robust daripada error yang berpotensi
+    memicu retry/alert yang tidak perlu di sisi cron VPS.
+- `externalId` bersifat unique tapi nullable (`String? @unique` di Prisma) —
+  banyak post manual dengan `externalId: null` tidak saling bentrok
+  (behavior standar unique index PostgreSQL: `NULL` dianggap distinct).
+
+## Batas ukuran upload
+
+`POST /uploads/image` membatasi ukuran file maksimum **10MB**
+(`fileSize: 10 * 1024 * 1024`, `apps/api/src/media/media.controller.ts:27`)
+— batas existing, tidak diubah oleh ticket ini. Hermes perlu handle/compress
+gambar di sisi VPS sebelum upload kalau melebihi batas ini.
 
 ---
 
