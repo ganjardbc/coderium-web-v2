@@ -110,6 +110,8 @@ model Post {
   content         String?
   tags            Json?
   cover           String?
+  sourceUrl       String?   @map("source_url")
+  externalId      String?   @unique @map("external_id")
   type            PostType  @default(article)
   media           Json?
   isPublished     Boolean   @default(false) @map("is_published")

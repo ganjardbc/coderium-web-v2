@@ -56,7 +56,7 @@ M10 - Production Release Completed
 Last Updated:
 
 ```txt
-2026-08-24
+2026-08-29
 ```
 
 ---
@@ -82,6 +82,7 @@ Last Updated:
 | Phase 12 - Product Catalog (Backend) | DONE | 100%     |
 | Phase 13 - Product Catalog (Admin UI) | DONE | 100%    |
 | Phase 14 - Product Catalog (Public Site) | DONE | 100% |
+| Phase 15 - Hermes Integration (Backend) | DONE | 100% |
 
 ---
 
@@ -232,6 +233,7 @@ PROD-CRUD-002 Implement Product public API (ticket 12)
 PROD-CRUD-003 Implement Product admin API — CRUD + publish/unpublish/archive/restore (ticket 12)
 ADMIN-PROD-001 Create Product List & Form Pages (ticket 13)
 WEB-PROD-001 Create Product Public Pages (ticket 14)
+HERMES-001 Extend Post API — atribusi sumber, dedup, kontrak untuk hermes (ticket 18)
 ```
 
 ---
@@ -247,6 +249,7 @@ WEB-PROD-001 Create Product Public Pages (ticket 14)
 | Search   | DONE        |
 | Analytics| DONE        |
 | Products (backend ticket 12 + admin UI ticket 13 + public pages ticket 14) | DONE |
+| Hermes Integration — Post API atribusi sumber & dedup (ticket 18, backend only) | DONE |
 
 ---
 
@@ -637,6 +640,58 @@ verification. Also see `docs/development/backlog.md` Phase 14
 Product List/Detail Page, Home Page), and `docs/api/api-contract.md`
 (Products API > List Products) for the resulting frontend surface and the
 documented API gap.
+```
+
+---
+
+### DEC-010
+
+Date:
+
+```txt
+2026-08-29
+```
+
+Decision:
+
+```txt
+For ticket 18 (extend Post API for the "hermes" external agent), on dedup
+hit (externalId already exists) return an HTTP success response (existing
+post data, message "Post already exists for this externalId") instead of
+a 409 Conflict; and document the hermes integration contract as a new
+section in the existing docs/api/api-contract.md instead of a separate
+file under apps/api/docs/.
+```
+
+Reason:
+
+```txt
+hermes runs as an unattended cron job on a separate VPS (outside this
+repo) with no human reading error responses in real time — a
+success-but-informative response is more robust for a cron consumer than
+an error that might trigger unnecessary retry/alert logic. The repo
+already has a root-level API contract doc referenced from CLAUDE.md
+(docs/api/api-contract.md), so extending it keeps a single source of
+truth for API consumers instead of fragmenting contract docs per ticket.
+```
+
+Status:
+
+```txt
+ACTIVE
+```
+
+Notes:
+
+```txt
+See `.caf/tasks/18/requirements.md` ("Celah & Ambiguitas" #1) and
+`.caf/tasks/18/verify-report.md` for full rationale and manual/functional
+verification (dedup hit round-trip, unique constraint P2002 as DB-level
+safety net, multiple NULL externalId not colliding). Also see
+`docs/development/backlog.md` Phase 15 (HERMES-001) and
+`docs/database/prisma-schema-design.md` (Post model — sourceUrl,
+externalId) for the resulting schema/API surface. Ticket 19 (apps/admin,
+displaying sourceUrl) depends on this ticket but is tracked separately.
 ```
 
 ---

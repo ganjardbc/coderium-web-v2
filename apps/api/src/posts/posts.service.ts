@@ -62,6 +62,19 @@ export class PostsService {
   // ─── Create ───────────────────────────────────────────────────
 
   async create(dto: CreatePostDto, userId: string) {
+    if (dto.externalId) {
+      const existingByExternalId = await this.prisma.post.findFirst({
+        where: { externalId: dto.externalId, deletedAt: null },
+      });
+
+      if (existingByExternalId) {
+        const withMedia = await this.attachMedia(
+          existingByExternalId as unknown as Record<string, unknown>,
+        );
+        return { post: withMedia, wasExisting: true };
+      }
+    }
+
     const { mediaIds, ...postData } = dto;
 
     let slug = slugify(dto.title);
@@ -86,7 +99,8 @@ export class PostsService {
       return created;
     });
 
-    return this.attachMedia(post as unknown as Record<string, unknown>);
+    const withMedia = await this.attachMedia(post as unknown as Record<string, unknown>);
+    return { post: withMedia, wasExisting: false };
   }
 
   // ─── Public reads ────────────────────────────────────────────

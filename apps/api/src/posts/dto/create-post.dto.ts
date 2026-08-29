@@ -46,6 +46,16 @@ export class CreatePostDto {
   @IsOptional()
   cover?: string;
 
+  @ApiPropertyOptional({ description: 'Source article URL (for attribution, e.g. from hermes)' })
+  @IsString()
+  @IsOptional()
+  sourceUrl?: string;
+
+  @ApiPropertyOptional({ description: 'External unique identifier for dedup (e.g. from hermes)' })
+  @IsString()
+  @IsOptional()
+  externalId?: string;
+
   @ApiPropertyOptional({ description: 'SEO meta description' })
   @IsString()
   @IsOptional()
