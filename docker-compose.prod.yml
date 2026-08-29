@@ -27,16 +27,19 @@ services:
         postgres:
           condition: service_healthy
       environment:
-        DATABASE_URL: "postgresql://postgres:***@postgres:5432/coderium?schema=public"
+        DATABASE_URL: "postgresql://postgres:production_password_here@postgres:5432/coderium?schema=public"
         PORT: 3031
         NODE_ENV: production
         JWT_SECRET: "production_jwt_secret_here"
         JWT_EXPIRES_IN: "7d"
-        CORS_ORIGIN: "http://localhost,http://localhost:5174"
+        CORS_ORIGIN: "https://coderium.id,https://www.coderium.id,https://admin.coderium.id,http://localhost,http://localhost:5174"
       ports:
         - "3031:3031"
       volumes:
         - api_uploads:/app/uploads
+      networks:
+        - default
+        - nginx-proxy-manager
 
   admin:
     build:
@@ -59,7 +62,7 @@ services:
     environment:
       PORT: 5174
       NODE_ENV: production
-      NUXT_PUBLIC_API_BASE: "http://localhost:3031/api/v1"
+      NUXT_PUBLIC_API_BASE: "https://api.coderium.id/api/v1"
     ports:
       - "8082:5174"
     networks:

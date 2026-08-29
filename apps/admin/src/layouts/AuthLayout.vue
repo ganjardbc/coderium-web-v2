@@ -38,7 +38,7 @@ import Card from 'primevue/card';
 import { useTheme } from '@/composables/useTheme';
 
 const { setTheme, isDark } = useTheme();
-const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:5174';
+const webUrl = import.meta.env.VITE_WEB_URL || 'https://coderium.id';
 
 function toggleDark() {
   const next = isDark.value ? 'light' : 'dark';

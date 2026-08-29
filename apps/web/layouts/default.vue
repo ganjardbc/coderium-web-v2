@@ -106,7 +106,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const adminUrl = import.meta.env.VITE_ADMIN_URL || 'http://localhost:5173';
+const adminUrl = import.meta.env.VITE_ADMIN_URL || 'https://admin.coderium.id';
 
 const navItems = [
   { to: '/', icon: 'lucide:home', label: 'Home', isActive: (route: { path: string }) => route.path === '/' },

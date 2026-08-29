@@ -238,7 +238,7 @@ const confirm = useConfirm();
 const toast = useToast();
 const { setTheme, currentTheme, isDark } = useTheme();
 
-const webUrl = import.meta.env.VITE_WEB_URL || 'http://localhost:5174';
+const webUrl = import.meta.env.VITE_WEB_URL || 'https://coderium.id';
 
 interface SubmenuItem {
   label: string;
