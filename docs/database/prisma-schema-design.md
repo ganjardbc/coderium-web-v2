@@ -176,6 +176,8 @@ model Post {
   content         String?
   tags            Json?
   cover           String?
+  sourceUrl       String?   @map("source_url")
+  externalId      String?   @unique @map("external_id")
   type            PostType  @default(article)
   media           Json?
   isPublished     Boolean   @default(false) @map("is_published")
@@ -202,6 +204,13 @@ model Post {
   @@map("posts")
 }
 ```
+
+Catatan (ticket 18): `sourceUrl` (atribusi asal artikel) dan `externalId`
+(basis dedup create-post dari agent eksternal "hermes") ditambahkan sebagai
+field opsional. `externalId` unique tapi nullable — banyak post manual
+dengan `externalId: null` tidak saling bentrok (behavior standar unique
+index PostgreSQL, `NULL` dianggap distinct). Lihat `docs/api/api-contract.md`
+(`# Hermes Integration`) untuk kontrak endpoint dan behavior dedup lengkap.
 
 ---
 

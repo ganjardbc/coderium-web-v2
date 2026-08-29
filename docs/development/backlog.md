@@ -1246,3 +1246,51 @@ Details:
 ```
 
 
+---
+
+# Phase 15 - Hermes Integration (Backend)
+
+## HERMES-001
+
+Task: Extend Post API — atribusi sumber, dedup, kontrak untuk hermes (ticket 18)
+
+Status: `DONE`
+
+Endpoints (extend, tidak ada endpoint baru):
+
+```txt
+POST /admin/posts  (dedup by externalId, field baru sourceUrl/externalId)
+```
+
+Details:
+
+```txt
+- Tambah field sourceUrl (String?) dan externalId (String? @unique) ke model
+  Post di schema.prisma, migration baru
+  apps/api/prisma/migrations/20260829183715_add_post_source_url_external_id
+- CreatePostDto: tambah sourceUrl?/externalId? (optional, @IsString
+  @IsOptional, pola sama dengan cover) — post manual dari admin dashboard
+  tetap valid tanpa field ini. UpdatePostDto ikut otomatis (PartialType).
+- PostsService.create: dedup check SEBELUM slug generation/transaction —
+  kalau dto.externalId truthy dan sudah ada post match (belum
+  soft-deleted), TIDAK create baru, return post existing (wasExisting:
+  true). Skip total kalau externalId tidak dikirim.
+- PostsController.create: message "Post already exists for this
+  externalId" untuk dedup-hit, "Post created" untuk create baru. HTTP
+  status tetap sukses (200/201), bukan 409 Conflict — hermes adalah cron
+  otomatis tanpa manusia yang membaca error real-time.
+- Dokumentasi kontrak integrasi untuk hermes (VPS terpisah, di luar repo
+  ini) ditambahkan sebagai section baru `# Hermes Integration (Ticket #18)`
+  di docs/api/api-contract.md (dokumen kontrak API yang sudah ada, bukan
+  file baru) — 3 endpoint (login, upload image, create post), field DTO
+  relevan, behavior dedup final, batas upload 10MB existing (tidak diubah).
+- Tidak ada script test untuk module posts di apps/api — verifikasi pakai
+  typecheck + build (PASS) plus test fungsional ad-hoc via Prisma Client
+  langsung ke DB lokal (dedup hit, unique constraint P2002, multiple NULL
+  externalId tidak bentrok), dihapus setelah verify; lihat
+  .caf/tasks/18/verify-report.md untuk detail lengkap.
+- Di luar scope: logic scraping/cronjob di VPS hermes sendiri, tampilan
+  sourceUrl di apps/admin (ticket 19, terpisah), auto-publish otomatis.
+```
+
+
