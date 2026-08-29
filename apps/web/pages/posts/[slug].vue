@@ -66,7 +66,7 @@
 
       <!-- Content -->
       <section v-if="post.content" class="prose-medium">
-        <div v-html="renderMarkdown(post.content)"></div>
+        <div v-html="renderContent(post.content)"></div>
       </section>
 
       <!-- Tags -->
@@ -126,6 +126,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import DOMPurify from 'isomorphic-dompurify';
 
 definePageMeta({
   layout: 'default',
@@ -237,14 +238,35 @@ function copyShareLink() {
   }
 }
 
-function renderMarkdown(content: string): string {
+// Post content is authored as HTML by the admin's rich text editor.
+// Older posts stored as plain markdown-ish text (no HTML tags) still get
+// a minimal conversion so they render correctly too.
+const ALLOWED_TAGS = [
+  'p', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'blockquote',
+  'a', 'b', 'i', 'u', 'strong', 'em', 's', 'strike', 'br', 'img',
+  'code', 'pre', 'hr', 'span', 'div',
+];
+const ALLOWED_ATTR = ['href', 'target', 'rel', 'src', 'alt', 'title'];
+
+function legacyMarkdownToHtml(content: string): string {
   return content
-    .replace(/\n\n/g, '</p><p class="mt-4">')
-    .replace(/\n/g, '<br />')
-    .replace(/^#\s+(.+)$/gm, '<h1 class="text-3xl font-bold mt-8 mb-4">$1</h1>')
-    .replace(/^##\s+(.+)$/gm, '<h2 class="text-2xl font-bold mt-6 mb-3">$1</h2>')
-    .replace(/^###\s+(.+)$/gm, '<h3 class="text-xl font-semibold mt-4 mb-2">$1</h3>')
+    .split(/\n{2,}/)
+    .map((block) => {
+      const heading = block.match(/^(#{1,3})\s+(.+)$/);
+      if (heading) {
+        const level = heading[1].length;
+        return `<h${level}>${heading[2]}</h${level}>`;
+      }
+      return `<p>${block.replace(/\n/g, '<br />')}</p>`;
+    })
+    .join('')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
+function renderContent(content: string): string {
+  const looksLikeHtml = /<[a-z][\s\S]*>/i.test(content);
+  const html = looksLikeHtml ? content : legacyMarkdownToHtml(content);
+  return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR });
 }
 </script>
