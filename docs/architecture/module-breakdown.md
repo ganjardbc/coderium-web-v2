@@ -33,6 +33,7 @@ rbac
 posts
 playlists
 products
+ai-content
 
 media
 uploads
@@ -365,6 +366,56 @@ POST   /admin/products/:id/restore
 ```txt
 manage_products   # Admin-only, tanpa varian _own (tidak ada ownership)
 ```
+
+---
+
+## AI Content Module (Ticket #24)
+
+### Responsibility
+
+Generate draft artikel via LLM (OpenAI-compatible, dengan built-in web
+search) dan commit cover image hasil generate ke media library internal.
+Tidak menulis apapun ke `posts` — hanya menghasilkan bahan (title/content/
+cover URL internal) yang dipakai caller (`apps/admin`, ticket #25) untuk
+memanggil `POST /admin/posts` secara terpisah.
+
+### Features
+
+* Generate 1 artikel trending (AI/Coding/Technology/Startup) via LLM +
+  web search, style guide (Bahasa Indonesia, sapaan Aku/Kamu, tone ramah)
+  hardcoded server-side, tidak ada parameter override dari caller
+* Log durasi round-trip generate (`{ event: 'ai_content_generate',
+  durationMs, success }`) sebagai baseline observability latensi
+* Download+reupload cover image (fetch server-side, validasi
+  content-type/ukuran, reuse `MediaService.upload()`) supaya `POST
+  /admin/posts` tetap hanya menerima URL internal, bukan hotlink eksternal
+
+### Tables
+
+* Tidak ada tabel baru — reuse `media`/`mediables` (via `MediaModule`).
+
+### Dependencies
+
+* Media Module (`MediaService.upload()`, reuse langsung — tidak
+  reimplement logic upload)
+* Package `openai` (client OpenAI-compatible, base URL/model/API key
+  configurable via env var, bukan hardcode ke OpenAI resmi)
+
+### API Endpoints
+
+```txt
+POST /admin/ai-content/generate
+POST /admin/ai-content/cover
+```
+
+### Permissions
+
+```txt
+manage_own_posts
+manage_all_posts
+```
+
+(sama dengan permission Create Post, tidak ada permission baru)
 
 ---
 
