@@ -165,8 +165,10 @@ run_prisma() {
   cp apps/api/prisma/migration_lock.toml "$TMPDIR_STAGE/prisma/" 2>/dev/null || true
 
   # ambil versi prisma dari package.json (mis. "^7.8.0" -> 7.8.0) — npm install butuh versi eksplisit
-  local PRISMA_VER
-  PRISMA_VER=$(node -p "require('./apps/api/package.json').dependencies['prisma'].replace(/[^0-9.]/g, '')")
+  local PRISMA_VER PRISMA_RAW TMPDIR_STAGE SQL
+  PRISMA_RAW=$(node -p "const p=require('./apps/api/package.json'); (p.dependencies&&p.dependencies.prisma)||(p.devDependencies&&p.devDependencies.prisma)||''")
+  [[ -n "$PRISMA_RAW" ]] || die "prisma tidak ditemukan di dependencies/devDependencies apps/api/package.json"
+  PRISMA_VER=${PRISMA_RAW//[^0-9.]/}
   log "Versi prisma: $PRISMA_VER"
 
   (cd "$TMPDIR_STAGE" \
@@ -184,8 +186,6 @@ EOF
 
   log "Jalankan: prisma migrate $MIGRATE_MODE ..."
   if [[ $PRISMA_APPLY -eq 0 ]]; then
-    # dry-run: tampilkan SQL yang akan dijalankan; exit 0 kalau tidak ada perubahan
-    local SQL
     SQL=$(cd "$TMPDIR_STAGE" && DATABASE_URL="$DBURL" ./node_modules/.bin/prisma migrate diff \
           --from-migrations prisma/migrations \
           --to-schema-datamodel prisma/schema.prisma \
