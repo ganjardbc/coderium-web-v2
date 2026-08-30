@@ -1198,6 +1198,108 @@ di halaman edit post. `sourceUrl` tidak pernah dikirim balik ke
 
 ---
 
+# AI Content Integration (Ticket #24 / #25)
+
+Fitur "AI Agent" di `apps/admin` (`/ai-agent`) — generate draft artikel via LLM,
+preview di frontend, lalu commit lewat `POST /admin/posts` existing (tidak ada
+perubahan pada endpoint itu). Backend (`apps/api/src/ai-content/`, ticket #24)
+dikerjakan di PR terpisah (belum merge ke `main` saat dokumen ini ditulis);
+kontrak di bawah adalah kontrak final yang dipakai frontend (ticket #25) apa
+adanya, belum diverifikasi ulang lewat smoke test end-to-end (lihat
+`.caf/tasks/25/verify-report.md`).
+
+## Generate Article
+
+```http
+POST /admin/ai-content/generate
+```
+
+Tanpa body request. JWT-protected, permission `manage_own_posts` atau
+`manage_all_posts` (sama seperti create Post, tidak ada permission baru).
+
+Response sukses:
+
+```json
+{
+  "success": true,
+  "message": "Success",
+  "data": {
+    "title": "...",
+    "content": "<rich text html fragment>",
+    "coverUrl": "https://external-source.example/cover.jpg",
+    "sourceUrl": "https://external-source.example/article-slug"
+  }
+}
+```
+
+`coverUrl` adalah URL eksternal, HANYA untuk preview (`<img src="coverUrl">`)
+— TIDAK PERNAH dikirim langsung sebagai field `cover` ke `POST /admin/posts`.
+
+Error: `500` (config LLM belum diisi di backend), `502` (provider/parsing
+gagal).
+
+---
+
+## Upload Generated Cover
+
+```http
+POST /admin/ai-content/cover
+```
+
+Request:
+
+```json
+{
+  "imageUrl": "https://external-source.example/cover.jpg"
+}
+```
+
+JWT-protected, permission sama seperti di atas. Dipanggil HANYA saat user
+klik "Publish Post"/"Save as Draft" di halaman preview — TIDAK saat preview
+pertama kali tampil.
+
+Response sukses:
+
+```json
+{
+  "success": true,
+  "message": "Success",
+  "data": {
+    "url": "https://cdn.coderium.id/media/xxx.jpg",
+    "mediaId": "uuid"
+  }
+}
+```
+
+`data.url` adalah URL internal, WAJIB dipakai sebagai field `cover` (string)
+saat commit ke `POST /admin/posts` (bukan `coverUrl` mentah dari `generate`).
+
+Error: `400` (bukan image / >10MB), `502` (fetch gagal), `500` (upload gagal).
+
+---
+
+## Commit ke Post (reuse existing, tidak berubah)
+
+Setelah generate + upload cover, frontend memanggil `POST /admin/posts`
+(kontrak existing, lihat `## Create Post` di atas) dengan:
+
+```json
+{
+  "title": "<dari hasil generate>",
+  "content": "<dari hasil generate>",
+  "type": "article",
+  "cover": "<data.url dari POST /admin/ai-content/cover>",
+  "sourceUrl": "<dari hasil generate>",
+  "isPublished": true
+}
+```
+
+`isPublished: true` untuk tombol "Publish Post", `false` untuk "Save as
+Draft". Setelah sukses, admin UI redirect ke `/posts/:slug/edit` milik post
+yang baru dibuat.
+
+---
+
 # HTTP Status Codes
 
 ```txt
