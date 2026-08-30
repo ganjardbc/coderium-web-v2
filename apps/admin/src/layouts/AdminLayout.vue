@@ -270,6 +270,10 @@ const menuSections: MenuSection[] = [
         to: '/posts'
       },
       {
+        label: 'AI Agent',
+        to: '/ai-agent'
+      },
+      {
         label: 'Products',
         to: '/products'
       },
@@ -324,6 +328,7 @@ function isSubmenuItemActive(subItem: SubmenuItem) {
 const iconMap: Record<string, string> = {
   '/': 'pi-th-large',
   '/posts': 'pi-file-edit',
+  '/ai-agent': 'pi-sparkles',
   '/products': 'pi-box',
   '/playlists': 'pi-list',
   '/media': 'pi-images',

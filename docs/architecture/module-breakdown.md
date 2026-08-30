@@ -57,6 +57,7 @@ dashboard
 posts
 playlists
 products
+ai-agent
 media
 analytics
 settings
@@ -753,6 +754,59 @@ mengikuti kontrak API admin `/admin/products/:id` — lihat ticket 13.)
 * Banner error publish gagal dengan daftar field yang kurang (di-parse dari
   `err.response.data.fields`), input tidak hilang saat publish gagal
 * Auto-generate slug dari `name` (client-side, tetap editable manual)
+
+---
+
+## AI Agent Module
+
+### App
+
+```txt
+apps/admin
+```
+
+### Pages
+
+```txt
+/ai-agent
+/ai-agent/article/preview
+```
+
+### Features
+
+* Grid card pemilihan tipe konten untuk generate AI — hanya "Article" yang
+  fungsional (klik → generate + redirect ke halaman preview); carousel/
+  video/stack_gallery tampil disabled dengan badge "Segera Hadir" (hardcode
+  di frontend, bukan fetch dinamis)
+* Halaman preview (`article-preview.vue`) dengan 3 state: loading (spinner +
+  pesan bertahap kosmetik), preview (title/content read-only, cover kandidat
+  dari sumber eksternal + fallback kalau gagal load, link `sourceUrl`,
+  tombol "Generate Ulang"), error (pesan generik-ramah + "Coba Lagi")
+* Commit lewat dua tombol — "Publish Post" (`isPublished: true`) dan "Save
+  as Draft" (`isPublished: false`) — reuse `usePostStore().createPost`
+  (Posts Module) apa adanya, tidak duplikasi logic `POST /admin/posts`.
+  Sebelum commit, cover kandidat (URL eksternal dari `generate`) di-upload
+  dulu via `POST /admin/ai-content/cover` untuk dapat URL internal
+  (`data.url`) yang dikirim sebagai field `cover` — URL eksternal `coverUrl`
+  TIDAK PERNAH dikirim langsung ke `createPost`
+* Guard keluar halaman (`beforeunload` + `onBeforeRouteLeave`, konfirmasi
+  browser) selama state `preview` — hasil generate hilang kalau ditinggalkan/
+  refresh (state preview hanya di frontend, sesuai desain)
+* Store `ai-content.store.ts` (Pinia) — state `preview`/`status`/
+  `errorMessage`/`committing`/`commitError`, actions `generateArticle()`,
+  `reset()`, `commitPost(isPublished)`
+* Menu sidebar baru "AI Agent" (icon `pi-sparkles`) di `AdminLayout.vue`
+
+### Catatan
+
+* Backend (`apps/api/src/ai-content/`, ticket #24) dikerjakan di PR terpisah
+  — smoke test end-to-end (generate → preview → commit) masih perlu
+  dijalankan ulang begitu backend tersedia di environment yang sama; lihat
+  `.caf/tasks/25/verify-report.md` catatan #4.
+* `sourceUrl` dikirim ke `createPost` lewat type lokal
+  `CreatePostWithSourceUrl` (extend `CreatePostPayload` di dalam
+  `ai-content.store.ts`) — `CreatePostPayload` shared di Posts Module belum
+  diupdate untuk field ini (di luar scope ticket #25).
 
 ---
 

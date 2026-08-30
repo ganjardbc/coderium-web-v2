@@ -7,6 +7,7 @@ import { useAuthStore } from '@/modules/auth/stores/auth.store';
 import { authRoutes } from '@/modules/auth/router';
 import { dashboardRoutes } from '@/modules/dashboard/router';
 import { postsRoutes } from '@/modules/posts/router';
+import { aiAgentRoutes } from '@/modules/ai-agent/router';
 import { productsRoutes } from '@/modules/products/router';
 import { playlistsRoutes } from '@/modules/playlists/router';
 import { mediaRoutes } from '@/modules/media/router';
@@ -17,6 +18,7 @@ const routes: RouteRecordRaw[] = [
   ...authRoutes,
   ...dashboardRoutes,
   ...postsRoutes,
+  ...aiAgentRoutes,
   ...productsRoutes,
   ...playlistsRoutes,
   ...mediaRoutes,

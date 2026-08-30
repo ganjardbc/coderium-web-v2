@@ -50,7 +50,7 @@ Phase 16 - AI Content Generation (Backend done, ticket 24; apps/admin UI — tic
 Current Milestone:
 
 ```txt
-M10 - Production Release Completed
+M11 - AI Agent Ready (IN_PROGRESS — admin UI ticket 25 DONE, backend ticket 24 pending merge PR #26)
 ```
 
 Last Updated:
@@ -102,6 +102,7 @@ Last Updated:
 | M8 Admin Panel Ready     | DONE        |
 | M9 Public Site Ready     | DONE        |
 | M10 Production Release   | DONE        |
+| M11 AI Agent Ready       | IN_PROGRESS |
 
 ---
 
@@ -128,7 +129,7 @@ None
 ### IN_PROGRESS
 
 ```txt
-None
+AI-CONTENT-001 Implement AI Content backend module — generate artikel via LLM (ticket 24, PR #26, belum merge ke main)
 ```
 
 ---
@@ -253,13 +254,14 @@ AI-CONTENT-001 Implement AI Content Generation module — generate + cover commi
 | Analytics| DONE        |
 | Products (backend ticket 12 + admin UI ticket 13 + public pages ticket 14) | DONE |
 | Hermes Integration — Post API atribusi sumber & dedup (ticket 18, backend) + Admin UI atribusi sourceUrl (ticket 19) | DONE |
+| AI Agent — generate artikel AI (admin UI ticket 25, DONE) + backend ai-content (ticket 24, IN_PROGRESS, PR #26 belum merge) | IN_PROGRESS |
 
 ---
 
 ## MVP Completion
 
 ```txt
-100%
+~95% (AI Agent — admin UI ticket 25 DONE, backend ticket 24 pending merge PR #26)
 ```
 
 Catatan: MVP (Phase 0-15) selesai 100%. Phase 16 (AI Content Generation) adalah
