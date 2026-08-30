@@ -49,7 +49,7 @@
     </header>
 
     <!-- Main Outer Wrapper -->
-    <div class="max-w-7xl w-full mx-auto px-4 md:px-6 flex flex-1">
+    <div class="max-w-7xl w-full mx-auto md:px-6 flex flex-1">
       <!-- Left Sidebar (Desktop Only) -->
       <aside class="hidden md:block w-52 md:w-60 py-8 border-r border-gray-100 dark:border-gray-800 sticky top-16 h-[calc(105vh-4rem)] shrink-0">
         <nav class="space-y-1.5 pr-4">
@@ -77,16 +77,15 @@
       <div class="max-w-7xl mx-auto px-4 md:px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-400 dark:text-gray-500">
         <div>&copy; {{ new Date().getFullYear() }} Coderium. All rights reserved.</div>
         <div class="flex gap-6">
-          <NuxtLink to="/explore" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Explore</NuxtLink>
-          <NuxtLink to="/playlists" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Series</NuxtLink>
-          <a href="#" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">About</a>
-          <a href="#" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Privacy</a>
+          <NuxtLink to="/about" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">About</NuxtLink>
+          <NuxtLink to="/terms" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Terms</NuxtLink>
+          <NuxtLink to="/privacy" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Privacy</NuxtLink>
         </div>
       </div>
     </footer>
 
     <!-- Mobile Bottom Navigation Bar -->
-    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-dark/95 border-t border-gray-200 dark:border-gray-800 backdrop-blur-md md:hidden flex justify-around items-center py-2 px-6">
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-dark/95 border-t border-gray-200 dark:border-gray-800 backdrop-blur-md md:hidden flex justify-around items-center py-4 px-0">
       <NuxtLink
         v-for="item in navItems"
         :key="item.to"
@@ -111,7 +110,6 @@ const adminUrl = import.meta.env.VITE_ADMIN_URL || 'https://admin.coderium.id';
 const navItems = [
   { to: '/', icon: 'lucide:home', label: 'Home', isActive: (route: { path: string }) => route.path === '/' },
   { to: '/explore', icon: 'lucide:compass', label: 'Explore', isActive: (route: { path: string }) => route.path === '/explore' },
-  { to: '/products', icon: 'lucide:box', label: 'Products', isActive: (route: { path: string }) => route.path.startsWith('/products') },
   { to: '/playlists', icon: 'lucide:library', label: 'Series', isActive: (route: { path: string }) => route.path.startsWith('/playlists') },
 ];
 

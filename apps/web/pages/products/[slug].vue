@@ -9,17 +9,14 @@
     </div>
 
     <!-- Not found -->
-    <div v-else-if="error" class="max-w-3xl mx-auto">
-      <NotFoundState
-        title="Product Not Found"
-        message="The product you are looking for might have been removed or unpublished."
-        back-label="Back to Products"
-      />
+    <div v-else-if="error" class="text-center py-10 md:py-20">
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Product Not Found</h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-2">The product you are looking for might have been removed or unpublished.</p>
     </div>
 
     <div v-else-if="product" class="max-w-3xl mx-auto">
       <BackButton
-        label="Back to Products"
+        label="Back"
         link-class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
         class="mb-6 md:mb-8"
       />

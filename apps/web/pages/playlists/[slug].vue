@@ -10,12 +10,11 @@
     <div v-else-if="error" class="text-center py-10 md:py-20 bg-gray-50 dark:bg-dark-secondary rounded-2xl border dark:border-gray-800">
       <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Playlist Not Found</h1>
       <p class="text-gray-500 dark:text-gray-400 mt-2">The playlist you are looking for might have been removed or unpublished.</p>
-      <BackButton label="Back to Playlists" variant="solid-blue" class="mt-6" />
     </div>
 
     <div v-else-if="playlist" class="space-y-8 md:space-y-12">
       <!-- Back Link -->
-      <BackButton label="Back to Playlists" link-class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400" />
+      <BackButton label="Back" link-class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400" />
 
       <!-- Playlist Info Header -->
       <header class="flex flex-col md:flex-row gap-4 md:gap-8 items-start pb-6 md:pb-8 border-b dark:border-gray-800">

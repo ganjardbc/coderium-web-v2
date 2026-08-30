@@ -19,13 +19,12 @@
     <div v-else-if="error" class="text-center py-10 md:py-20">
       <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Story Not Found</h1>
       <p class="text-gray-500 dark:text-gray-400 mt-2">The article you are looking for might have been removed or unpublished.</p>
-      <BackButton label="Back Home" variant="solid-dark" class="mt-6" />
     </div>
 
     <article v-else-if="post">
       <!-- Back link -->
       <BackButton
-        label="Back to Explore"
+        label="Back"
         link-class="text-gray-400 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
         class="mb-6 md:mb-8"
       />

@@ -17,16 +17,7 @@
     </div>
 
     <!-- Empty -->
-    <EmptyState v-else-if="products.length === 0" padding="py-16">
-      <p class="text-base">Belum ada produk yang tersedia saat ini.</p>
-      <p class="mt-2 text-sm">
-        Sambil menunggu, jelajahi
-        <NuxtLink to="/explore" class="text-gray-700 dark:text-gray-300 underline hover:text-gray-900 dark:hover:text-white">artikel</NuxtLink>
-        atau
-        <NuxtLink to="/playlists" class="text-gray-700 dark:text-gray-300 underline hover:text-gray-900 dark:hover:text-white">series</NuxtLink>
-        kami.
-      </p>
-    </EmptyState>
+    <EmptyState v-else-if="products.length === 0" message="No products created yet. Check back later!" padding="py-16" />
 
     <!-- Grid -->
     <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
