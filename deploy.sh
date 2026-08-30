@@ -9,12 +9,18 @@
 #   ./deploy.sh --no-build         # skip build (recreate dari image yang ada)
 #   ./deploy.sh --force            # lanjut meski ada perubahan lokal belum di-commit
 #   ./deploy.sh --prune            # prune dangling images setelah build
+#   ./deploy.sh --prisma           # cek migrasi prisma (DRY-RUN — tidak terapkan apa-apa)
+#   ./deploy.sh --prisma --apply   # terapkan migrasi yang belum jalan (sembarangan? tidak)
 #
 # Alur: cek prereq -> cek perubahan lokal -> git fetch + reset ke origin/main
 #       -> build image -> recreate container -> healthcheck -> verifikasi endpoint.
 # Config (compose/.env) di-bake ke image, jadi perubahan config WAJIB di-commit
 # dulu sebelum deploy, kalau tidak akan ketimpa oleh git reset --hard.
-#
+# Prisma: migrate deploy butuh CLI yang TIDAK ada di image API. Mode --prisma
+# meng-staging schema+migrations ke /tmp, install prisma lokal, lalu jalankan
+# dari HOST. Password diambil dari env container postgres (printenv), tidak
+# pernah diketik manual. Default = dry-run (prisma migrate diff / status),
+# migrasi sungguhan HANYA dengan --apply. Tidak pernah prisma db seed.
 set -euo pipefail
 
 STACK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -35,14 +41,18 @@ SERVICES=()
 NO_BUILD=0
 FORCE=0
 PRUNE=0
+PRISMA=0
+PRISMA_APPLY=0
 
 for arg in "$@"; do
   case "$arg" in
     --no-build) NO_BUILD=1 ;;
     --force)    FORCE=1 ;;
     --prune)    PRUNE=1 ;;
+    --prisma)   PRISMA=1 ;;
+    --apply)    PRISMA_APPLY=1 ;;
     -h|--help)
-      sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *) SERVICES+=("$arg") ;;
@@ -121,6 +131,84 @@ for i in $(seq 1 24); do
   sleep 5
 done
 [[ $API_OK -eq 1 ]] || die "API tidak sehat setelah 120s (http $CODE). Cek: sudo docker logs coderium-api-prod --tail 50"
+
+# ---------------------------------------------------------------------------
+# 5b. Prisma migrate (opsional, --prisma)
+#     CLI prisma TIDAK ada di image API (hanya client). Dijalankan dari HOST:
+#     schema+migrations di-staging ke /tmp, prisma di-install lokal di sana.
+#     Password diambil dari env container postgres — tidak pernah diketik manual.
+#     Tanpa --apply hanya dry-run (migrasi TIDAK diterapkan).
+# ---------------------------------------------------------------------------
+run_prisma() {
+  local MIGRATE_MODE="deploy"
+  if [[ $PRISMA_APPLY -eq 0 ]]; then
+    log "MODE DRY-RUN — tidak menerapkan migrasi apa pun"
+    MIGRATE_MODE="diff --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --exit-code"
+  fi
+
+  # ambil kredensial dari container postgres (jangan pernah hardcode)
+  local PGPASSWORD
+  PGPASSWORD=$($SUDO docker exec coderium-postgres-prod printenv POSTGRES_PASSWORD 2>/dev/null || true)
+  [[ -n "$PGPASSWORD" ]] || die "Gagal membaca POSTGRES_PASSWORD dari container coderium-postgres-prod"
+  local PGUSER=${POSTGRES_USER:-postgres}
+  local PGDATABASE=${POSTGRES_DB:-coderium}
+  local DBURL="postgresql://${PGUSER}:${PGPASSWORD}@127.0.0.1:5432/${PGDATABASE}?schema=public"
+
+  local TMPDIR_STAGE
+  TMPDIR_STAGE=$(mktemp -d /tmp/prisma-deploy.XXXXXX)
+  trap 'rm -rf "$TMPDIR_STAGE"' EXIT
+
+  log "Stage prisma ke $TMPDIR_STAGE ..."
+  mkdir -p "$TMPDIR_STAGE/prisma"
+  cp apps/api/prisma/schema.prisma "$TMPDIR_STAGE/prisma/"
+  cp -r apps/api/prisma/migrations "$TMPDIR_STAGE/prisma/"
+  cp apps/api/prisma/migration_lock.toml "$TMPDIR_STAGE/prisma/" 2>/dev/null || true
+
+  # ambil versi prisma dari package.json (mis. "^7.8.0" -> 7.8.0) — npm install butuh versi eksplisit
+  local PRISMA_VER
+  PRISMA_VER=$(node -p "require('./apps/api/package.json').dependencies['prisma'].replace(/[^0-9.]/g, '')")
+  log "Versi prisma: $PRISMA_VER"
+
+  (cd "$TMPDIR_STAGE" \
+    && npm init -y >/dev/null 2>&1 \
+    && npm install prisma@"$PRISMA_VER" --no-save --silent) || die "Gagal install prisma di staging"
+
+  cat > "$TMPDIR_STAGE/prisma.config.ts" <<EOF
+import { defineConfig } from 'prisma/config';
+export default defineConfig({
+  schema: 'prisma/schema.prisma',
+  migrations: { path: 'prisma/migrations' },
+  datasource: { url: process.env['DATABASE_URL'] },
+});
+EOF
+
+  log "Jalankan: prisma migrate $MIGRATE_MODE ..."
+  if [[ $PRISMA_APPLY -eq 0 ]]; then
+    # dry-run: tampilkan SQL yang akan dijalankan; exit 0 kalau tidak ada perubahan
+    local SQL
+    SQL=$(cd "$TMPDIR_STAGE" && DATABASE_URL="$DBURL" ./node_modules/.bin/prisma migrate diff \
+          --from-migrations prisma/migrations \
+          --to-schema-datamodel prisma/schema.prisma \
+          --script 2>&1) || true
+    if [[ -z "$SQL" || "$SQL" == *"No difference detected"* || "$SQL" == *"empty"* ]]; then
+      ok "Tidak ada migrasi tertunda (schema sudah sinkron dengan DB)"
+    else
+      warn "Ada migrasi tertunda! Jalankan: ./deploy.sh --prisma --apply"
+      printf '%s\n' "$SQL" | head -40
+    fi
+  else
+    (cd "$TMPDIR_STAGE" && DATABASE_URL="$DBURL" ./node_modules/.bin/prisma migrate deploy) \
+      || die "prisma migrate deploy GAGAL — DB mungkin berubah. Periksa output di atas."
+  fi
+  rm -rf "$TMPDIR_STAGE"
+  trap - EXIT
+}
+
+if [[ $PRISMA -eq 1 ]]; then
+  log "=== PRISMA MODE ==="
+  run_prisma
+  ok "Prisma selesai"
+fi
 
 # ---------------------------------------------------------------------------
 # 6. Verifikasi
