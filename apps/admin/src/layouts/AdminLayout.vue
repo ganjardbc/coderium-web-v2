@@ -178,7 +178,7 @@
           />
 
           <!-- Breadcrumbs -->
-          <Breadcrumb :model="breadcrumbItems" class="admin-breadcrumb">
+          <Breadcrumb :model="breadcrumbItems" class="hidden md:block">
             <template #item="{ item }">
               <span
                 class="text-sm font-medium"
@@ -278,20 +278,20 @@ const menuSections: MenuSection[] = [
         to: '/playlists'
       },
       {
-        label: 'Media Library',
+        label: 'Medias',
         to: '/media'
       },
-      {
-        label: 'Users',
-        to: '/users'
-      }
     ]
   },
   {
     title: 'Settings',
     items: [
       {
-        label: 'System Settings',
+        label: 'Users',
+        to: '/users'
+      },
+      {
+        label: 'Settings',
         to: '/settings/profile',
         activeMatch: '/settings/',
         submenu: [
@@ -300,7 +300,7 @@ const menuSections: MenuSection[] = [
           { label: 'Appearance', to: '/settings/appearance' },
           { label: 'Two-Factor Auth', to: '/settings/two-factor' }
         ]
-      }
+      },
     ]
   }
 ];

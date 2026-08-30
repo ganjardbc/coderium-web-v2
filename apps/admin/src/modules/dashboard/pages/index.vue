@@ -43,13 +43,13 @@
           <template #content>
             <div v-if="topByViews.length === 0" class="text-gray-400 dark:text-gray-500 text-sm py-4 text-center">No data yet</div>
             <div v-else class="space-y-3">
-              <div v-for="(post, i) in topByViews" :key="post.id" class="flex items-center gap-3">
+              <div v-for="(post, i) in topByViews" :key="post.id" class="grid grid-cols-[24px_1fr_32px] gap-3">
                 <span class="text-gray-400 text-sm font-mono w-6">{{ String(i + 1).padStart(2, '0') }}</span>
                 <div class="flex-1 min-w-0">
                   <p class="text-sm font-medium truncate">{{ post.title }}</p>
                   <Tag :value="post.type" severity="secondary" class="capitalize text-xs mt-0.5" />
                 </div>
-                <span class="text-sm font-semibold text-blue-600">{{ formatNumber(post.viewsCount) }}</span>
+                <span class="text-sm font-semibold text-blue-600 text-right">{{ formatNumber(post.viewsCount) }}</span>
               </div>
             </div>
           </template>
@@ -62,13 +62,13 @@
           <template #content>
             <div v-if="topByLikes.length === 0" class="text-gray-400 dark:text-gray-500 text-sm py-4 text-center">No data yet</div>
             <div v-else class="space-y-3">
-              <div v-for="(post, i) in topByLikes" :key="post.id" class="flex items-center gap-3">
+              <div v-for="(post, i) in topByLikes" :key="post.id" class="grid grid-cols-[24px_1fr_32px] gap-3">
                 <span class="text-gray-400 text-sm font-mono w-6">{{ String(i + 1).padStart(2, '0') }}</span>
                 <div class="flex-1 min-w-0">
                   <p class="text-sm font-medium truncate">{{ post.title }}</p>
                   <Tag :value="post.type" severity="secondary" class="capitalize text-xs mt-0.5" />
                 </div>
-                <span class="text-sm font-semibold text-red-600">{{ formatNumber(post.likesCount) }}</span>
+                <span class="text-sm font-semibold text-red-600 text-right">{{ formatNumber(post.likesCount) }}</span>
               </div>
             </div>
           </template>
@@ -82,14 +82,18 @@
         <template #content>
           <div v-if="!overview.recentPosts?.length" class="text-gray-400 dark:text-gray-500 text-sm py-4 text-center">No posts yet</div>
           <div v-else class="space-y-3">
-            <div v-for="post in overview.recentPosts" :key="post.id" class="flex items-center gap-3">
-              <Tag :value="post.type" severity="secondary" class="capitalize text-xs shrink-0" />
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium truncate">{{ post.title }}</p>
+            <div v-for="post in overview.recentPosts" :key="post.id" class="flex flex-col lg:flex-row gap-3">
+              <div class="flex flex-1 flex-row-reverse lg:flex-row gap-3">
+                <Tag :value="post.type" severity="secondary" class="capitalize text-xs shrink-0" />
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium truncate">{{ post.title }}</p>
+                </div>
               </div>
-              <span class="text-xs text-gray-400 whitespace-nowrap">{{ formatNumber(post.viewsCount) }} views</span>
-              <span class="text-xs text-gray-400 whitespace-nowrap">{{ formatNumber(post.likesCount) }} likes</span>
-              <span class="text-xs text-gray-400 whitespace-nowrap">{{ post.createdAt ? new Date(post.createdAt).toLocaleDateString() : '' }}</span>
+              <div class="flex gap-3 flex-1 lg:justify-end">
+                <span class="text-xs text-gray-400 whitespace-nowrap">{{ formatNumber(post.viewsCount) }} views</span>
+                <span class="text-xs text-gray-400 whitespace-nowrap">{{ formatNumber(post.likesCount) }} likes</span>
+                <span class="text-xs text-gray-400 whitespace-nowrap">{{ post.createdAt ? new Date(post.createdAt).toLocaleDateString() : '' }}</span>
+              </div>
             </div>
           </div>
         </template>

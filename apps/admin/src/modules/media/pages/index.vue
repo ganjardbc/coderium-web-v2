@@ -4,7 +4,7 @@
     <ConfirmDialog />
 
     <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold">Media Library</h1>
+      <h1 class="text-2xl font-bold">Medias</h1>
     </div>
 
     <MediaUploader :multiple="true" @uploaded="onUploaded" class="mb-6" />

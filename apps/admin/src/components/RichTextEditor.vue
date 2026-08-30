@@ -11,10 +11,10 @@
     <div class="flex flex-wrap items-center gap-0.5 border-b border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800 px-2 py-1.5">
       <!-- Text format -->
       <ToolbarButton @click="exec('bold')" :active="states.bold" title="Bold">
-        <i class="pi pi-bold text-xs" />
+        <span class="text-xs font-bold">B</span>
       </ToolbarButton>
       <ToolbarButton @click="exec('italic')" :active="states.italic" title="Italic">
-        <i class="pi pi-italic text-xs" />
+        <span class="italic text-xs font-bold">I</span>
       </ToolbarButton>
       <ToolbarButton @click="exec('underline')" :active="states.underline" title="Underline">
         <span class="underline text-xs font-bold">U</span>
@@ -72,7 +72,7 @@
       ref="editorRef"
       contenteditable="true"
       :data-placeholder="placeholder"
-      class="rich-editor-content min-h-[220px] p-4 text-sm text-surface-800 dark:text-surface-100 focus:outline-none bg-white dark:bg-surface-900"
+      class="rich-editor-content min-h-55 p-4 text-sm text-surface-800 dark:text-surface-100 focus:outline-none bg-white dark:bg-surface-900"
       @focus="focused = true"
       @blur="onBlur"
       @input="onInput"
