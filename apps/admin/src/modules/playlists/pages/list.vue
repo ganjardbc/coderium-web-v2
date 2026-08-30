@@ -3,96 +3,122 @@
     <Toast />
     <ConfirmDialog />
 
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
       <h1 class="text-2xl font-bold">Playlists</h1>
-      <router-link v-slot="{ navigate }" to="/playlists/create" custom>
-        <Button label="New Playlist" icon="pi pi-plus" size="small" @click="navigate" />
-      </router-link>
+      <div class="flex items-center gap-3 flex-wrap">
+        <IconField icon-position="left">
+          <InputIcon class="pi pi-search" />
+          <InputText v-model="search" placeholder="Search playlists..." size="small" @input="onSearchInput" />
+        </IconField>
+        <router-link v-slot="{ navigate }" to="/playlists/create" custom>
+          <Button label="New Playlist" icon="pi pi-plus" size="small" @click="navigate" />
+        </router-link>
+      </div>
     </div>
 
     <div v-if="loading" class="flex justify-center py-16">
       <ProgressSpinner />
     </div>
 
-    <div v-else-if="playlists.length === 0" class="text-center py-16 text-gray-400 dark:text-gray-500">
-      No playlists yet. Create your first playlist!
-    </div>
+    <EmptyState
+      v-else-if="playlists.length === 0"
+      icon="pi-list"
+      :title="search ? 'No playlists match your search' : 'No playlists yet'"
+      :description="search ? undefined : 'Create your first playlist to see it listed here.'"
+    />
 
-    <DataTable
-      v-else
-      :value="playlists"
-      class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden"
-      stripedRows
-    >
-      <Column field="title" header="Title" class="min-w-48">
-        <template #body="{ data }">
-          <router-link :to="`/playlists/${data.slug}/edit`" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
-            {{ data.title }}
-          </router-link>
-        </template>
-      </Column>
-      <Column field="isPublished" header="Status" class="w-32">
-        <template #body="{ data }">
-          <Tag :value="data.isPublished ? 'Published' : 'Draft'" :severity="data.isPublished ? 'success' : 'warn'" />
-        </template>
-      </Column>
-      <Column header="Posts" class="w-24">
-        <template #body="{ data }">
-          {{ data._count?.posts || 0 }}
-        </template>
-      </Column>
-      <Column field="createdAt" header="Created" class="w-36">
-        <template #body="{ data }">
-          {{ new Date(data.createdAt).toLocaleDateString() }}
-        </template>
-      </Column>
-      <Column header="Actions" class="w-44">
-        <template #body="{ data }">
-          <div class="flex gap-1">
-            <router-link v-slot="{ navigate }" :to="`/playlists/${data.slug}/posts`" custom>
-              <Button icon="pi pi-list" size="small" text severity="help" title="Manage Posts" @click="navigate" />
-            </router-link>
-            <router-link v-slot="{ navigate }" :to="`/playlists/${data.slug}/edit`" custom>
-              <Button icon="pi pi-pencil" size="small" text severity="info" title="Edit" @click="navigate" />
-            </router-link>
-            <Button
-              icon="pi pi-trash"
-              size="small"
-              text
-              severity="danger"
-              title="Delete"
-              @click="handleDelete(data.slug, data.title)"
-            />
+    <div v-else class="space-y-3">
+      <div
+        v-for="playlist in playlists"
+        :key="playlist.id"
+        class="flex gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-surface-900 hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
+      >
+        <!-- Cover thumbnail -->
+        <div class="hidden sm:block shrink-0 w-24 h-24 rounded-lg overflow-hidden bg-gray-100 dark:bg-surface-800">
+          <img v-if="playlist.cover" :src="playlist.cover" :alt="playlist.title" class="w-full h-full object-cover" />
+          <div v-else class="w-full h-full flex items-center justify-center">
+            <i class="pi pi-list text-2xl text-gray-300 dark:text-gray-600" />
           </div>
-        </template>
-      </Column>
-    </DataTable>
+        </div>
 
-    <div v-if="meta.totalPages > 1" class="flex justify-center gap-2 mt-6">
-      <Button
-        v-for="p in meta.totalPages"
-        :key="p"
-        :label="String(p)"
-        size="small"
-        :severity="p === meta.page ? 'primary' : 'secondary'"
-        :outlined="p !== meta.page"
-        @click="fetchPlaylists(p, meta.limit)"
-      />
+        <!-- Content -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <router-link
+                :to="`/playlists/${playlist.slug}/edit`"
+                class="font-semibold text-gray-900 dark:text-white hover:underline line-clamp-2"
+              >
+                {{ playlist.title }}
+              </router-link>
+              <p v-if="playlist.description" class="text-sm text-gray-400 dark:text-gray-500 line-clamp-2 mt-0.5">
+                {{ playlist.description }}
+              </p>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-1 shrink-0">
+              <router-link v-slot="{ navigate }" :to="`/playlists/${playlist.slug}/posts`" custom>
+                <Button icon="pi pi-list" size="small" text rounded severity="help" title="Manage Posts" @click="navigate" />
+              </router-link>
+              <router-link v-slot="{ navigate }" :to="`/playlists/${playlist.slug}/edit`" custom>
+                <Button icon="pi pi-pencil" size="small" text rounded severity="info" title="Edit" @click="navigate" />
+              </router-link>
+              <Button
+                icon="pi pi-trash"
+                size="small"
+                text
+                rounded
+                severity="danger"
+                title="Delete"
+                @click="handleDelete(playlist.slug, playlist.title)"
+              />
+            </div>
+          </div>
+
+          <!-- Badges + meta -->
+          <div class="flex items-center flex-wrap gap-2 mt-3">
+            <Tag :value="playlist.isPublished ? 'Published' : 'Draft'" :severity="playlist.isPublished ? 'success' : 'warn'" />
+
+            <span class="text-sm text-gray-400 dark:text-gray-500 flex items-center gap-1 ml-auto">
+              <i class="pi pi-file text-xs" /> {{ playlist._count?.posts || 0 }} posts
+            </span>
+            <span class="text-sm text-gray-400 dark:text-gray-500 flex items-center gap-1">
+              <i class="pi pi-calendar text-xs" /> {{ new Date(playlist.createdAt).toLocaleDateString() }}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <AdminPagination :meta="meta" @change="(p) => fetchPlaylists(p, meta.limit)" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { DataTable, Column, Button, Tag, Toast, ConfirmDialog, ProgressSpinner } from 'primevue';
+import {
+  Button,
+  Tag,
+  Toast,
+  ConfirmDialog,
+  ProgressSpinner,
+  IconField,
+  InputIcon,
+  InputText,
+} from 'primevue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import api from '@/lib/api';
+import EmptyState from '@/components/EmptyState.vue';
+import AdminPagination from '@/components/AdminPagination.vue';
 
 interface PlaylistItem {
   id: string;
   title: string;
   slug: string;
+  description?: string | null;
+  cover?: string | null;
   isPublished: boolean;
   createdAt: string;
   _count?: { posts: number };
@@ -108,20 +134,29 @@ interface PlaylistMeta {
 const playlists = ref<PlaylistItem[]>([]);
 const meta = ref<PlaylistMeta>({ page: 1, limit: 10, total: 0, totalPages: 0 });
 const loading = ref(false);
+const search = ref('');
 const confirm = useConfirm();
 const toast = useToast();
+let searchTimeout: ReturnType<typeof setTimeout> | undefined;
 
 onMounted(() => fetchPlaylists());
 
 async function fetchPlaylists(page = 1, limit = 10) {
   loading.value = true;
   try {
-    const { data } = await api.get('/admin/playlists', { params: { page, limit } });
+    const { data } = await api.get('/admin/playlists', {
+      params: { page, limit, search: search.value || undefined },
+    });
     playlists.value = data.data;
     meta.value = data.meta;
   } finally {
     loading.value = false;
   }
+}
+
+function onSearchInput() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => fetchPlaylists(1, meta.value.limit), 350);
 }
 
 function handleDelete(slug: string, title: string) {
