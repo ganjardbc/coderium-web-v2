@@ -11,11 +11,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdminPagination: typeof import('./src/components/AdminPagination.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
     Breadcrumb: typeof import('primevue/breadcrumb')['default']
     Button: typeof import('primevue/button')['default']
     ConfirmDialog: typeof import('primevue/confirmdialog')['default']
     Drawer: typeof import('primevue/drawer')['default']
+    EmptyState: typeof import('./src/components/EmptyState.vue')['default']
     MediaUploader: typeof import('./src/components/MediaUploader.vue')['default']
     PanelMenu: typeof import('primevue/panelmenu')['default']
     RepeatableListField: typeof import('./src/components/RepeatableListField.vue')['default']

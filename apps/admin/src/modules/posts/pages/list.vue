@@ -16,107 +16,109 @@
       <ProgressSpinner />
     </div>
 
-    <div v-else-if="posts.length === 0" class="text-center py-16 text-gray-400 dark:text-gray-500">
-      No posts yet. Create your first post!
+    <EmptyState
+      v-else-if="posts.length === 0"
+      icon="pi-file-edit"
+      title="No posts yet"
+      description="Create your first post to see it listed here."
+    />
+
+    <div v-else class="space-y-3">
+      <div
+        v-for="post in posts"
+        :key="post.id"
+        class="flex gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-surface-900 hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
+      >
+        <!-- Cover thumbnail -->
+        <div class="hidden sm:block shrink-0 w-24 h-24 rounded-lg overflow-hidden bg-gray-100 dark:bg-surface-800">
+          <img v-if="post.cover" :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
+          <div v-else class="w-full h-full flex items-center justify-center">
+            <i class="pi pi-image text-2xl text-gray-300 dark:text-gray-600" />
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <router-link
+                :to="`/posts/${post.slug}/edit`"
+                class="font-semibold text-gray-900 dark:text-white hover:underline line-clamp-2"
+              >
+                {{ post.title }}
+              </router-link>
+              <p v-if="post.subtitle" class="text-sm text-gray-400 dark:text-gray-500 line-clamp-2 mt-0.5">
+                {{ post.subtitle }}
+              </p>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-1 shrink-0">
+              <Button
+                v-if="!post.isPublished"
+                icon="pi pi-send"
+                size="small"
+                text
+                rounded
+                severity="success"
+                title="Publish"
+                @click="handlePublish(post.slug)"
+              />
+              <Button
+                v-else
+                icon="pi pi-pause"
+                size="small"
+                text
+                rounded
+                severity="warn"
+                title="Unpublish"
+                @click="handleUnpublish(post.slug)"
+              />
+              <router-link v-slot="{ navigate }" :to="`/posts/${post.slug}/edit`" custom>
+                <Button icon="pi pi-pencil" size="small" text rounded severity="info" title="Edit" @click="navigate" />
+              </router-link>
+              <Button
+                icon="pi pi-trash"
+                size="small"
+                text
+                rounded
+                severity="danger"
+                title="Delete"
+                @click="handleDelete(post.slug, post.title)"
+              />
+            </div>
+          </div>
+
+          <!-- Badges + meta -->
+          <div class="flex items-center flex-wrap gap-2 mt-3">
+            <Tag :value="post.type" severity="secondary" class="capitalize" />
+            <Tag :value="post.isPublished ? 'Published' : 'Draft'" :severity="post.isPublished ? 'success' : 'warn'" />
+            <Tag v-if="post.sourceUrl" value="Hermes" icon="pi pi-bolt" severity="info" title="Sourced from Hermes" />
+
+            <span class="text-sm text-gray-400 dark:text-gray-500 flex items-center gap-1 ml-auto">
+              <i class="pi pi-eye text-xs" /> {{ post.viewsCount }}
+            </span>
+            <span class="text-sm text-gray-400 dark:text-gray-500 flex items-center gap-1">
+              <i class="pi pi-calendar text-xs" /> {{ new Date(post.createdAt).toLocaleDateString() }}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <DataTable
-      v-else
-      :value="posts"
-      class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden"
-      stripedRows
-    >
-      <Column field="title" header="Title" class="min-w-48">
-        <template #body="{ data }">
-          <div class="flex items-center gap-2">
-            <router-link :to="`/posts/${data.slug}/edit`" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
-              {{ data.title }}
-            </router-link>
-            <Tag
-              v-if="data.sourceUrl"
-              value="Hermes"
-              icon="pi pi-bolt"
-              severity="info"
-              title="Sourced from Hermes"
-            />
-          </div>
-        </template>
-      </Column>
-      <Column field="type" header="Type" class="w-32">
-        <template #body="{ data }">
-          <Tag :value="data.type" severity="secondary" class="capitalize" />
-        </template>
-      </Column>
-      <Column field="isPublished" header="Status" class="w-32">
-        <template #body="{ data }">
-          <Tag :value="data.isPublished ? 'Published' : 'Draft'" :severity="data.isPublished ? 'success' : 'warn'" />
-        </template>
-      </Column>
-      <Column field="viewsCount" header="Views" class="w-24" />
-      <Column field="createdAt" header="Created" class="w-36">
-        <template #body="{ data }">
-          {{ new Date(data.createdAt).toLocaleDateString() }}
-        </template>
-      </Column>
-      <Column header="Actions" class="w-40">
-        <template #body="{ data }">
-          <div class="flex gap-1">
-            <Button
-              v-if="!data.isPublished"
-              icon="pi pi-send"
-              size="small"
-              text
-              severity="success"
-              title="Publish"
-              @click="handlePublish(data.slug)"
-            />
-            <Button
-              v-else
-              icon="pi pi-pause"
-              size="small"
-              text
-              severity="warn"
-              title="Unpublish"
-              @click="handleUnpublish(data.slug)"
-            />
-            <router-link v-slot="{ navigate }" :to="`/posts/${data.slug}/edit`" custom>
-              <Button icon="pi pi-pencil" size="small" text severity="info" title="Edit" @click="navigate" />
-            </router-link>
-            <Button
-              icon="pi pi-trash"
-              size="small"
-              text
-              severity="danger"
-              title="Delete"
-              @click="handleDelete(data.slug, data.title)"
-            />
-          </div>
-        </template>
-      </Column>
-    </DataTable>
-
-    <!-- Pagination -->
-    <div v-if="meta.totalPages > 1" class="flex justify-center gap-2 mt-6">
-      <Button
-        v-for="p in meta.totalPages"
-        :key="p"
-        :label="String(p)"
-        size="small"
-        :severity="p === meta.page ? 'primary' : 'secondary'"
-        :outlined="p !== meta.page"
-        @click="postsStore.fetchPosts(p, meta.limit)"
-      />
-    </div>
+    <AdminPagination :meta="meta" @change="(p) => postsStore.fetchPosts(p, meta.limit)" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { DataTable, Column, Button, Tag, Toast, ConfirmDialog, ProgressSpinner } from 'primevue';
+import { Button, Tag, Toast, ConfirmDialog, ProgressSpinner } from 'primevue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { usePostStore } from '@/modules/posts/stores/post.store';
 import { storeToRefs } from 'pinia';
+import EmptyState from '@/components/EmptyState.vue';
+import AdminPagination from '@/components/AdminPagination.vue';
 
 const postsStore = usePostStore();
 const { posts, meta, loading } = storeToRefs(postsStore);
