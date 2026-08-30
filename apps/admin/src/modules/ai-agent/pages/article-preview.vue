@@ -4,18 +4,18 @@
     <div v-if="status === 'loading'" class="flex flex-col items-center justify-center gap-4 py-24">
       <ProgressSpinner style="width: 48px; height: 48px" strokeWidth="4" />
       <p class="text-sm text-surface-500 dark:text-surface-400">{{ loadingMessage }}</p>
-      <Button label="Batal" severity="secondary" outlined size="small" @click="handleCancel" />
+      <Button label="Cancel" severity="secondary" outlined size="small" @click="handleCancel" />
     </div>
 
     <!-- Error state -->
     <div v-else-if="status === 'error'" class="flex flex-col items-center justify-center gap-4 py-24 text-center">
       <i class="pi pi-exclamation-triangle text-4xl text-red-400" />
       <p class="text-sm text-surface-600 dark:text-surface-300 max-w-md">
-        {{ errorMessage || 'Terjadi kesalahan saat membuat artikel. Silakan coba lagi.' }}
+        {{ errorMessage || 'Something went wrong while generating the article. Please try again.' }}
       </p>
       <div class="flex gap-2">
-        <Button label="Coba Lagi" icon="pi pi-refresh" @click="generateArticle" />
-        <Button label="Kembali" severity="secondary" outlined @click="handleCancel" />
+        <Button label="Try Again" icon="pi pi-refresh" @click="generateArticle" />
+        <Button label="Back" severity="secondary" outlined @click="handleCancel" />
       </div>
     </div>
 
@@ -23,11 +23,11 @@
     <div v-else-if="status === 'preview' && preview" class="space-y-5">
       <div class="flex items-center justify-between gap-3">
         <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-50">Preview Article</h1>
-        <Button label="Generate Ulang" icon="pi pi-refresh" severity="secondary" outlined size="small" @click="generateArticle" />
+        <Button label="Regenerate" icon="pi pi-refresh" severity="secondary" outlined size="small" @click="generateArticle" />
       </div>
 
       <Message severity="warn" size="small" variant="simple">
-        Hasil ini belum disimpan — refresh atau tinggalkan halaman akan menghapusnya.
+        This result hasn't been saved yet — refreshing or leaving the page will discard it.
       </Message>
 
       <!-- Cover -->
@@ -41,10 +41,10 @@
         />
         <div v-else class="flex flex-col items-center gap-2 text-surface-400">
           <i class="pi pi-image text-3xl" />
-          <span class="text-xs">Preview cover tidak tersedia</span>
+          <span class="text-xs">Cover preview unavailable</span>
         </div>
         <span class="absolute top-2 left-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-black/60 text-white">
-          dari sumber eksternal
+          from external source
         </span>
       </div>
 
@@ -74,11 +74,12 @@
       </Message>
 
       <!-- Commit actions -->
-      <div class="flex items-center justify-end gap-3 pt-2">
+      <div class="flex flex-col md:flex-row items-center justify-end gap-3 pt-2">
         <Button
         label="Publish Post"
         :loading="committing"
         :disabled="committing"
+        class="w-full md:w-auto"
         @click="handleCommit(true)"
         />
         <Button
@@ -87,6 +88,7 @@
           outlined
           :loading="committing"
           :disabled="committing"
+          class="w-full md:w-auto"
           @click="handleCommit(false)"
         />
       </div>
@@ -110,8 +112,8 @@ const coverLoadError = ref(false);
 // ─── Loading state cosmetic copy (frontend-only, not tied to real backend progress) ───
 
 const loadingMessages = [
-  'Mencari artikel trending...',
-  'Menulis ulang artikel dalam Bahasa Indonesia...',
+  'Searching for trending articles...',
+  'Rewriting the article...',
 ];
 const loadingMessageIndex = ref(0);
 const loadingMessage = computed(() => loadingMessages[loadingMessageIndex.value]);
@@ -171,7 +173,7 @@ async function handleCommit(isPublished: boolean) {
 
 // ─── Leave-confirmation guard (only while a not-yet-committed preview exists) ───
 
-const LEAVE_CONFIRM_MESSAGE = 'Yakin ingin meninggalkan halaman ini? Hasil generate akan hilang.';
+const LEAVE_CONFIRM_MESSAGE = 'Are you sure you want to leave this page? The generated result will be lost.';
 
 function handleBeforeUnload(e: BeforeUnloadEvent) {
   if (status.value === 'preview') {

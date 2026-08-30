@@ -20,9 +20,9 @@ export interface ArticlePreview {
 export type AiContentStatus = 'idle' | 'loading' | 'preview' | 'error';
 
 const GENERIC_GENERATE_ERROR =
-  'Gagal membuat artikel. Silakan coba lagi beberapa saat lagi.';
+  'Failed to generate the article. Please try again in a moment.';
 const GENERIC_COMMIT_ERROR =
-  'Gagal menyimpan post. Silakan coba lagi.';
+  'Failed to save the post. Please try again.';
 
 export const useAiContentStore = defineStore('ai-content', () => {
   const preview = ref<ArticlePreview | null>(null);
