@@ -60,17 +60,19 @@ export const useAiContentStore = defineStore('ai-content', () => {
     committing.value = true;
     commitError.value = '';
 
-    let coverUrl: string;
-    try {
-      const { data } = await api.post('/admin/ai-content/cover', {
-        imageUrl: preview.value.coverUrl,
-      });
-      coverUrl = data.data.url as string;
-    } catch (err) {
-      console.error('[ai-content] cover upload failed', err);
-      commitError.value = GENERIC_COMMIT_ERROR;
-      committing.value = false;
-      return undefined;
+    let coverUrl = '';
+    if (preview.value.coverUrl) {
+      try {
+        const { data } = await api.post('/admin/ai-content/cover', {
+          imageUrl: preview.value.coverUrl,
+        });
+        coverUrl = data.data.url as string;
+      } catch (err) {
+        console.error('[ai-content] cover upload failed', err);
+        commitError.value = GENERIC_COMMIT_ERROR;
+        committing.value = false;
+        return undefined;
+      }
     }
 
     try {

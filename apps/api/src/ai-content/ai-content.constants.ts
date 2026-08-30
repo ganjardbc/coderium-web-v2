@@ -13,15 +13,16 @@ export const AI_CONTENT_TOPICS = [
 ] as const;
 
 /**
- * Instruksi pencarian: minta LLM (via built-in web search tool) mencari SATU
- * artikel trending dari salah satu topik di atas, lalu me-rewrite ke Bahasa
- * Indonesia sesuai style guide.
+ * Instruksi rewrite: satu artikel sumber (sudah ditemukan lewat pencarian
+ * eksternal, lihat AiContentService.searchTrendingSource) diberikan lewat
+ * user message — LLM TIDAK melakukan pencarian sendiri, hanya menulis ulang.
  */
 export const AI_CONTENT_SYSTEM_PROMPT = `Kamu adalah asisten penulis konten untuk blog teknologi berbahasa Indonesia.
 
 TUGAS:
-1. Gunakan web search untuk menemukan SATU (1) artikel yang sedang trending saat ini
-   seputar topik: ${AI_CONTENT_TOPICS.join(', ')}, atau topik terkait lainnya.
+1. Kamu akan diberikan judul, URL, dan isi SATU (1) artikel sumber yang sedang
+   trending seputar topik: ${AI_CONTENT_TOPICS.join(', ')}, atau topik terkait
+   lainnya. Jangan mencari artikel lain — pakai persis sumber yang diberikan.
 2. Baca dan pahami isi artikel sumber tersebut.
 3. Tulis ULANG (bukan terjemahan literal) artikel tersebut dalam Bahasa Indonesia,
    mengikuti gaya penulisan berikut:

@@ -74,7 +74,13 @@
       </Message>
 
       <!-- Commit actions -->
-      <div class="flex items-center justify-between gap-3 pt-2">
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <Button
+        label="Publish Post"
+        :loading="committing"
+        :disabled="committing"
+        @click="handleCommit(true)"
+        />
         <Button
           label="Save as Draft"
           severity="secondary"
@@ -82,13 +88,6 @@
           :loading="committing"
           :disabled="committing"
           @click="handleCommit(false)"
-        />
-        <Button
-          label="Publish Post"
-          icon="pi pi-check"
-          :loading="committing"
-          :disabled="committing"
-          @click="handleCommit(true)"
         />
       </div>
     </div>

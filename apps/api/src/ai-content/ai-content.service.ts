@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
 import OpenAI from 'openai';
 import { MediaService } from '../media/media.service';
-import { AI_CONTENT_SYSTEM_PROMPT } from './ai-content.constants';
+import { AI_CONTENT_SYSTEM_PROMPT, AI_CONTENT_TOPICS } from './ai-content.constants';
 
 interface GeneratedArticle {
   title: string;
@@ -18,8 +18,16 @@ interface GeneratedArticle {
   sourceUrl: string;
 }
 
+interface SearchedSource {
+  title: string;
+  url: string;
+  content: string;
+}
+
 const MAX_COVER_SIZE_BYTES = 10 * 1024 * 1024; // 10MB, konsisten dengan MediaController.uploadImage
 const FETCH_TIMEOUT_MS = 15_000;
+const ANYSEARCH_BASE_URL = 'https://api.anysearch.com';
+const MAX_SOURCE_CONTENT_CHARS = 6_000; // dibatasi kecil — payload besar bikin provider LLM lambat/kadang di-block WAF
 
 @Injectable()
 export class AiContentService {
@@ -60,20 +68,33 @@ export class AiContentService {
         );
       }
 
-      const client = this.getClient();
+      // Provider LLM yang dipakai tidak mengeksekusi built-in `web_search`
+      // tool (cuma echo/hallucinate syntax tool-call) — jadi pencarian +
+      // ekstraksi artikel sumber dilakukan sendiri lewat AnySearch, baru
+      // hasilnya disuapkan ke LLM untuk ditulis ulang.
+      const source = await this.searchTrendingSource();
 
-      const response = await client.responses.create({
-        model,
-        tools: [{ type: 'web_search' }],
-        input: [
-          { role: 'developer', content: AI_CONTENT_SYSTEM_PROMPT },
-          {
-            role: 'user',
-            content:
-              'Cari 1 artikel trending sekarang sesuai instruksi, lalu tulis ulang sesuai style guide. Balas hanya dengan JSON sesuai format.',
-          },
-        ],
-      });
+      const client = this.getClient();
+      const input = [
+        { role: 'developer' as const, content: AI_CONTENT_SYSTEM_PROMPT },
+        {
+          role: 'user' as const,
+          content: `Judul sumber: ${source.title}\nURL sumber: ${source.url}\n\nKonten sumber:\n${source.content}\n\nTulis ulang artikel di atas sesuai instruksi & style guide. Balas hanya dengan JSON sesuai format.`,
+        },
+      ];
+
+      // Provider (di balik Cloudflare) kadang blokir/lambat secara acak untuk
+      // request besar — retry sekali sebelum menyerah.
+      let response;
+      try {
+        response = await client.responses.create({ model, input });
+      } catch (error) {
+        this.logger.warn({
+          event: 'ai_content_generate_retry',
+          error: error instanceof Error ? error.message : String(error),
+        });
+        response = await client.responses.create({ model, input });
+      }
 
       const parsed = this.parseArticleResponse(response.output_text);
 
@@ -104,6 +125,85 @@ export class AiContentService {
       throw new BadGatewayException(
         'Failed to generate article from AI content provider',
       );
+    }
+  }
+
+  private async searchTrendingSource(): Promise<SearchedSource> {
+    const apiKey = this.configService.get<string>('ANYSEARCH_API_KEY');
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
+
+    const topic = AI_CONTENT_TOPICS[Math.floor(Math.random() * AI_CONTENT_TOPICS.length)];
+
+    let searchData: {
+      code: number;
+      data?: { results?: { title: string; url: string }[] };
+    };
+    try {
+      const searchRes = await this.fetchWithTimeout(`${ANYSEARCH_BASE_URL}/v1/search`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          query: `${topic} trending artikel`,
+          max_results: 5,
+          language: 'id',
+        }),
+      });
+      searchData = (await searchRes.json()) as typeof searchData;
+    } catch (error) {
+      throw new BadGatewayException(
+        `Failed to search trending source: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+
+    const candidates = searchData.data?.results?.filter((r) => r.url) ?? [];
+    if (searchData.code !== 0 || candidates.length === 0) {
+      throw new BadGatewayException('No trending source article found');
+    }
+
+    // Beberapa hasil search (mis. halaman listing) gagal diekstrak — coba
+    // tiap kandidat berurutan sampai ada yang berhasil.
+    for (const candidate of candidates) {
+      let extractData: { code: number; data?: { title: string; content: string } };
+      try {
+        const extractRes = await this.fetchWithTimeout(`${ANYSEARCH_BASE_URL}/v1/extract`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ url: candidate.url }),
+        });
+        extractData = (await extractRes.json()) as typeof extractData;
+      } catch (error) {
+        this.logger.warn({
+          event: 'ai_content_extract_candidate_failed',
+          url: candidate.url,
+          error: error instanceof Error ? error.message : String(error),
+        });
+        continue;
+      }
+
+      if (extractData.code === 0 && extractData.data?.content) {
+        return {
+          title: extractData.data.title || candidate.title,
+          url: candidate.url,
+          content: extractData.data.content.slice(0, MAX_SOURCE_CONTENT_CHARS),
+        };
+      }
+    }
+
+    throw new BadGatewayException('Failed to extract content from any candidate source article');
+  }
+
+  private async fetchWithTimeout(url: string, init: RequestInit): Promise<Response> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    try {
+      const response = await fetch(url, { ...init, signal: controller.signal });
+      if (!response.ok) {
+        throw new Error(`request to ${url} failed with status ${response.status}`);
+      }
+      return response;
+    } finally {
+      clearTimeout(timeout);
     }
   }
 

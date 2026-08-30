@@ -266,12 +266,12 @@ const menuSections: MenuSection[] = [
         to: '/'
       },
       {
-        label: 'Posts',
-        to: '/posts'
-      },
-      {
         label: 'AI Agent',
         to: '/ai-agent'
+      },
+      {
+        label: 'Posts',
+        to: '/posts'
       },
       {
         label: 'Products',
