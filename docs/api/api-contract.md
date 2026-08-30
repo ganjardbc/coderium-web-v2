@@ -698,6 +698,123 @@ DELETE /admin/media/:id
 
 ---
 
+# AI Content API (Admin, Ticket #24)
+
+Modul `apps/api/src/ai-content/` — generate draft artikel via LLM
+OpenAI-compatible (dengan built-in web search) dan commit cover image hasil
+generate ke media library internal. Semua endpoint di bawah butuh auth
+(`Authorization: Bearer <access_token>`) dan permission `manage_own_posts`
+atau `manage_all_posts` (permission sama dengan Create Post, tidak ada
+permission baru).
+
+## Generate Article
+
+```http
+POST /admin/ai-content/generate
+```
+
+Tanpa body/parameter dari caller (tidak ada form input — tone/style guide
+di-hardcode server-side, tidak bisa di-override dari request). Memanggil LLM
+provider OpenAI-compatible (`AI_CONTENT_LLM_*` env var, lihat di bawah)
+dengan built-in web search tool untuk mencari 1 artikel trending
+(AI/Coding/Technology/Startup), lalu me-rewrite jadi draft Bahasa Indonesia.
+
+Response:
+
+```json
+{
+  "success": true,
+  "message": "Article generated",
+  "data": {
+    "title": "...",
+    "content": "<rich text html>",
+    "coverUrl": "https://external-source.example/cover.jpg",
+    "sourceUrl": "https://external-source.example/article-slug"
+  }
+}
+```
+
+Catatan:
+
+* `data.content` berupa fragment HTML (mengikuti format `RichTextEditor.vue`
+  di `apps/admin`, `contenteditable` + `innerHTML` — bukan markdown/plain
+  text).
+* `data.coverUrl` adalah URL eksternal (kandidat, belum diupload) —
+  **JANGAN** dikirim langsung sebagai `cover` di `POST /admin/posts`
+  (hotlink). Panggil `POST /admin/ai-content/cover` dulu untuk dapat URL
+  internal.
+* Endpoint ini TIDAK menulis apapun ke database.
+* Durasi request dicatat via structured log
+  (`{ event: 'ai_content_generate', durationMs, success }`) sebagai baseline
+  observability latensi.
+* Kalau env var LLM (`AI_CONTENT_LLM_API_KEY`/`AI_CONTENT_LLM_BASE_URL`/
+  `AI_CONTENT_LLM_MODEL`) belum diisi → `500` dengan pesan konfigurasi
+  eksplisit. Kalau provider/parsing response gagal → `502 Bad Gateway`.
+
+---
+
+## Commit Cover
+
+```http
+POST /admin/ai-content/cover
+```
+
+Request:
+
+```json
+{
+  "imageUrl": "https://external-source.example/cover.jpg"
+}
+```
+
+`imageUrl` — wajib, URL absolut (`@IsUrl({ require_protocol: true })`),
+biasanya diisi dari `data.coverUrl` hasil `generate`.
+
+Proses: fetch `imageUrl` server-side (bukan dari browser — hindari CORS,
+konsisten dengan requirement no-hotlink), validasi `Content-Type: image/*`
+dan ukuran maksimum 10MB, lalu panggil `MediaService.upload()` existing
+(reuse langsung, sama service yang dipakai `POST /uploads/image`) untuk
+menghasilkan `Media` record + URL internal.
+
+Response:
+
+```json
+{
+  "success": true,
+  "message": "Cover uploaded",
+  "data": {
+    "url": "https://api.coderium.id/uploads/media/xxx.jpg",
+    "mediaId": "uuid"
+  }
+}
+```
+
+Catatan:
+
+* `data.url` adalah URL internal yang **wajib** dipakai sebagai `cover` saat
+  memanggil `POST /admin/posts` — endpoint ini sendiri TIDAK memanggil
+  `POST /admin/posts` (tetap tanggung jawab caller/frontend).
+* Kegagalan fetch (network error, timeout 15s, bukan gambar valid, > 10MB)
+  dikembalikan sebagai error HTTP jelas (4xx/5xx sesuai kasus), detail
+  teknis dilog di backend, pesan generik ke caller.
+
+## Environment Variables
+
+Ditambahkan di `apps/api/.env` / `.env.example` (pola sama seperti
+`JWT_SECRET`):
+
+```txt
+AI_CONTENT_LLM_API_KEY   # API key provider LLM
+AI_CONTENT_LLM_BASE_URL  # base URL provider (OpenAI-compatible, bukan hardcode ke OpenAI resmi)
+AI_CONTENT_LLM_MODEL     # model id, wajib eksplisit
+```
+
+Provider WAJIB mendukung built-in web search tool — prasyarat fungsional
+untuk `generate`. Kredensial asli tidak pernah di-commit; hanya placeholder
+di `.env.example`.
+
+---
+
 # Products API (Public)
 
 ## List Products

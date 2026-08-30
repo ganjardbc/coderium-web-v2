@@ -13,6 +13,7 @@ import { EngagementModule } from './engagement/engagement.module';
 import { SearchModule } from './search/search.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { UsersModule } from './users/users.module';
+import { AiContentModule } from './ai-content/ai-content.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { JwtAuthGuard, PermissionsGuard } from './auth/guards';
 
@@ -36,6 +37,7 @@ import { JwtAuthGuard, PermissionsGuard } from './auth/guards';
     SearchModule,
     AnalyticsModule,
     UsersModule,
+    AiContentModule,
     ThrottlerModule.forRoot([
       {
         ttl: 60000,

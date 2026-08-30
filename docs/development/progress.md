@@ -38,13 +38,13 @@ Coderium V2
 Current Status:
 
 ```txt
-DONE
+IN_PROGRESS
 ```
 
 Current Phase:
 
 ```txt
-All Phases Completed
+Phase 16 - AI Content Generation (Backend done, ticket 24; apps/admin UI — ticket 25 — pending)
 ```
 
 Current Milestone:
@@ -56,7 +56,7 @@ M10 - Production Release Completed
 Last Updated:
 
 ```txt
-2026-08-29
+2026-08-30
 ```
 
 ---
@@ -83,6 +83,7 @@ Last Updated:
 | Phase 13 - Product Catalog (Admin UI) | DONE | 100%    |
 | Phase 14 - Product Catalog (Public Site) | DONE | 100% |
 | Phase 15 - Hermes Integration (Backend & Admin UI) | DONE | 100% |
+| Phase 16 - AI Content Generation (Backend, ticket 24) | DONE | 100% |
 
 ---
 
@@ -235,6 +236,7 @@ ADMIN-PROD-001 Create Product List & Form Pages (ticket 13)
 WEB-PROD-001 Create Product Public Pages (ticket 14)
 HERMES-001 Extend Post API — atribusi sumber, dedup, kontrak untuk hermes (ticket 18)
 HERMES-002 Admin UI — tampilkan atribusi sumber draft hermes (ticket 19)
+AI-CONTENT-001 Implement AI Content Generation module — generate + cover commit (ticket 24)
 ```
 
 ---
@@ -260,6 +262,11 @@ HERMES-002 Admin UI — tampilkan atribusi sumber draft hermes (ticket 19)
 100%
 ```
 
+Catatan: MVP (Phase 0-15) selesai 100%. Phase 16 (AI Content Generation) adalah
+fitur post-MVP tambahan — backend (`ai-content` module, ticket 24) DONE, UI
+`apps/admin` (ticket 25) belum dikerjakan, tidak dihitung dalam MVP Critical
+Path di atas.
+
 ---
 
 # Next Tasks
@@ -267,7 +274,9 @@ HERMES-002 Admin UI — tampilkan atribusi sumber draft hermes (ticket 19)
 Priority Order:
 
 ```txt
-None (All phases completed!)
+Ticket 25 — apps/admin UI untuk AI Content Generation (grid card "AI Agent",
+trigger POST /admin/ai-content/generate, preview, commit cover via
+POST /admin/ai-content/cover, lalu POST /admin/posts)
 ```
 
 ---
@@ -695,6 +704,63 @@ externalId) for the resulting schema/API surface. Ticket 19 (apps/admin,
 displaying sourceUrl) depended on this ticket and is now also DONE — see
 `.caf/tasks/19/verify-report.md`, `docs/development/backlog.md` Phase 15
 (HERMES-002), and `docs/api/api-contract.md` (`# Hermes Integration`).
+```
+
+---
+
+### DEC-011
+
+Date:
+
+```txt
+2026-08-30
+```
+
+Decision:
+
+```txt
+For ticket 24 (backend module `ai-content`, apps/api): split the feature
+into two endpoints — `POST /admin/ai-content/generate` (LLM + web search,
+no DB write) and `POST /admin/ai-content/cover` (server-side fetch +
+`MediaService.upload()` reuse) — instead of one combined endpoint or
+reusing `POST /uploads/image` directly from the frontend; and hardcode the
+LLM system prompt/style guide server-side with no API parameter to
+override it.
+```
+
+Reason:
+
+```txt
+`POST /admin/posts` must keep its existing contract unchanged (no new
+required fields), and browsers cannot reliably fetch images cross-origin
+from an arbitrary external domain (CORS) nor satisfy a "no-hotlink"
+requirement client-side — so the cover download+reupload has to happen
+server-side, and a dedicated endpoint (rather than folding it into
+`generate`) lets the caller (apps/admin, ticket 25) commit the cover only
+after the user accepts the generated preview, avoiding wasted uploads for
+previews that get discarded. The style guide (Bahasa Indonesia, "Aku"/
+"Kamu", friendly tone) is a fixed product decision, not a per-request
+setting — hardcoding it server-side (`ai-content.constants.ts`) prevents
+any caller from bypassing the intended tone via request body.
+```
+
+Status:
+
+```txt
+ACTIVE
+```
+
+Notes:
+
+```txt
+See `.caf/tasks/24/requirements.md` ("Keputusan Desain: Endpoint Cover
+Commit", "Style Guide LLM") and `.caf/tasks/24/verify-report.md` for full
+rationale and verification (typecheck/build PASS, config-missing smoke
+check via code reading). Also see `docs/development/backlog.md` Phase 16
+(AI-CONTENT-001), `docs/architecture/module-breakdown.md` (AI Content
+Module), and `docs/api/api-contract.md` (`# AI Content API (Admin, Ticket
+#24)`) for the resulting API surface. Ticket 25 (apps/admin UI) is the
+next dependent ticket, not yet started.
 ```
 
 ---

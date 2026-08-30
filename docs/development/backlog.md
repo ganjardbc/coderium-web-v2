@@ -1330,4 +1330,70 @@ Details:
   .caf/tasks/19/verify-report.md untuk detail lengkap.
 ```
 
+---
+
+---
+
+# Phase 16 - AI Content Generation (Backend)
+
+## AI-CONTENT-001
+
+Task: Implement AI Content Generation module — generate + cover commit
+(apps/api, ticket 24)
+
+Status: `DONE`
+
+Endpoints:
+
+```txt
+POST /admin/ai-content/generate
+POST /admin/ai-content/cover
+```
+
+Details:
+
+```txt
+- Modul baru apps/api/src/ai-content/ (module, controller, service,
+  constants, dto/) — konvensi sama posts.controller.ts/media.controller.ts
+  (@ApiTags, @ApiBearerAuth, @ApiOperation, response shape
+  { success, message, data }), permission manage_own_posts/manage_all_posts
+  (sama dengan Create Post, tidak ada permission baru)
+- generateArticle(): panggil package baru `openai` (client OpenAI-compatible,
+  base URL/model/API key configurable via env var, bukan hardcode ke OpenAI
+  resmi) dengan built-in web search tool untuk cari 1 artikel trending
+  (AI/Coding/Technology/Startup), system prompt Bahasa Indonesia (sapaan
+  Aku/Kamu, tone ramah) hardcoded di ai-content.constants.ts, parse response
+  jadi { title, content, coverUrl, sourceUrl }. Log durasi round-trip
+  (structured log { event: 'ai_content_generate', durationMs, success })
+  baik sukses maupun gagal. Config env kosong -> 500 pesan jelas; kegagalan
+  provider/parsing -> 502.
+- commitCover(imageUrl, userId): fetch server-side dengan timeout 15s,
+  validasi Content-Type: image/* + limit 10MB, bungkus jadi
+  Express.Multer.File-compatible object, panggil MediaService.upload()
+  existing (reuse langsung dari MediaModule, tidak reimplement logic
+  upload). Endpoint ini TIDAK memanggil POST /admin/posts — caller
+  (apps/admin, ticket 25) yang memanggil POST /admin/posts setelahnya
+  dengan cover sudah berupa URL internal, supaya CreatePostDto/
+  POST /admin/posts tetap tidak berubah kontraknya.
+- Env var baru AI_CONTENT_LLM_API_KEY/AI_CONTENT_LLM_BASE_URL/
+  AI_CONTENT_LLM_MODEL ditambahkan ke apps/api/.env.example (placeholder,
+  tanpa kredensial asli) — pola sama JWT_SECRET
+- Dependency baru: package `openai` di apps/api/package.json
+- AiContentModule didaftarkan di apps/api/src/app.module.ts (import
+  MediaModule untuk MediaService)
+- Unit test ai-content.service.spec.ts ditulis mengikuti kontrak Jest +
+  @nestjs/testing standar, tapi TIDAK bisa dieksekusi di lingkungan ini —
+  tidak ada script test/jest/@types+jest terpasang di apps/api (gap
+  infra repo-wide, bukan spesifik modul ini, dicatat non-blocking)
+- Typecheck (tsc --noEmit) dan build (nest build) PASS. Smoke check
+  konfigurasi kosong (tanpa kredensial LLM asli) diverifikasi via
+  pembacaan kode, tidak dijalankan end-to-end lewat HTTP request nyata;
+  lihat .caf/tasks/24/verify-report.md untuk detail lengkap
+- Di luar scope: apapun di apps/admin (halaman AI Agent, grid card,
+  preview UI — ticket 25 terpisah), generate untuk carousel/video/
+  stack_gallery, dedup otomatis, batch generate, kustomisasi system
+  prompt dari frontend, multi-provider LLM/fallback, retry otomatis
+```
+
+---
 
