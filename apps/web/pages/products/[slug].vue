@@ -25,7 +25,7 @@
       <section class="pb-8 md:pb-12 border-b border-gray-100 dark:border-gray-800">
         <div
           v-if="product.cover"
-          class="mb-6 md:mb-8 w-full aspect-16/7 rounded-2xl overflow-hidden bg-gray-50 dark:bg-dark-secondary"
+          class="mb-6 md:mb-8 w-full aspect-video rounded-2xl overflow-hidden bg-gray-50 dark:bg-dark-secondary"
         >
           <img :src="product.cover" :alt="product.name" class="w-full h-full object-cover" />
         </div>

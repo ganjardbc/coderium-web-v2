@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
     :to="`/products/${product.slug}`"
-    class="group relative block w-full aspect-[16/7] rounded-2xl overflow-hidden bg-gray-900"
+    class="group relative block w-full aspect-video rounded-2xl overflow-hidden bg-gray-900"
   >
     <img
       v-if="product.cover"
@@ -13,7 +13,7 @@
       <Icon name="lucide:box" class="w-12 h-12 text-gray-600" />
     </div>
 
-    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+    <div class="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-transparent" />
 
     <div class="absolute inset-0 flex flex-col justify-end p-6 md:p-10">
       <span
@@ -22,7 +22,7 @@
         <Icon name="lucide:sparkles" class="w-3.5 h-3.5" />
         Featured Product
       </span>
-      <h3 class="text-2xl md:text-4xl font-bold text-white leading-tight max-w-2xl">
+      <h3 class="text-xl md:text-4xl font-bold text-white leading-tight max-w-2xl">
         {{ product.name }}
       </h3>
       <p v-if="product.tagline" class="mt-2 text-sm md:text-base text-gray-300 max-w-xl truncate">
