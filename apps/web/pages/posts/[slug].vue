@@ -123,8 +123,8 @@
       <!-- Related Articles -->
       <div v-if="relatedPosts.length > 0" class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
         <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm mb-5">Related Articles</h2>
-        <div class="grid sm:grid-cols-2 gap-6">
-          <RelatedPostCard v-for="related in relatedPosts" :key="related.id" :post="related" />
+        <div class="divide-y divide-gray-100 dark:divide-gray-800">
+          <PostListItem v-for="related in relatedPosts" :key="related.id" :post="related" />
         </div>
       </div>
 
@@ -206,10 +206,13 @@ interface RelatedPost {
   id: string;
   title: string;
   slug: string;
+  subtitle?: string | null;
   type: string;
   cover?: string | null;
   publishedAt: string;
   viewsCount: number;
+  likesCount?: number;
+  user?: Author;
 }
 
 const RELATED_LIMIT = 4;
