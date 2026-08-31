@@ -6,7 +6,7 @@
         Stay curious.
       </h1>
       <p class="mt-3 md:mt-4 text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-md">
-        Discover stories, thinking, and expertise from writers on web development and software architecture.
+        Coderium curates trustworthy articles, tutorials, and insights on AI and software development — all in one place.
       </p>
       <div class="mt-6 flex gap-3">
         <NuxtLink
@@ -35,7 +35,7 @@
     <!-- Recent Stories + Sidebar -->
     <div class="grid lg:grid-cols-3 gap-8 md:gap-12">
       <!-- Main: Recent Stories -->
-      <section class="lg:col-span-2">
+      <section class="order-2 lg:order-1 lg:col-span-2">
         <div class="flex justify-between items-center mb-6">
           <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm">Recent Stories</h2>
           <NuxtLink to="/explore" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
@@ -65,13 +65,19 @@
         <EmptyState v-else-if="recentPosts.length === 0" message="No stories published yet." padding="py-8 md:py-12" />
 
         <!-- Article list -->
-        <div v-else class="divide-y divide-gray-100 dark:divide-gray-800">
-          <PostListItem v-for="post in recentPosts" :key="post.id" :post="post" />
-        </div>
+        <template v-else>
+          <div class="divide-y divide-gray-100 dark:divide-gray-800">
+            <PostListItem v-for="post in recentPosts" :key="post.id" :post="post" />
+          </div>
+
+          <InfiniteScrollLoader v-if="loadingMore" />
+          <EndOfListMessage v-else-if="recentFinished" message="You've reached the end. No more stories to show." />
+          <div ref="recentSentinel" aria-hidden="true" class="h-px" />
+        </template>
       </section>
 
       <!-- Sidebar -->
-      <aside class="space-y-10">
+      <aside class="order-1 lg:order-2 space-y-10">
         <!-- Popular on Coderium -->
         <section>
           <h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-5">Popular on Coderium</h3>
@@ -136,6 +142,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import type { InfiniteListMeta } from '~/composables/useInfiniteList';
 
 definePageMeta({
   layout: 'default',
@@ -169,11 +176,23 @@ interface Post {
   user?: Author;
 }
 
-const { data: recentRes, pending } = await useAsyncData<{ data: Post[] }>(
+const RECENT_LIMIT = 6;
+
+const { data: recentFirstPage, pending } = await useAsyncData<{ data: Post[]; meta: InfiniteListMeta }>(
   'recentPosts',
-  () => $fetch(`${apiBase}/posts/recent`)
+  () => $fetch(`${apiBase}/posts?page=1&limit=${RECENT_LIMIT}`)
 );
-const recentPosts = computed(() => recentRes.value?.data || []);
+
+async function fetchRecentPage(page: number) {
+  return $fetch<{ data: Post[]; meta: InfiniteListMeta }>(`${apiBase}/posts?page=${page}&limit=${RECENT_LIMIT}`);
+}
+
+const {
+  items: recentPosts,
+  loading: loadingMore,
+  finished: recentFinished,
+  sentinel: recentSentinel,
+} = useInfiniteList(fetchRecentPage, recentFirstPage.value ?? null);
 
 const { data: popularRes, pending: pendingPopular } = await useAsyncData<{ data: Post[] }>(
   'popularPosts',
