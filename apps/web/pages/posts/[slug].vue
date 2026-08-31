@@ -16,10 +16,11 @@
     </div>
 
     <!-- Not found -->
-    <div v-else-if="error" class="text-center py-10 md:py-20">
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Story Not Found</h1>
-      <p class="text-gray-500 dark:text-gray-400 mt-2">The article you are looking for might have been removed or unpublished.</p>
-    </div>
+    <NotFoundState
+      v-else-if="error"
+      title="Story Not Found"
+      message="The article you are looking for might have been removed or unpublished."
+    />
 
     <article v-else-if="post">
       <!-- Back link -->
@@ -52,6 +53,7 @@
           :views-count="post.viewsCount"
           :liked="liked"
           :like-loading="likeLoading"
+          :like-error="likeError"
           :copied-link="copiedLink"
           @toggle-like="toggleLike"
           @share="copyShareLink"
@@ -71,7 +73,7 @@
         rel="noopener noreferrer"
         class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
       >
-        View Original Article <Icon name="lucide:external-link" class="w-4 h-4" />
+        View Original Article<template v-if="sourceDomain"> on {{ sourceDomain }}</template> <Icon name="lucide:external-link" class="w-4 h-4" />
       </a>
 
       <!-- Content -->
@@ -93,10 +95,12 @@
 
       <!-- Action Bar (Bottom) -->
       <PostActionBar
+        :bordered="false"
         :likes-count="post.likesCount"
         :views-count="post.viewsCount"
         :liked="liked"
         :like-loading="likeLoading"
+        :like-error="likeError"
         :copied-link="copiedLink"
         @toggle-like="toggleLike"
         @share="copyShareLink"
@@ -281,24 +285,46 @@ const readingTimeDisplay = computed(() =>
   readingTime(post.value?.content ?? post.value?.subtitle ?? post.value?.title ?? '')
 );
 
+// Hostname shown on the "View Original Article" button, e.g. "example.com"
+const sourceDomain = computed(() => {
+  if (!post.value?.sourceUrl) return '';
+  try {
+    return new URL(post.value.sourceUrl).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+});
+
 // Like/clap
 const liked = ref(false);
 const likeLoading = ref(false);
+const likeError = ref(false);
 const copiedLink = ref(false);
+let likeErrorTimeout: ReturnType<typeof setTimeout> | undefined;
 
 async function toggleLike() {
   if (likeLoading.value || !post.value) return;
+
+  // Optimistic update: flip the UI immediately, reconcile/revert once the
+  // request settles so the interaction feels instant.
+  const previousLiked = liked.value;
+  const previousCount = post.value.likesCount;
+  liked.value = !previousLiked;
+  post.value.likesCount += liked.value ? 1 : -1;
   likeLoading.value = true;
+  likeError.value = false;
+
   try {
     const { data } = await $fetch<{ data: { liked: boolean } }>(`${apiBase}/posts/${slug}/like`, { method: 'POST' });
     liked.value = data.liked;
-    if (data.liked) {
-      post.value.likesCount++;
-    } else {
-      post.value.likesCount--;
-    }
   } catch {
-    // ignore
+    liked.value = previousLiked;
+    post.value.likesCount = previousCount;
+    likeError.value = true;
+    clearTimeout(likeErrorTimeout);
+    likeErrorTimeout = setTimeout(() => {
+      likeError.value = false;
+    }, 3000);
   } finally {
     likeLoading.value = false;
   }
