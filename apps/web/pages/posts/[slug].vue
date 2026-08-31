@@ -16,10 +16,11 @@
     </div>
 
     <!-- Not found -->
-    <div v-else-if="error" class="text-center py-10 md:py-20">
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Story Not Found</h1>
-      <p class="text-gray-500 dark:text-gray-400 mt-2">The article you are looking for might have been removed or unpublished.</p>
-    </div>
+    <NotFoundState
+      v-else-if="error"
+      title="Story Not Found"
+      message="The article you are looking for might have been removed or unpublished."
+    />
 
     <article v-else-if="post">
       <!-- Back link -->
@@ -52,6 +53,7 @@
           :views-count="post.viewsCount"
           :liked="liked"
           :like-loading="likeLoading"
+          :like-error="likeError"
           :copied-link="copiedLink"
           @toggle-like="toggleLike"
           @share="copyShareLink"
@@ -71,7 +73,7 @@
         rel="noopener noreferrer"
         class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
       >
-        View Original Article <Icon name="lucide:external-link" class="w-4 h-4" />
+        View Original Article<template v-if="sourceDomain"> on {{ sourceDomain }}</template> <Icon name="lucide:external-link" class="w-4 h-4" />
       </a>
 
       <!-- Content -->
@@ -81,21 +83,24 @@
 
       <!-- Tags -->
       <div v-if="post.tags && post.tags.length > 0" class="flex flex-wrap gap-2 pt-8 mt-8 border-t border-gray-100 dark:border-gray-800">
-        <span
+        <NuxtLink
           v-for="tag in post.tags"
           :key="tag"
+          :to="{ path: '/explore', query: { tags: tag } }"
           class="px-3 py-1 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600 transition-colors"
         >
           #{{ tag }}
-        </span>
+        </NuxtLink>
       </div>
 
       <!-- Action Bar (Bottom) -->
       <PostActionBar
+        :bordered="false"
         :likes-count="post.likesCount"
         :views-count="post.viewsCount"
         :liked="liked"
         :like-loading="likeLoading"
+        :like-error="likeError"
         :copied-link="copiedLink"
         @toggle-like="toggleLike"
         @share="copyShareLink"
@@ -117,6 +122,14 @@
               More stories <Icon name="lucide:arrow-right" class="w-4 h-4 inline" />
             </NuxtLink>
           </div>
+        </div>
+      </div>
+
+      <!-- Related Articles -->
+      <div v-if="relatedPosts.length > 0" class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
+        <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm mb-5">Related Articles</h2>
+        <div class="divide-y divide-gray-100 dark:divide-gray-800">
+          <PostListItem v-for="related in relatedPosts" :key="related.id" :post="related" />
         </div>
       </div>
 
@@ -192,6 +205,62 @@ if (postRes.value?.data) {
   });
 }
 
+// Related articles: prefer posts sharing a tag, then fill up with posts
+// of the same type. Always excludes the current post itself.
+interface RelatedPost {
+  id: string;
+  title: string;
+  slug: string;
+  subtitle?: string | null;
+  type: string;
+  cover?: string | null;
+  publishedAt: string;
+  viewsCount: number;
+  likesCount?: number;
+  user?: Author;
+}
+
+const RELATED_LIMIT = 4;
+
+const { data: relatedRes } = await useAsyncData<{ data: RelatedPost[] }>(
+  `post-related-${slug}`,
+  async () => {
+    const current = post.value;
+    if (!current) return { data: [] };
+
+    const results: RelatedPost[] = [];
+    const seenIds = new Set<string>();
+
+    function addResults(list: RelatedPost[]) {
+      for (const item of list) {
+        if (item.slug === slug || seenIds.has(item.id)) continue;
+        seenIds.add(item.id);
+        results.push(item);
+        if (results.length >= RELATED_LIMIT) break;
+      }
+    }
+
+    const tags = (current.tags || []).filter(Boolean);
+    if (tags.length > 0) {
+      const byTags = await $fetch<{ data: RelatedPost[] }>(
+        `${apiBase}/search?tags=${encodeURIComponent(tags.join(','))}&limit=${RELATED_LIMIT + 1}`
+      );
+      addResults(byTags.data);
+    }
+
+    if (results.length < RELATED_LIMIT) {
+      const byType = await $fetch<{ data: RelatedPost[] }>(
+        `${apiBase}/search?type=${current.type}&limit=${RELATED_LIMIT + 1 + results.length}`
+      );
+      addResults(byType.data);
+    }
+
+    return { data: results.slice(0, RELATED_LIMIT) };
+  },
+  { default: () => ({ data: [] }) }
+);
+const relatedPosts = computed(() => relatedRes.value?.data || []);
+
 // Reading progress
 const readingProgress = ref(0);
 
@@ -216,24 +285,46 @@ const readingTimeDisplay = computed(() =>
   readingTime(post.value?.content ?? post.value?.subtitle ?? post.value?.title ?? '')
 );
 
+// Hostname shown on the "View Original Article" button, e.g. "example.com"
+const sourceDomain = computed(() => {
+  if (!post.value?.sourceUrl) return '';
+  try {
+    return new URL(post.value.sourceUrl).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+});
+
 // Like/clap
 const liked = ref(false);
 const likeLoading = ref(false);
+const likeError = ref(false);
 const copiedLink = ref(false);
+let likeErrorTimeout: ReturnType<typeof setTimeout> | undefined;
 
 async function toggleLike() {
   if (likeLoading.value || !post.value) return;
+
+  // Optimistic update: flip the UI immediately, reconcile/revert once the
+  // request settles so the interaction feels instant.
+  const previousLiked = liked.value;
+  const previousCount = post.value.likesCount;
+  liked.value = !previousLiked;
+  post.value.likesCount += liked.value ? 1 : -1;
   likeLoading.value = true;
+  likeError.value = false;
+
   try {
     const { data } = await $fetch<{ data: { liked: boolean } }>(`${apiBase}/posts/${slug}/like`, { method: 'POST' });
     liked.value = data.liked;
-    if (data.liked) {
-      post.value.likesCount++;
-    } else {
-      post.value.likesCount--;
-    }
   } catch {
-    // ignore
+    liked.value = previousLiked;
+    post.value.likesCount = previousCount;
+    likeError.value = true;
+    clearTimeout(likeErrorTimeout);
+    likeErrorTimeout = setTimeout(() => {
+      likeError.value = false;
+    }, 3000);
   } finally {
     likeLoading.value = false;
   }
