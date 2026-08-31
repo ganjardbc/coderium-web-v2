@@ -120,6 +120,14 @@
         </div>
       </div>
 
+      <!-- Related Articles -->
+      <div v-if="relatedPosts.length > 0" class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
+        <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm mb-5">Related Articles</h2>
+        <div class="grid sm:grid-cols-2 gap-6">
+          <RelatedPostCard v-for="related in relatedPosts" :key="related.id" :post="related" />
+        </div>
+      </div>
+
       <!-- More from Coderium -->
       <div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800 text-center">
         <p class="text-sm text-gray-400 dark:text-gray-500 mb-3">Enjoyed this story?</p>
@@ -191,6 +199,59 @@ if (postRes.value?.data) {
     ],
   });
 }
+
+// Related articles: prefer posts sharing a tag, then fill up with posts
+// of the same type. Always excludes the current post itself.
+interface RelatedPost {
+  id: string;
+  title: string;
+  slug: string;
+  type: string;
+  cover?: string | null;
+  publishedAt: string;
+  viewsCount: number;
+}
+
+const RELATED_LIMIT = 4;
+
+const { data: relatedRes } = await useAsyncData<{ data: RelatedPost[] }>(
+  `post-related-${slug}`,
+  async () => {
+    const current = post.value;
+    if (!current) return { data: [] };
+
+    const results: RelatedPost[] = [];
+    const seenIds = new Set<string>();
+
+    function addResults(list: RelatedPost[]) {
+      for (const item of list) {
+        if (item.slug === slug || seenIds.has(item.id)) continue;
+        seenIds.add(item.id);
+        results.push(item);
+        if (results.length >= RELATED_LIMIT) break;
+      }
+    }
+
+    const tags = (current.tags || []).filter(Boolean);
+    if (tags.length > 0) {
+      const byTags = await $fetch<{ data: RelatedPost[] }>(
+        `${apiBase}/search?tags=${encodeURIComponent(tags.join(','))}&limit=${RELATED_LIMIT + 1}`
+      );
+      addResults(byTags.data);
+    }
+
+    if (results.length < RELATED_LIMIT) {
+      const byType = await $fetch<{ data: RelatedPost[] }>(
+        `${apiBase}/search?type=${current.type}&limit=${RELATED_LIMIT + 1 + results.length}`
+      );
+      addResults(byType.data);
+    }
+
+    return { data: results.slice(0, RELATED_LIMIT) };
+  },
+  { default: () => ({ data: [] }) }
+);
+const relatedPosts = computed(() => relatedRes.value?.data || []);
 
 // Reading progress
 const readingProgress = ref(0);
