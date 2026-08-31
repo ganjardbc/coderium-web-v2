@@ -81,13 +81,14 @@
 
       <!-- Tags -->
       <div v-if="post.tags && post.tags.length > 0" class="flex flex-wrap gap-2 pt-8 mt-8 border-t border-gray-100 dark:border-gray-800">
-        <span
+        <NuxtLink
           v-for="tag in post.tags"
           :key="tag"
+          :to="{ path: '/explore', query: { tags: tag } }"
           class="px-3 py-1 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600 transition-colors"
         >
           #{{ tag }}
-        </span>
+        </NuxtLink>
       </div>
 
       <!-- Action Bar (Bottom) -->

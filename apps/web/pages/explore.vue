@@ -15,7 +15,7 @@
     </div>
 
     <!-- Type filter chips -->
-    <div class="flex gap-2 flex-wrap mb-6 md:mb-8">
+    <div class="flex gap-2 flex-wrap mb-4">
       <button
         v-for="t in types"
         :key="t.value"
@@ -24,6 +24,17 @@
         class="px-4 py-1.5 rounded-full border text-xs md:text-sm font-medium transition-colors cursor-pointer"
       >
         {{ t.label }}
+      </button>
+    </div>
+
+    <!-- Active tag filter -->
+    <div v-if="filterTag" class="flex items-center gap-2 mb-6 md:mb-8">
+      <span class="text-xs md:text-sm text-gray-500 dark:text-gray-400">Filtered by tag:</span>
+      <button
+        @click="clearTag"
+        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs md:text-sm font-medium cursor-pointer"
+      >
+        #{{ filterTag }} <Icon name="lucide:x" class="w-3.5 h-3.5" />
       </button>
     </div>
 
@@ -47,6 +58,7 @@
     <!-- Empty -->
     <EmptyState v-else-if="items.length === 0" padding="py-16">
       <p v-if="searchQuery" class="text-base">No results for "<strong class="text-gray-600 dark:text-gray-400">{{ searchQuery }}</strong>"</p>
+      <p v-else-if="filterTag" class="text-base">No stories tagged "<strong class="text-gray-600 dark:text-gray-400">#{{ filterTag }}</strong>"</p>
       <p v-else class="text-base">No stories yet. Check back soon.</p>
     </EmptyState>
 
@@ -82,16 +94,19 @@ interface SearchResult {
 }
 
 const route = useRoute();
+const router = useRouter();
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase as string;
 
 const searchQuery = ref((route.query.q as string) ?? '');
 const filterType = ref('');
+const filterTag = ref((route.query.tags as string) ?? '');
 
 async function fetchSearchPage(page: number) {
   const params: Record<string, string> = { page: String(page), limit: '10' };
   if (searchQuery.value) params.q = searchQuery.value;
   if (filterType.value) params.type = filterType.value;
+  if (filterTag.value) params.tags = filterTag.value;
 
   const url = `${apiBase}/search?${new URLSearchParams(params).toString()}`;
   return $fetch<{ data: SearchResult[]; meta: InfiniteListMeta }>(url);
@@ -112,9 +127,10 @@ let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 reset();
 
 watch(
-  () => route.query.q,
-  (q) => {
+  () => [route.query.q, route.query.tags],
+  ([q, tags]) => {
     searchQuery.value = (q as string) ?? '';
+    filterTag.value = (tags as string) ?? '';
     reset();
   }
 );
@@ -126,6 +142,12 @@ function onSearch() {
 
 function setType(val: string) {
   filterType.value = val;
+  reset();
+}
+
+function clearTag() {
+  filterTag.value = '';
+  router.replace({ query: { ...route.query, tags: undefined } });
   reset();
 }
 </script>
