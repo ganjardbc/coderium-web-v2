@@ -111,6 +111,7 @@ const navItems = [
   { to: '/', icon: 'lucide:home', label: 'Home', isActive: (route: { path: string }) => route.path === '/' },
   { to: '/explore', icon: 'lucide:compass', label: 'Explore', isActive: (route: { path: string }) => route.path === '/explore' },
   { to: '/playlists', icon: 'lucide:library', label: 'Series', isActive: (route: { path: string }) => route.path.startsWith('/playlists') },
+  { to: '/products', icon: 'lucide:box', label: 'Products', isActive: (route: { path: string }) => route.path.startsWith('/products') },
 ];
 
 const isDark = ref(false);

@@ -30,7 +30,7 @@
         class="group block border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden hover:border-gray-400 dark:hover:border-gray-600 bg-white dark:bg-dark-secondary transition-colors"
       >
         <!-- Cover -->
-        <div class="aspect-4/3 bg-gray-100 dark:bg-dark overflow-hidden relative">
+        <div class="aspect-square bg-gray-100 dark:bg-dark overflow-hidden relative">
           <img
             v-if="pl.cover"
             :src="pl.cover"

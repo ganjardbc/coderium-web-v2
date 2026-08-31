@@ -18,7 +18,7 @@
 
       <!-- Playlist Info Header -->
       <header class="flex flex-col md:flex-row gap-4 md:gap-8 items-start pb-6 md:pb-8 border-b dark:border-gray-800">
-        <div v-if="playlist.cover" class="w-full md:w-64 aspect-video md:aspect-square rounded-2xl overflow-hidden border dark:border-gray-800 shrink-0 bg-gray-50 dark:bg-dark-secondary">
+        <div v-if="playlist.cover" class="w-full md:w-64 aspect-square rounded-2xl overflow-hidden border dark:border-gray-800 shrink-0 bg-gray-50 dark:bg-dark-secondary">
           <img :src="playlist.cover" :alt="playlist.title" class="w-full h-full object-cover" />
         </div>
         <div class="space-y-3 md:space-y-4 flex-1">
