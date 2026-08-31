@@ -17,17 +17,23 @@
     </div>
 
     <!-- Empty -->
-    <EmptyState v-else-if="products.length === 0" message="No products created yet. Check back later!" padding="py-16" />
+    <EmptyState v-else-if="items.length === 0" message="No products created yet. Check back later!" padding="py-16" />
 
     <!-- Grid -->
-    <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <ProductCard v-for="product in products" :key="product.id" :product="product" />
-    </div>
+    <template v-else>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <ProductCard v-for="product in items" :key="product.id" :product="product" />
+      </div>
+
+      <InfiniteScrollLoader v-if="loading" />
+      <EndOfListMessage v-else-if="finished" message="You've reached the end. No more products to show." />
+      <div ref="sentinel" aria-hidden="true" class="h-px" />
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import type { InfiniteListMeta } from '~/composables/useInfiniteList';
 
 definePageMeta({
   layout: 'default',
@@ -46,17 +52,16 @@ interface ProductListItem {
   cover?: string | null;
 }
 
-interface ProductListMeta {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-}
+const LIMIT = 12;
 
-const { data: productsRes, pending } = await useAsyncData<{ data: ProductListItem[]; meta: ProductListMeta }>(
+const { data: firstPage, pending } = await useAsyncData<{ data: ProductListItem[]; meta: InfiniteListMeta }>(
   'products-index',
-  () => $fetch(`${apiBase}/products?page=1&limit=24`)
+  () => $fetch(`${apiBase}/products?page=1&limit=${LIMIT}`)
 );
 
-const products = computed(() => productsRes.value?.data || []);
+async function fetchProductsPage(page: number) {
+  return $fetch<{ data: ProductListItem[]; meta: InfiniteListMeta }>(`${apiBase}/products?page=${page}&limit=${LIMIT}`);
+}
+
+const { items, loading, finished, sentinel } = useInfiniteList(fetchProductsPage, firstPage.value ?? null);
 </script>

@@ -63,6 +63,17 @@
         <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
       </div>
 
+      <!-- View Original Article -->
+      <a
+        v-if="post.sourceUrl"
+        :href="post.sourceUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+      >
+        View Original Article <Icon name="lucide:external-link" class="w-4 h-4" />
+      </a>
+
       <!-- Content -->
       <section v-if="post.content" class="prose-medium">
         <div v-html="renderContent(post.content)"></div>
@@ -156,6 +167,7 @@ interface PostData {
   likesCount: number;
   metaDescription?: string | null;
   metaKeywords?: string | null;
+  sourceUrl?: string | null;
   user?: Author;
 }
 

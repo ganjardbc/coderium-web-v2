@@ -19,12 +19,13 @@
     </div>
 
     <!-- Empty -->
-    <EmptyState v-else-if="playlists.length === 0" message="No series created yet. Check back later!" padding="py-16" />
+    <EmptyState v-else-if="items.length === 0" message="No series created yet. Check back later!" padding="py-16" />
 
     <!-- Grid -->
-    <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+    <template v-else>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
       <NuxtLink
-        v-for="pl in playlists"
+        v-for="pl in items"
         :key="pl.id"
         :to="`/playlists/${pl.slug}`"
         class="group block border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden hover:border-gray-400 dark:hover:border-gray-600 bg-white dark:bg-dark-secondary transition-colors"
@@ -61,12 +62,17 @@
           <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">By {{ pl.user?.name }}</p>
         </div>
       </NuxtLink>
-    </div>
+      </div>
+
+      <InfiniteScrollLoader v-if="loading" />
+      <EndOfListMessage v-else-if="finished" message="You've reached the end. No more series to show." />
+      <div ref="sentinel" aria-hidden="true" class="h-px" />
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import type { InfiniteListMeta } from '~/composables/useInfiniteList';
 
 definePageMeta({
   layout: 'default',
@@ -96,9 +102,16 @@ interface Playlist {
   _count?: { posts: number };
 }
 
-const { data: playlistsRes, pending } = await useAsyncData<{ data: Playlist[] }>(
+const LIMIT = 12;
+
+const { data: firstPage, pending } = await useAsyncData<{ data: Playlist[]; meta: InfiniteListMeta }>(
   'playlists',
-  () => $fetch(`${apiBase}/playlists`)
+  () => $fetch(`${apiBase}/playlists?page=1&limit=${LIMIT}`)
 );
-const playlists = computed(() => playlistsRes.value?.data || []);
+
+async function fetchPlaylistsPage(page: number) {
+  return $fetch<{ data: Playlist[]; meta: InfiniteListMeta }>(`${apiBase}/playlists?page=${page}&limit=${LIMIT}`);
+}
+
+const { items, loading, finished, sentinel } = useInfiniteList(fetchPlaylistsPage, firstPage.value ?? null);
 </script>
