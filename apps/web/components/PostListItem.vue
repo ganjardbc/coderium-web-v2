@@ -7,7 +7,7 @@
           <UserAvatar :name="post.user?.name" size="sm" />
           <span class="text-sm text-gray-700 dark:text-gray-300 font-medium truncate">{{ post.user?.name }}</span>
           <span class="text-gray-300 dark:text-gray-700 text-sm">·</span>
-          <span class="text-sm text-gray-400 dark:text-gray-400 shrink-0">{{ formatDate(post.publishedAt) }}</span>
+          <span class="text-sm text-gray-400 dark:text-gray-400 shrink-0">{{ formatDate(post.publishedAt || post.createdAt) }}</span>
         </div>
 
         <!-- Title + subtitle -->
@@ -53,6 +53,8 @@ interface Post {
   subtitle?: string | null;
   type: string;
   cover?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
   publishedAt: string;
   viewsCount: number;
   likesCount?: number;

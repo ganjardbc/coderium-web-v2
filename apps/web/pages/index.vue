@@ -38,8 +38,8 @@
       <section class="order-2 lg:order-1 lg:col-span-2">
         <div class="flex justify-between items-center mb-6">
           <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm">Recent Stories</h2>
-          <NuxtLink to="/explore" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
-            See all <Icon name="lucide:arrow-right" class="w-4 h-4 inline" />
+          <NuxtLink to="/explore" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-2">
+            See all <Icon name="lucide:arrow-right" class="w-4 h-4" />
           </NuxtLink>
         </div>
 
@@ -95,27 +95,12 @@
           <EmptyState v-else-if="popularPosts.length === 0" message="No popular posts yet." padding="" :center="false" />
 
           <div v-else class="space-y-5">
-            <div
+            <PopularPostItem
               v-for="(post, index) in popularPosts"
               :key="post.id"
-              class="flex gap-3 group"
-            >
-              <span class="text-2xl font-black text-gray-300 dark:text-gray-700 w-7 shrink-0 leading-none mt-0.5 select-none">
-                0{{ index + 1 }}
-              </span>
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-1.5 mb-1">
-                  <UserAvatar :name="post.user?.name" size="xs" />
-                  <span class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ post.user?.name }}</span>
-                </div>
-                <NuxtLink :to="`/posts/${post.slug}`">
-                  <h4 class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors line-clamp-2 leading-snug">
-                    {{ post.title }}
-                  </h4>
-                </NuxtLink>
-                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ formatDate(post.publishedAt) }} &bull; {{ post.viewsCount }} views</p>
-              </div>
-            </div>
+              :post="post"
+              :rank="index + 1"
+            />
           </div>
         </section>
 
@@ -130,7 +115,7 @@
           </p>
           <NuxtLink
             to="/playlists"
-            class="mt-4 inline-block text-sm font-medium text-gray-900 dark:text-white hover:underline"
+            class="mt-4 text-sm font-medium text-gray-900 dark:text-white hover:underline flex items-center gap-2"
           >
             Browse all series <Icon name="lucide:arrow-right" class="w-4 h-4 inline" />
           </NuxtLink>
@@ -171,6 +156,8 @@ interface Post {
   subtitle?: string | null;
   type: string;
   cover?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
   publishedAt: string;
   viewsCount: number;
   user?: Author;

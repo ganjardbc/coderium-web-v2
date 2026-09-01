@@ -6,7 +6,7 @@
     aria-hidden="true"
   />
 
-  <div class="max-w-3xl mx-auto px-4 md:px-6 pt-6 md:pt-12 pb-28 md:pb-24">
+  <div class="max-w-3xl mx-auto px-4 md:px-6 py-4 md:pt-6">
     <!-- Loading skeleton -->
     <div v-if="pending" class="space-y-6">
       <SkeletonBlock class="h-4 rounded w-1/4" />
@@ -38,7 +38,7 @@
           <div>
             <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ post.user?.name }}</p>
             <p class="text-xs text-gray-400 dark:text-gray-500">
-              {{ formatDate(post.publishedAt, 'long') }} &bull; {{ readingTimeDisplay }}
+              {{ formatDate(post.publishedAt || post.createdAt) }} &bull; {{ readingTimeDisplay }}
             </p>
           </div>
         </div>
@@ -49,7 +49,7 @@
       </header>
 
       <!-- Cover Image -->
-      <div v-if="post.cover" class="rounded-lg overflow-hidden aspect-video bg-gray-100 dark:bg-dark-secondary mb-10 border border-gray-100 dark:border-gray-800">
+      <div v-if="post.cover" class="rounded-lg overflow-hidden aspect-video bg-gray-100 dark:bg-dark-secondary my-10 border border-gray-100 dark:border-gray-800">
         <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
       </div>
 
@@ -162,6 +162,8 @@ interface PostData {
   type: string;
   cover?: string | null;
   tags?: string[];
+  createdAt?: string;
+  updatedAt?: string;
   publishedAt: string;
   viewsCount: number;
   likesCount: number;
