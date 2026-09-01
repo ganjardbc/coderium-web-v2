@@ -6,7 +6,7 @@
     <div class="relative mb-5 flex items-center">
       <Icon name="lucide:search" class="absolute left-4 top-3 md:top-4 w-5 h-5 text-gray-400 dark:text-gray-400" />
       <input
-        v-model="searchQuery"
+        v-model="searchInput"
         type="text"
         placeholder="Search stories..."
         class="w-full pl-11 pr-4 py-2.5 md:py-3 border border-gray-200 dark:border-gray-800 rounded-full bg-gray-50 dark:bg-dark-secondary focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700 focus:bg-white dark:focus:bg-gray-800 text-sm md:text-base dark:text-gray-100 transition-colors"
@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import type { InfiniteListMeta } from '~/composables/useInfiniteList';
 
 useHead({ title: 'Explore - Coderium' });
@@ -98,9 +98,23 @@ const router = useRouter();
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase as string;
 
-const searchQuery = ref((route.query.q as string) ?? '');
-const filterType = ref('');
-const filterTag = ref((route.query.tags as string) ?? '');
+// The URL query string is the single source of truth for search state
+// (q, type, tags) so the current search is shareable/bookmarkable and
+// survives refresh/back-forward navigation.
+const searchQuery = computed(() => (route.query.q as string) ?? '');
+const filterType = computed(() => (route.query.type as string) ?? '');
+const filterTag = computed(() => (route.query.tags as string) ?? '');
+
+// Local buffer for the text input so typing feels instant; debounced into
+// the URL rather than writing on every keystroke.
+const searchInput = ref(searchQuery.value);
+watch(searchQuery, (val) => {
+  if (val !== searchInput.value) searchInput.value = val;
+});
+
+function updateQuery(patch: Record<string, string | undefined>) {
+  router.replace({ query: { ...route.query, ...patch } });
+}
 
 async function fetchSearchPage(page: number) {
   const params: Record<string, string> = { page: String(page), limit: '10' };
@@ -124,30 +138,24 @@ const types = [
 
 let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
-reset();
-
 watch(
-  () => [route.query.q, route.query.tags],
-  ([q, tags]) => {
-    searchQuery.value = (q as string) ?? '';
-    filterTag.value = (tags as string) ?? '';
-    reset();
-  }
+  () => [route.query.q, route.query.type, route.query.tags],
+  () => reset(),
+  { immediate: true }
 );
 
 function onSearch() {
   if (searchTimeout) clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(() => reset(), 300);
+  searchTimeout = setTimeout(() => {
+    updateQuery({ q: searchInput.value || undefined });
+  }, 300);
 }
 
 function setType(val: string) {
-  filterType.value = val;
-  reset();
+  updateQuery({ type: val || undefined });
 }
 
 function clearTag() {
-  filterTag.value = '';
-  router.replace({ query: { ...route.query, tags: undefined } });
-  reset();
+  updateQuery({ tags: undefined });
 }
 </script>
