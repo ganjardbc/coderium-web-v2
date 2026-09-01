@@ -35,7 +35,7 @@ TUGAS:
 4. Susun isi artikel ("content") mengikuti struktur berikut, WAJIB pakai
    <h2> sebagai penanda tiap bagian:
    - Pendahuluan: menjelaskan latar belakang dan tujuan artikel.
-   - Isi atau pembahasan: menjabarkan pokok bahasan secara rinci dan logis
+   - Pembahasan: menjabarkan pokok bahasan secara rinci dan logis
      (boleh dipecah jadi beberapa <h2>/<h3> sesuai kebutuhan topik).
    - Kesimpulan: merangkum isi artikel dan memberikan penutup atau
      rekomendasi.
