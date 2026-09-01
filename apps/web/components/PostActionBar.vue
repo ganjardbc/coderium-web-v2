@@ -1,9 +1,19 @@
 <template>
-  <div
-    class="flex items-center justify-between py-3"
-    :class="bordered ? 'border-y border-gray-100 dark:border-gray-800 my-6' : 'my-4'"
-  >
-    <div class="flex items-center gap-6">
+  <div class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center">
+    <!-- Toast: like error / link copied -->
+    <Transition name="fade">
+      <span
+        v-if="likeError || copiedLink"
+        class="mb-2 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap shadow-sm"
+        :class="likeError
+          ? 'bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400'
+          : 'bg-green-50 text-green-600 dark:bg-green-950 dark:text-green-400'"
+      >
+        {{ likeError ? "Couldn't update like. Try again." : 'Link copied!' }}
+      </span>
+    </Transition>
+
+    <div class="flex items-center gap-5 px-5 py-2.5 rounded-full bg-white/95 dark:bg-dark-secondary/95 backdrop-blur-md border border-gray-200 dark:border-gray-700 shadow-lg">
       <!-- Like Button -->
       <button
         @click="emit('toggle-like')"
@@ -14,25 +24,24 @@
         <span>{{ likesCount }}</span>
       </button>
 
+      <div class="w-px h-4 bg-gray-200 dark:bg-gray-700" />
+
       <!-- Views Count -->
       <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
         <Icon name="lucide:eye" class="w-5 h-5" />
-        <span>{{ viewsCount }} views</span>
+        <span>{{ viewsCount }}</span>
       </div>
 
-      <span v-if="likeError" class="text-xs text-red-500 dark:text-red-400">Couldn't update like. Try again.</span>
-    </div>
+      <div class="w-px h-4 bg-gray-200 dark:bg-gray-700" />
 
-    <!-- Right Side: Share / Copy Link -->
-    <div class="flex items-center gap-3">
+      <!-- Share / Copy Link -->
       <button
         @click="emit('share')"
-        class="p-1.5 rounded-full hover:bg-gray-50 dark:hover:bg-dark-secondary text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors cursor-pointer"
+        class="flex items-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors cursor-pointer"
         title="Copy Link"
       >
         <Icon name="lucide:share-2" class="w-5 h-5" />
       </button>
-      <span v-if="copiedLink" class="text-xs text-green-600 dark:text-green-400 font-medium">Link copied!</span>
     </div>
   </div>
 </template>
@@ -46,10 +55,20 @@ withDefaults(
     likeLoading: boolean;
     copiedLink: boolean;
     likeError?: boolean;
-    bordered?: boolean;
   }>(),
-  { bordered: true, likeError: false }
+  { likeError: false }
 );
 
 const emit = defineEmits<{ 'toggle-like': []; share: [] }>();
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

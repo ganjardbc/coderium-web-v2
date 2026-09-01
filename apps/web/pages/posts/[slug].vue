@@ -6,7 +6,7 @@
     aria-hidden="true"
   />
 
-  <div class="max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-12">
+  <div class="max-w-3xl mx-auto px-4 md:px-6 pt-6 md:pt-12 pb-28 md:pb-24">
     <!-- Loading skeleton -->
     <div v-if="pending" class="space-y-6">
       <SkeletonBlock class="h-4 rounded w-1/4" />
@@ -46,18 +46,6 @@
         <!-- Title & subtitle -->
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight tracking-tight">{{ post.title }}</h1>
         <p v-if="post.subtitle" class="text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed">{{ post.subtitle }}</p>
-
-        <!-- Action Bar (Top) -->
-        <PostActionBar
-          :likes-count="post.likesCount"
-          :views-count="post.viewsCount"
-          :liked="liked"
-          :like-loading="likeLoading"
-          :like-error="likeError"
-          :copied-link="copiedLink"
-          @toggle-like="toggleLike"
-          @share="copyShareLink"
-        />
       </header>
 
       <!-- Cover Image -->
@@ -65,21 +53,21 @@
         <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
       </div>
 
+      <!-- Content -->
+      <section v-if="post.content" class="prose-medium">
+        <div v-html="renderContent(post.content)"></div>
+      </section>
+
       <!-- View Original Article -->
       <a
         v-if="post.sourceUrl"
         :href="post.sourceUrl"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+        class="inline-flex items-center gap-2 px-4 py-2 mt-8 rounded-full border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
       >
         View Original Article<template v-if="sourceDomain"> on {{ sourceDomain }}</template> <Icon name="lucide:external-link" class="w-4 h-4" />
       </a>
-
-      <!-- Content -->
-      <section v-if="post.content" class="prose-medium">
-        <div v-html="renderContent(post.content)"></div>
-      </section>
 
       <!-- Tags -->
       <div v-if="post.tags && post.tags.length > 0" class="flex flex-wrap gap-2 pt-8 mt-8 border-t border-gray-100 dark:border-gray-800">
@@ -92,19 +80,6 @@
           #{{ tag }}
         </NuxtLink>
       </div>
-
-      <!-- Action Bar (Bottom) -->
-      <PostActionBar
-        :bordered="false"
-        :likes-count="post.likesCount"
-        :views-count="post.viewsCount"
-        :liked="liked"
-        :like-loading="likeLoading"
-        :like-error="likeError"
-        :copied-link="copiedLink"
-        @toggle-like="toggleLike"
-        @share="copyShareLink"
-      />
 
       <!-- Written by -->
       <div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
@@ -143,6 +118,18 @@
           Explore all stories
         </NuxtLink>
       </div>
+
+      <!-- Floating Action Bar: like, views, share -->
+      <PostActionBar
+        :likes-count="post.likesCount"
+        :views-count="post.viewsCount"
+        :liked="liked"
+        :like-loading="likeLoading"
+        :like-error="likeError"
+        :copied-link="copiedLink"
+        @toggle-like="toggleLike"
+        @share="copyShareLink"
+      />
     </article>
   </div>
 </template>
