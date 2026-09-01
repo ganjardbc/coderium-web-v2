@@ -97,6 +97,7 @@ export class AiContentService {
       }
 
       const parsed = this.parseArticleResponse(response.output_text);
+      parsed.content = `${parsed.content}\n<p><em>Sumber: <a href="${this.escapeHtml(source.url)}">${this.escapeHtml(source.title)}</a></em></p>`;
 
       const durationMs = Date.now() - startedAt;
       this.logger.log({
@@ -191,6 +192,15 @@ export class AiContentService {
     }
 
     throw new BadGatewayException('Failed to extract content from any candidate source article');
+  }
+
+  private escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   private async fetchWithTimeout(url: string, init: RequestInit): Promise<Response> {
