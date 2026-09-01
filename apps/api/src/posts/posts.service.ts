@@ -89,6 +89,7 @@ export class PostsService {
           ...postData,
           slug,
           userId,
+          publishedAt: postData.isPublished ? new Date() : null,
         },
       });
 
@@ -232,7 +233,12 @@ export class PostsService {
     const updated = await this.prisma.$transaction(async (tx) => {
       const result = await tx.post.update({
         where: { id: post.id },
-        data: postData,
+        data: {
+          ...postData,
+          ...(postData.isPublished && !post.publishedAt
+            ? { publishedAt: new Date() }
+            : {}),
+        },
       });
 
       if (mediaIds !== undefined) {
