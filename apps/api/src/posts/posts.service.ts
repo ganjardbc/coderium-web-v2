@@ -160,11 +160,6 @@ export class PostsService {
 
     if (!post) throw new NotFoundException('Post not found');
 
-    await this.prisma.post.update({
-      where: { id: post.id },
-      data: { viewsCount: { increment: 1 } },
-    });
-
     const withMedia = await this.attachMedia(post as unknown as Record<string, unknown>);
     return { success: true, message: 'Post retrieved', data: withMedia };
   }
