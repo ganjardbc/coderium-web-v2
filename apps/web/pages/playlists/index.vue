@@ -78,11 +78,9 @@ definePageMeta({
   layout: 'default',
 });
 
-useHead({
-  title: 'Series - Curated Tech Guides | Coderium',
-  meta: [
-    { name: 'description', content: 'Browse step-by-step guides and curated stories on web development and architecture.' },
-  ],
+useSeo({
+  title: 'Series - Curated Tech Guides',
+  description: 'Browse step-by-step guides and curated stories on web development and architecture.',
 });
 
 const config = useRuntimeConfig();

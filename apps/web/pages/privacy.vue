@@ -69,7 +69,10 @@ definePageMeta({
   layout: 'default',
 });
 
-useHead({ title: 'Privacy Policy - Coderium' });
+useSeo({
+  title: 'Privacy Policy',
+  description: "Coderium's privacy policy.",
+});
 
 const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 </script>

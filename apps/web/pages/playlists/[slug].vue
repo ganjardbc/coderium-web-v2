@@ -120,16 +120,27 @@ const { data: playlistRes, pending, error } = await useAsyncData<{ data: Playlis
 const playlist = computed(() => playlistRes.value?.data);
 
 // Setup SEO
-if (playlistRes.value?.data) {
-  const pl = playlistRes.value.data;
-  useHead({
-    title: `${pl.title} - Playlist`,
-    meta: [
-      { name: 'description', content: pl.description || '' },
-      { property: 'og:title', content: pl.title },
-      { property: 'og:description', content: pl.description || '' },
-      { property: 'og:image', content: pl.cover || '' },
-    ],
+if (playlist.value) {
+  const pl = playlist.value;
+  useSeo({
+    title: `${pl.title} - Series`,
+    description: pl.description || undefined,
+    image: pl.cover,
   });
+
+  const siteUrl = (config.public.siteUrl as string).replace(/\/$/, '');
+  useJsonLd(
+    breadcrumbJsonLd([
+      { name: 'Home', url: siteUrl },
+      { name: 'Series', url: `${siteUrl}/playlists` },
+      { name: pl.title, url: `${siteUrl}/playlists/${slug}` },
+    ])
+  );
+} else if (error.value) {
+  if (import.meta.server) {
+    const event = useRequestEvent();
+    if (event) setResponseStatus(event, 404);
+  }
+  useHead({ meta: [{ name: 'robots', content: 'noindex' }] });
 }
 </script>

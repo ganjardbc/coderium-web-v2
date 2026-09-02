@@ -179,19 +179,45 @@ const { data: postRes, pending, error } = await useAsyncData<{ data: PostData }>
 );
 const post = computed(() => postRes.value?.data);
 
-if (postRes.value?.data) {
-  const p = postRes.value.data;
-  useHead({
-    title: `${p.title} - Coderium`,
-    meta: [
-      { name: 'description', content: p.metaDescription || p.subtitle || '' },
-      { name: 'keywords', content: p.metaKeywords || (p.tags || []).join(', ') },
-      { property: 'og:title', content: p.title },
-      { property: 'og:description', content: p.metaDescription || p.subtitle || '' },
-      { property: 'og:image', content: p.cover || '' },
-      { property: 'og:type', content: 'article' },
-    ],
+if (post.value) {
+  const p = post.value;
+  const description = p.metaDescription || p.subtitle || undefined;
+
+  useSeo({
+    title: p.title,
+    description,
+    keywords: p.metaKeywords || (p.tags || []).join(', ') || undefined,
+    image: p.cover,
+    type: 'article',
   });
+
+  const siteUrl = (config.public.siteUrl as string).replace(/\/$/, '');
+  const postUrl = `${siteUrl}/posts/${slug}`;
+  useJsonLd([
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: p.title,
+      description,
+      image: p.cover ? [p.cover] : undefined,
+      datePublished: p.publishedAt || p.createdAt,
+      dateModified: p.updatedAt || p.publishedAt || p.createdAt,
+      author: p.user?.name ? { '@type': 'Person', name: p.user.name } : undefined,
+      publisher: { '@type': 'Organization', name: 'Coderium', logo: { '@type': 'ImageObject', url: `${siteUrl}/favicon.png` } },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
+    },
+    breadcrumbJsonLd([
+      { name: 'Home', url: siteUrl },
+      { name: 'Explore', url: `${siteUrl}/explore` },
+      { name: p.title, url: postUrl },
+    ]),
+  ]);
+} else if (error.value) {
+  if (import.meta.server) {
+    const event = useRequestEvent();
+    if (event) setResponseStatus(event, 404);
+  }
+  useHead({ meta: [{ name: 'robots', content: 'noindex' }] });
 }
 
 // Related articles: prefer posts sharing a tag, then fill up with posts

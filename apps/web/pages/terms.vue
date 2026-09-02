@@ -69,7 +69,10 @@ definePageMeta({
   layout: 'default',
 });
 
-useHead({ title: 'Terms of Service - Coderium' });
+useSeo({
+  title: 'Terms of Service',
+  description: "Coderium's terms of service.",
+});
 
 const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 </script>
