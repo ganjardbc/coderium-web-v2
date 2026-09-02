@@ -44,6 +44,7 @@ export default defineNuxtConfig({
     public: {
       apiBase: '/api',
       siteUrl,
+      gaId: process.env.NUXT_PUBLIC_GA_ID,
     },
   },
 
