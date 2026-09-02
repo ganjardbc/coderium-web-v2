@@ -78,8 +78,6 @@
 import { ref, computed, watch } from 'vue';
 import type { InfiniteListMeta } from '~/composables/useInfiniteList';
 
-useHead({ title: 'Explore - Coderium' });
-
 interface SearchResult {
   id: string;
   title: string;
@@ -104,6 +102,15 @@ const apiBase = config.public.apiBase as string;
 const searchQuery = computed(() => (route.query.q as string) ?? '');
 const filterType = computed(() => (route.query.type as string) ?? '');
 const filterTag = computed(() => (route.query.tags as string) ?? '');
+
+// A specific search/filter result is a thin, ever-changing subset of the
+// same underlying content — keep only the bare /explore page indexable so
+// search engines don't treat every query combination as a distinct page.
+useSeo(() => ({
+  title: 'Explore',
+  description: 'Browse and search Coderium stories — articles, videos, carousels, and galleries on AI and software development.',
+  noindex: Boolean(searchQuery.value || filterType.value || filterTag.value),
+}));
 
 // Local buffer for the text input so typing feels instant; debounced into
 // the URL rather than writing on every keystroke.

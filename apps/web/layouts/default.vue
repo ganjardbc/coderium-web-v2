@@ -91,6 +91,32 @@
 import { ref, onMounted } from 'vue';
 const adminUrl = import.meta.env.VITE_ADMIN_URL || 'https://admin.coderium.id';
 
+// Site-wide structured data: lets Google understand the brand/organization
+// and enables a sitelinks search box for "Coderium" queries.
+const config = useRuntimeConfig();
+const siteUrl = (config.public.siteUrl as string).replace(/\/$/, '');
+
+useJsonLd([
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Coderium',
+    url: siteUrl,
+    logo: `${siteUrl}/favicon.png`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Coderium',
+    url: siteUrl,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${siteUrl}/explore?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  },
+]);
+
 const navItems = [
   { to: '/', icon: 'lucide:home', label: 'Home', isActive: (route: { path: string }) => route.path === '/' },
   { to: '/explore', icon: 'lucide:search', label: 'Explore', isActive: (route: { path: string }) => route.path === '/explore' },

@@ -133,11 +133,10 @@ definePageMeta({
   layout: 'default',
 });
 
-useHead({
+useSeo({
   title: 'Coderium - Web Development Resources & Guides',
-  meta: [
-    { name: 'description', content: 'Explore high quality web development articles, carousel summaries, video tutorials, and interactive galleries.' },
-  ],
+  titleSuffix: false,
+  description: 'Explore high quality web development articles, carousel summaries, video tutorials, and interactive galleries.',
 });
 
 const config = useRuntimeConfig();

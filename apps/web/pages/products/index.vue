@@ -39,7 +39,10 @@ definePageMeta({
   layout: 'default',
 });
 
-useHead({ title: 'Products - Coderium' });
+useSeo({
+  title: 'Products',
+  description: "Explore what we've built and the pilots you can start today.",
+});
 
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase as string;

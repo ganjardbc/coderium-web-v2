@@ -39,5 +39,8 @@ definePageMeta({
   layout: 'default',
 });
 
-useHead({ title: 'About - Coderium' });
+useSeo({
+  title: 'About',
+  description: 'Learn about Coderium, a platform curating trustworthy articles, tutorials, and insights on AI and software development.',
+});
 </script>

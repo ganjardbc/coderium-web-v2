@@ -13,6 +13,8 @@
     "clean": "rm -rf .nuxt .output dist .turbo"
   },
   "dependencies": {
+    "@nuxtjs/robots": "6.2.0",
+    "@nuxtjs/sitemap": "8.5.0",
     "@pinia/nuxt": "^0.5.0",
     "isomorphic-dompurify": "^2.15.0",
     "nuxt": "^3.12.0",

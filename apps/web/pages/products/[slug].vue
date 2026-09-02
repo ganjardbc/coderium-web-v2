@@ -241,16 +241,27 @@ function postTypeLabel(type: string): string {
   return postTypeLabels[type] || type;
 }
 
-if (productRes.value?.data) {
-  const p = productRes.value.data;
-  useHead({
-    title: `${p.name} - Coderium`,
-    meta: [
-      { name: 'description', content: p.tagline || p.description || '' },
-      { property: 'og:title', content: p.name },
-      { property: 'og:description', content: p.tagline || p.description || '' },
-      { property: 'og:image', content: p.cover || '' },
-    ],
+if (product.value) {
+  const p = product.value;
+  useSeo({
+    title: p.name,
+    description: p.tagline || p.description || undefined,
+    image: p.cover,
   });
+
+  const siteUrl = (config.public.siteUrl as string).replace(/\/$/, '');
+  useJsonLd(
+    breadcrumbJsonLd([
+      { name: 'Home', url: siteUrl },
+      { name: 'Products', url: `${siteUrl}/products` },
+      { name: p.name, url: `${siteUrl}/products/${p.slug}` },
+    ])
+  );
+} else if (error.value) {
+  if (import.meta.server) {
+    const event = useRequestEvent();
+    if (event) setResponseStatus(event, 404);
+  }
+  useHead({ meta: [{ name: 'robots', content: 'noindex' }] });
 }
 </script>

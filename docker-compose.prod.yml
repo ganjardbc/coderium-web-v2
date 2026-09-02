@@ -66,6 +66,7 @@ services:
       PORT: 5174
       NODE_ENV: production
       NUXT_PUBLIC_API_BASE: "https://api.coderium.id/api/v1"
+      NUXT_PUBLIC_SITE_URL: "https://coderium.id"
     ports:
       - "8082:5174"
     networks:
