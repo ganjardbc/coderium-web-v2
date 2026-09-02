@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
 
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
+import { trackPageView } from '@/core/analytics';
 
 import { authRoutes } from '@/modules/auth/router';
 import { dashboardRoutes } from '@/modules/dashboard/router';
@@ -49,6 +50,10 @@ export function setupRouter(app: App) {
         await authStore.fetchProfile();
       }
     }
+  });
+
+  router.afterEach((to) => {
+    trackPageView(to.fullPath);
   });
 
   app.use(router);
