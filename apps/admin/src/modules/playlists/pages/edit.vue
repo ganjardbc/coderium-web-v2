@@ -57,6 +57,7 @@ import { InputText, Textarea, Checkbox, Button, Message, Card, ProgressSpinner }
 import api from '@/lib/api';
 import MediaUploader from '@/components/MediaUploader.vue';
 import type { UploadedMedia } from '@/components/MediaUploader.vue';
+import { usePlaylistStore } from '@/modules/playlists/stores/playlist.store';
 
 const router = useRouter();
 const route = useRoute();
@@ -74,27 +75,22 @@ const error = ref('');
 
 onMounted(async () => {
   try {
-    const { data } = await api.get(`/admin/playlists`);
-    const playlist = data.data.find((p: { slug: string }) => p.slug === route.params.slug);
-    if (playlist) {
-      form.value = {
-        title: playlist.title,
-        description: playlist.description || '',
-        cover: playlist.cover ? [{
-          id: playlist.cover,
-          url: playlist.cover,
-          filename: playlist.cover.split('/').pop() || 'cover.jpg',
-          originalName: playlist.cover.split('/').pop() || 'cover.jpg',
-          mimeType: 'image/jpeg',
-          size: 0
-        }] : [],
-        isPublished: playlist.isPublished,
-      };
-    } else {
-      error.value = 'Playlist not found';
-    }
+    const playlist = await usePlaylistStore().fetchPlaylistBySlug(route.params.slug as string);
+    form.value = {
+      title: playlist.title,
+      description: playlist.description || '',
+      cover: playlist.cover ? [{
+        id: playlist.cover,
+        url: playlist.cover,
+        filename: playlist.cover.split('/').pop() || 'cover.jpg',
+        originalName: playlist.cover.split('/').pop() || 'cover.jpg',
+        mimeType: 'image/jpeg',
+        size: 0
+      }] : [],
+      isPublished: playlist.isPublished,
+    };
   } catch {
-    error.value = 'Failed to load playlist data';
+    error.value = 'Playlist not found';
   } finally {
     pageLoading.value = false;
   }

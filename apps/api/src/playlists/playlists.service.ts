@@ -132,6 +132,27 @@ export class PlaylistsService {
     };
   }
 
+  async findAdminBySlug(slug: string, userId: string, userRoles: Record<string, unknown>[]) {
+    const playlist = await this.prisma.playlist.findFirst({
+      where: { slug, deletedAt: null },
+      include: {
+        user: { select: { id: true, name: true, avatarUrl: true } },
+        _count: { select: { posts: true } },
+      },
+    });
+
+    if (!playlist) throw new NotFoundException('Playlist not found');
+
+    const isAdmin = userRoles?.some(
+      (ur: Record<string, unknown>) => (ur.role as Record<string, unknown>)?.slug === 'admin',
+    );
+    if (!isAdmin && playlist.userId !== userId) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    return { success: true, message: 'Playlist retrieved', data: playlist };
+  }
+
   async update(slug: string, dto: UpdatePlaylistDto, userId: string, userRoles: Record<string, unknown>[]) {
     const playlist = await this.prisma.playlist.findFirst({ where: { slug, deletedAt: null } });
     if (!playlist) throw new NotFoundException('Playlist not found');
