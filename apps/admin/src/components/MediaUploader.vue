@@ -174,6 +174,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   'update:modelValue': [value: UploadedMedia[]];
+  uploaded: [uploaded: UploadedMedia[]];
 }>();
 
 const fileInput = ref<HTMLInputElement | null>(null);
@@ -277,6 +278,7 @@ async function uploadFiles(files: File[]) {
 
     const next = props.multiple ? [...props.modelValue, ...uploaded] : uploaded;
     emit('update:modelValue', next);
+    emit('uploaded', uploaded);
   } catch (err: unknown) {
     const axiosErr = err as { response?: { data?: { message?: string } } };
     uploadError.value = axiosErr.response?.data?.message || 'Upload failed. Please try again.';
