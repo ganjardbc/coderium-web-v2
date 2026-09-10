@@ -171,6 +171,11 @@ function publishErrorDetail(err: unknown): string {
   return axiosErr.response?.data?.message || 'Publish failed';
 }
 
+function extractErrorMessage(err: unknown, fallback: string): string {
+  const axiosErr = err as { response?: { data?: { message?: string } } };
+  return axiosErr.response?.data?.message || fallback;
+}
+
 async function handlePublish(id: string) {
   try {
     await productsStore.publishProduct(id);
@@ -182,9 +187,18 @@ async function handlePublish(id: string) {
 }
 
 async function handleUnpublish(id: string) {
-  await productsStore.unpublishProduct(id);
-  await productsStore.fetchProducts(meta.value.page, meta.value.limit, sortField.value, sortDir.value);
-  toast.add({ severity: 'info', summary: 'Unpublished', detail: 'Product moved to drafts', life: 3000 });
+  try {
+    await productsStore.unpublishProduct(id);
+    await productsStore.fetchProducts(meta.value.page, meta.value.limit, sortField.value, sortDir.value);
+    toast.add({ severity: 'info', summary: 'Unpublished', detail: 'Product moved to drafts', life: 3000 });
+  } catch (err: unknown) {
+    toast.add({
+      severity: 'error',
+      summary: 'Unpublish failed',
+      detail: extractErrorMessage(err, 'Failed to unpublish product'),
+      life: 6000,
+    });
+  }
 }
 
 function handleArchive(id: string, name: string) {
@@ -195,16 +209,34 @@ function handleArchive(id: string, name: string) {
     rejectProps: { label: 'Cancel', severity: 'secondary', outlined: true },
     acceptProps: { label: 'Archive', severity: 'danger' },
     accept: async () => {
-      await productsStore.archiveProduct(id);
-      await productsStore.fetchProducts(meta.value.page, meta.value.limit, sortField.value, sortDir.value);
-      toast.add({ severity: 'success', summary: 'Archived', detail: 'Product has been archived', life: 3000 });
+      try {
+        await productsStore.archiveProduct(id);
+        await productsStore.fetchProducts(meta.value.page, meta.value.limit, sortField.value, sortDir.value);
+        toast.add({ severity: 'success', summary: 'Archived', detail: 'Product has been archived', life: 3000 });
+      } catch (err: unknown) {
+        toast.add({
+          severity: 'error',
+          summary: 'Archive failed',
+          detail: extractErrorMessage(err, 'Failed to archive product'),
+          life: 6000,
+        });
+      }
     },
   });
 }
 
 async function handleRestore(id: string) {
-  await productsStore.restoreProduct(id);
-  await productsStore.fetchProducts(meta.value.page, meta.value.limit, sortField.value, sortDir.value);
-  toast.add({ severity: 'info', summary: 'Restored', detail: 'Product moved back to drafts', life: 3000 });
+  try {
+    await productsStore.restoreProduct(id);
+    await productsStore.fetchProducts(meta.value.page, meta.value.limit, sortField.value, sortDir.value);
+    toast.add({ severity: 'info', summary: 'Restored', detail: 'Product moved back to drafts', life: 3000 });
+  } catch (err: unknown) {
+    toast.add({
+      severity: 'error',
+      summary: 'Restore failed',
+      detail: extractErrorMessage(err, 'Failed to restore product'),
+      life: 6000,
+    });
+  }
 }
 </script>
