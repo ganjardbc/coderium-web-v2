@@ -74,8 +74,8 @@ const error = ref('');
 
 onMounted(async () => {
   try {
-    const { data } = await api.get(`/admin/playlists`);
-    const playlist = data.data.find((p: { slug: string }) => p.slug === route.params.slug);
+    const { data } = await api.get(`/admin/playlists/${route.params.slug}`);
+    const playlist = data.data;
     if (playlist) {
       form.value = {
         title: playlist.title,
@@ -93,8 +93,13 @@ onMounted(async () => {
     } else {
       error.value = 'Playlist not found';
     }
-  } catch {
-    error.value = 'Failed to load playlist data';
+  } catch (err: unknown) {
+    const axiosErr = err as { response?: { status?: number; data?: { message?: string } } };
+    if (axiosErr.response?.status === 404) {
+      error.value = 'Playlist not found';
+    } else {
+      error.value = axiosErr.response?.data?.message || 'Failed to load playlist data';
+    }
   } finally {
     pageLoading.value = false;
   }

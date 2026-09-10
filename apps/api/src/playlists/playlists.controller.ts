@@ -56,6 +56,20 @@ export class PlaylistsController {
   }
 
   @ApiBearerAuth()
+  @Get('admin/playlists/:slug')
+  @ApiOperation({ summary: 'Get playlist by slug (admin)' })
+  async findAdminBySlug(
+    @Param('slug') slug: string,
+    @CurrentUser() user: Record<string, unknown>,
+  ) {
+    return this.playlistsService.findAdminBySlug(
+      slug,
+      user.id as string,
+      user.roles as Record<string, unknown>[],
+    );
+  }
+
+  @ApiBearerAuth()
   @Permissions('manage_own_playlists', 'manage_all_playlists')
   @Post('admin/playlists')
   @ApiOperation({ summary: 'Create playlist' })
