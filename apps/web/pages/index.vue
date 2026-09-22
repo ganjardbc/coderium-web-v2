@@ -140,7 +140,10 @@ useSeo({
 });
 
 const config = useRuntimeConfig();
-const apiBase = config.public.apiBase as string;
+// SSR uses the internal API URL; browser calls remain same-origin.
+const apiBase = import.meta.server
+  ? (config.apiInternalBase as string)
+  : (config.public.apiBase as string);
 
 interface Author {
   id: string;
@@ -169,6 +172,7 @@ const { data: recentFirstPage, pending } = await useAsyncData<{ data: Post[]; me
   () => $fetch(`${apiBase}/posts?page=1&limit=${RECENT_LIMIT}`)
 );
 
+
 async function fetchRecentPage(page: number) {
   return $fetch<{ data: Post[]; meta: InfiniteListMeta }>(`${apiBase}/posts?page=${page}&limit=${RECENT_LIMIT}`);
 }
@@ -184,6 +188,7 @@ const { data: popularRes, pending: pendingPopular } = await useAsyncData<{ data:
   'popularPosts',
   () => $fetch(`${apiBase}/posts/popular`)
 );
+
 const popularPosts = computed(() => popularRes.value?.data || []);
 
 interface Product {
@@ -200,5 +205,6 @@ const { data: productsRes, pending: pendingProducts } = await useAsyncData<{ dat
   'homepageProducts',
   () => $fetch(`${apiBase}/products?limit=24`)
 );
+
 const featuredProduct = computed(() => productsRes.value?.data?.find((p) => p.featured) ?? null);
 </script>

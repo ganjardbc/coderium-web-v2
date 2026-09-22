@@ -41,15 +41,18 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     apiSecret: '',
+    apiInternalBase: process.env.NUXT_API_INTERNAL_BASE || 'http://localhost:3030/api/v1',
     public: {
-      apiBase: '/api',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
       siteUrl,
       gaId: process.env.NUXT_PUBLIC_GA_ID,
     },
   },
 
   routeRules: {
-    '/api/**': { proxy: 'http://localhost:3030/api/v1/**' },
+    // Keep browser requests same-origin while routing SSR/API proxy traffic
+    // directly over the Docker network. Avoid hairpinning through Cloudflare.
+    '/api/**': { proxy: `${process.env.NUXT_API_INTERNAL_BASE || 'http://localhost:3030/api/v1'}/**` },
   },
 
   // Unified site metadata consumed by @nuxtjs/sitemap and @nuxtjs/robots
