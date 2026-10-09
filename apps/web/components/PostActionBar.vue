@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed z-40 flex flex-col items-center bottom-20 left-1/2 -translate-x-1/2 md:bottom-auto md:left-auto md:translate-x-0 md:right-6 md:top-1/2 md:-translate-y-1/2">
+  <div class="fixed z-40 flex flex-col items-center bottom-6 left-1/2 -translate-x-1/2 md:bottom-auto md:left-auto md:translate-x-0 md:right-6 md:top-1/2 md:-translate-y-1/2">
     <!-- Toast: like error / link copied -->
     <Transition name="fade">
       <span

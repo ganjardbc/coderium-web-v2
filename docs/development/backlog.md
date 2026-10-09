@@ -1597,7 +1597,38 @@ Details:
 
 Task: Layout menu atas dan footer
 
-Status: `TODO`
+Status: `DONE`
+
+Details:
+
+```txt
+- apps/web/layouts/default.vue: sidebar desktop dan bottom nav mobile dihapus,
+  diganti header menu atas: logo, Produk (/products), Kerja Sama
+  (/kerja-sama), Artikel (/explore, aktif juga di /posts/*), Series
+  (/playlists), tombol pill "Kirim email"
+  (mailto:hello@coderium.id?subject=Diskusi%20pilot). Tombol "Write" dan
+  variabel adminUrl dihapus dari layout. Dark mode toggle dipertahankan.
+- Mobile (< md): tombol menu (aria-expanded, aria-controls) membuka panel
+  lipat berisi empat tautan + tombol "Kirim email"; menutup otomatis setelah
+  navigasi. Tombol dan tautan menu 44px.
+- Footer: Produk, Kerja Sama, Artikel, Tentang, hello@coderium.id (mailto).
+  Tautan Terms dan Privacy dipertahankan di baris copyright supaya halaman
+  legal tidak yatim.
+- Konten utama kini selebar max-w-7xl tanpa kolom sidebar; padding bawah
+  untuk bottom nav (pb-16) dihapus.
+- Di luar daftar file task, akibat langsung hilangnya bottom nav:
+  PostActionBar.vue mobile bottom-20 -> bottom-6.
+- JSON-LD Organization/WebSite di layout tidak diubah (AGENCY-008).
+- Diverifikasi: build web dijalankan terhadap mock API; /, /products,
+  /products/:slug, /kerja-sama, /explore, /playlists, /playlists/:slug,
+  /posts/:slug, /about, /terms semua HTTP 200 dengan menu baru, tanpa
+  "Write". Di Chrome: desktop terang dan gelap (/explore, /posts/:slug,
+  /playlists, /kerja-sama), viewport 390px (menu buka/tutup, tutup setelah
+  navigasi, target 44px, tanpa scroll horizontal, dark mode).
+  pnpm typecheck dan pnpm build PASS.
+- Belum diuji: perangkat nyata, data produksi, halaman beranda secara visual
+  (dirombak di AGENCY-007).
+```
 
 ---
 

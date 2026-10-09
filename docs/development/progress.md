@@ -44,7 +44,7 @@ IN_PROGRESS
 Current Phase:
 
 ```txt
-Phase 17 - Agency Pivot (Public Site) — TASK-0, AGENCY-001..005 DONE, berikutnya AGENCY-006
+Phase 17 - Agency Pivot (Public Site) — TASK-0, AGENCY-001..006 DONE, berikutnya AGENCY-007
 ```
 
 Current Milestone:
@@ -84,7 +84,7 @@ Last Updated:
 | Phase 14 - Product Catalog (Public Site) | DONE | 100% |
 | Phase 15 - Hermes Integration (Backend & Admin UI) | DONE | 100% |
 | Phase 16 - AI Content Generation (Backend, ticket 24) | DONE | 100% |
-| Phase 17 - Agency Pivot (Public Site) | IN_PROGRESS | 50% (6/12) |
+| Phase 17 - Agency Pivot (Public Site) | IN_PROGRESS | 58% (7/12) |
 
 ---
 
@@ -122,7 +122,6 @@ Phase 0 - Foundation Setup
 ### TODO
 
 ```txt
-AGENCY-006 Layout menu atas dan footer
 AGENCY-007 Beranda agency, font, dan token warna
 AGENCY-008 Identitas, SEO, dan About
 AGENCY-009 [Manual] Isi konten produk lewat admin
@@ -250,6 +249,7 @@ AGENCY-002 Tambah field badge, proof, faq pada Product (Phase 17 Agency Pivot)
 AGENCY-003 Form admin untuk badge, proof, dan FAQ (Phase 17 Agency Pivot)
 AGENCY-004 Render badge, description, bukti, FAQ, dan CTA di detail produk (Phase 17 Agency Pivot)
 AGENCY-005 Halaman /kerja-sama (Phase 17 Agency Pivot)
+AGENCY-006 Layout menu atas dan footer (Phase 17 Agency Pivot)
 ```
 
 ---
@@ -288,7 +288,7 @@ Path di atas.
 Priority Order:
 
 ```txt
-Phase 17 - Agency Pivot: AGENCY-006 Layout menu atas dan footer
+Phase 17 - Agency Pivot: AGENCY-007 Beranda agency, font, dan token warna
 (urutan lengkap di docs/development/agency-pivot/tasks.md)
 
 Ticket 25 — apps/admin UI untuk AI Content Generation (grid card "AI Agent",

@@ -202,7 +202,7 @@ Acceptance:
 
 ## AGENCY-006 [CAF] Layout menu atas dan footer
 
-Status: `TODO`
+Status: `DONE`
 
 Files:
 
