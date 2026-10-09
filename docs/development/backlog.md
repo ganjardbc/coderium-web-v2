@@ -1563,7 +1563,33 @@ Details:
 
 Task: Halaman `/kerja-sama`
 
-Status: `TODO`
+Status: `DONE`
+
+Details:
+
+```txt
+- Halaman baru apps/web/pages/kerja-sama.vue, statis, bahasa Indonesia:
+  header + CTA, dua pilot dan harganya (termasuk harga perintis dan
+  Rp2.000.000 di muka fit check CAF), kartu harga perintis (diskon 30%
+  dengan izin studi kasus) dan retainer, syarat dari klien, FAQ, CTA penutup.
+- Semua harga, durasi, dan syarat disalin dari requirements.md bagian Data;
+  tidak ada angka atau klaim baru.
+- FAQ (6 butir) disusun hanya dari fakta di requirements.md (merge tetap
+  keputusan manusia, tiket yang belum dikerjakan, Jira/GitLab di rencana,
+  belum ada SLA, arti harga perintis, cara mulai). Teksnya perlu direview
+  pemilik produk.
+- CTA: mailto:hello@coderium.id dengan subjek terisi ("Diskusi pilot",
+  "Diskusi pilot AI Code Review", "Diskusi pilot CAF"), tanpa target.
+- Pakai ulang useSeo, useJsonLd + faqPageJsonLd (FAQPage), FaqAccordion.
+- Warna masih abu/hitam seperti halaman produk; token indigo baru masuk di
+  AGENCY-007. Tautan ke halaman ini dari navigasi masuk di AGENCY-006.
+- Route dicatat di docs/frontend/frontend-routes.md.
+- Diverifikasi lewat SSR nyata (build web + mock API): HTTP 200, semua harga
+  dan syarat ada di HTML, title/canonical/FAQPage ada, tiga tautan mailto
+  bersubjek, /kerja-sama muncul di sitemap.xml. pnpm typecheck dan
+  pnpm build PASS.
+- Belum diuji: tampilan visual di browser (mobile, dark mode).
+```
 
 ---
 

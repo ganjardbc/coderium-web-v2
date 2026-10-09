@@ -167,7 +167,7 @@ Acceptance:
 
 ## AGENCY-005 [CAF] Halaman `/kerja-sama`
 
-Status: `TODO`
+Status: `DONE`
 
 Files:
 

@@ -13,6 +13,7 @@ File-based routing.
 | `/posts/:slug`          | `pages/posts/[slug].vue`            | Post detail (SSR + SEO)  |
 | `/playlists`            | `pages/playlists/index.vue`         | Playlist list            |
 | `/playlists/:slug`      | `pages/playlists/[slug].vue`        | Playlist detail          |
+| `/kerja-sama`           | `pages/kerja-sama.vue`              | Kerja Sama — pilot, harga, syarat klien, FAQ, CTA email (statis, SSR) |
 
 ---
 
