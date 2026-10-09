@@ -37,8 +37,8 @@
         </p>
         <a
           :href="product.ctaUrl"
-          target="_blank"
-          rel="noopener noreferrer"
+          :target="ctaIsMailto ? undefined : '_blank'"
+          :rel="ctaIsMailto ? undefined : 'noopener noreferrer'"
           class="mt-6 inline-block px-6 py-2.5 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors"
         >
           {{ product.ctaLabel || 'Request pilot' }}
@@ -145,8 +145,8 @@
         <p class="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-4">Ready to piloting?</p>
         <a
           :href="product.ctaUrl"
-          target="_blank"
-          rel="noopener noreferrer"
+          :target="ctaIsMailto ? undefined : '_blank'"
+          :rel="ctaIsMailto ? undefined : 'noopener noreferrer'"
           class="inline-block px-6 py-2.5 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors"
         >
           {{ product.ctaLabel || 'Request pilot' }}
@@ -211,6 +211,8 @@ const { data: productRes, pending, error } = await useAsyncData<{ data: ProductD
   () => $fetch(`${apiBase}/products/${slug}`)
 );
 const product = computed(() => productRes.value?.data);
+// mailto: opens the mail client in place; only real web links get a new tab.
+const ctaIsMailto = computed(() => product.value?.ctaUrl?.toLowerCase().startsWith('mailto:') ?? false);
 
 const { data: playlistRes, error: playlistError } = await useAsyncData<{ data: PlaylistData }>(
   `product-playlist-${slug}`,

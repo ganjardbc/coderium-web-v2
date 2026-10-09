@@ -4,7 +4,6 @@ import {
   IsEnum,
   IsArray,
   IsBoolean,
-  IsUrl,
   IsNumber,
   MinLength,
   ValidateNested,
@@ -13,6 +12,7 @@ import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { PipelineStepDto } from './pipeline-step.dto';
 import { FeatureItemDto } from './feature-item.dto';
+import { IsCtaUrl } from './cta-url.validator';
 
 export enum ProductStatusEnum {
   draft = 'draft',
@@ -70,9 +70,12 @@ export class CreateProductDto {
   @IsOptional()
   ctaLabel?: string;
 
-  @ApiPropertyOptional({ description: 'Must be a valid URL' })
+  @ApiPropertyOptional({
+    description: 'http(s) URL or mailto: link',
+    example: 'mailto:hello@coderium.id?subject=Diskusi%20pilot',
+  })
   @IsOptional()
-  @IsUrl()
+  @IsCtaUrl()
   ctaUrl?: string;
 
   @ApiPropertyOptional({ default: 0 })

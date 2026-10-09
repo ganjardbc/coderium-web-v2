@@ -4,7 +4,6 @@ import {
   ConflictException,
   BadRequestException,
 } from '@nestjs/common';
-import { isURL } from 'class-validator';
 import type { Prisma } from '@prisma/client';
 import { PrismaService } from '../database';
 import {
@@ -12,6 +11,7 @@ import {
   UpdateProductDto,
   ListProductsDto,
   ListPublicProductsDto,
+  isCtaUrl,
 } from './dto';
 import { slugify } from '@coderium/shared-utils';
 
@@ -36,7 +36,7 @@ export class ProductsService {
     const failed: string[] = [];
 
     if (!candidate.cover) failed.push('cover');
-    if (!candidate.ctaUrl || !isURL(candidate.ctaUrl)) failed.push('ctaUrl');
+    if (!isCtaUrl(candidate.ctaUrl)) failed.push('ctaUrl');
     if (
       !Array.isArray(candidate.pipelineSteps) ||
       candidate.pipelineSteps.length < 1

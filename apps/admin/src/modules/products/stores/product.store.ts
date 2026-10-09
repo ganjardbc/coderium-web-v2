@@ -64,7 +64,7 @@ export interface ProductPayload {
  */
 export const PUBLISH_FIELD_LABELS: Record<string, string> = {
   cover: 'Cover image',
-  ctaUrl: 'CTA URL (must be a valid URL)',
+  ctaUrl: 'CTA URL (must be an http(s) URL or a mailto: link)',
   pipelineSteps: 'Pipeline Steps (at least 1 item)',
   features: 'Features (at least 1 item)',
 };

@@ -39,7 +39,7 @@ Details:
 
 ## AGENCY-001 [CAF] Izinkan `mailto:` pada CTA produk
 
-Status: `TODO`
+Status: `DONE`
 
 Files:
 

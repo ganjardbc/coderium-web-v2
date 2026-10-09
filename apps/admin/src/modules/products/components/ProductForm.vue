@@ -91,16 +91,16 @@
       <FormField
         label="CTA URL"
         :invalid="isInvalid('ctaUrl')"
-        hint="Must be a valid URL (e.g. https://example.com) to publish"
+        hint="Must be an http(s) URL or a mailto: link to publish, e.g. mailto:hello@coderium.id?subject=Diskusi%20pilot"
       >
         <InputText
           id="product-cta-url"
           v-model="form.ctaUrl"
-          placeholder="https://example.com"
+          placeholder="mailto:hello@coderium.id?subject=Diskusi%20pilot"
           class="w-full"
         />
         <p v-if="ctaUrlLooksInvalid" class="text-xs text-red-500 mt-1">
-          This doesn't look like a valid URL.
+          This doesn't look like a valid http(s) URL or mailto: link.
         </p>
       </FormField>
     </div>
@@ -306,10 +306,11 @@ function fieldLabel(key: string): string {
 const ctaUrlLooksInvalid = computed(() => {
   const value = props.form.ctaUrl;
   if (!value) return false;
+  if (/\s/.test(value)) return true;
   try {
-    // eslint-disable-next-line no-new
-    new URL(value);
-    return false;
+    const url = new URL(value);
+    if (url.protocol === 'mailto:') return !/^[^@?]+@[^@?]+\.[^@?]+$/.test(url.pathname);
+    return url.protocol !== 'http:' && url.protocol !== 'https:';
   } catch {
     return true;
   }

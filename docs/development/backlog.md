@@ -1428,7 +1428,34 @@ Details:
 
 Task: Izinkan `mailto:` pada CTA produk
 
-Status: `TODO`
+Status: `DONE`
+
+Details:
+
+```txt
+- Aturan baru di apps/api/src/products/dto/cta-url.validator.ts: isCtaUrl()
+  + decorator @IsCtaUrl(). ctaUrl valid bila URL http(s) absolut, atau
+  mailto: ke satu alamat email valid (query seperti ?subject=... boleh).
+- CreateProductDto (dan UpdateProductDto lewat PartialType) memakai
+  @IsCtaUrl() menggantikan @IsUrl(); ProductsService.assertPublishable()
+  memakai isCtaUrl() yang sama, jadi simpan dan publish satu aturan.
+- PERUBAHAN PERILAKU: aturan lama (@IsUrl()/isURL() bawaan) menerima URL
+  tanpa protokol (example.com) dan ftp://. Sekarang keduanya ditolak,
+  sesuai FR-1 (hanya http(s) atau mailto:). Produk lama dengan ctaUrl
+  tanpa protokol akan gagal disimpan ulang/dipublish sampai diperbaiki.
+- apps/admin ProductForm.vue: hint dan placeholder memakai contoh
+  mailto:hello@coderium.id?subject=Diskusi%20pilot; cek format di klien
+  mengikuti aturan yang sama. Label ctaUrl di PUBLISH_FIELD_LABELS
+  (product.store.ts) disesuaikan.
+- apps/web pages/products/[slug].vue: kedua tombol CTA tidak memakai
+  target="_blank"/rel bila ctaUrl berupa mailto:.
+- products.service.spec.ts ditambah kasus mailto dan URL tidak valid, tetapi
+  TIDAK dieksekusi (apps/api tidak punya test runner). Aturan diuji ad-hoc
+  lewat dist hasil build: 13 kasus isCtaUrl() + validasi CreateProductDto,
+  semua sesuai. pnpm typecheck dan pnpm build PASS.
+- Belum diuji: simpan/publish lewat HTTP dan DB nyata, tampilan form admin
+  dan klik tombol di browser.
+```
 
 ---
 
