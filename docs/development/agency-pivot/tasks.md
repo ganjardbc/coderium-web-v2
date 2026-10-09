@@ -15,7 +15,7 @@ Keterangan: **[CAF]** cocok diserahkan ke pipeline CAF. **[Manual]** dikerjakan 
 | AGENCY-004 | Render badge, description, bukti, FAQ, CTA di detail produk | CAF | AGENCY-002 |
 | AGENCY-005 | Halaman `/kerja-sama` | CAF | AGENCY-001 |
 | AGENCY-006 | Layout menu atas dan footer | CAF | AGENCY-005 |
-| AGENCY-007 | Beranda agency, font Inter, token warna | CAF | AGENCY-004, AGENCY-006 |
+| AGENCY-007 | Beranda agency (Opsi B), font Inter, token warna | CAF | AGENCY-004, AGENCY-006 |
 | AGENCY-008 | Identitas, SEO, dan About | CAF | - |
 | AGENCY-009 | Isi konten produk lewat admin | Manual | AGENCY-003 |
 | AGENCY-010 | Perbarui dokumen proyek | Manual + CAF | - |
@@ -230,7 +230,7 @@ Acceptance:
 
 ---
 
-## AGENCY-007 [CAF] Beranda agency, font, dan token warna
+## AGENCY-007 [CAF] Beranda agency (Opsi B), font, dan token warna
 
 Status: `DONE`
 
@@ -239,7 +239,7 @@ Files:
 ```txt
 apps/web/pages/index.vue
 apps/web/assets/css/main.css
-apps/web/components/ (komponen baru bila perlu)
+apps/web/components/ (komponen baru bila perlu, mis. HomeHero, ProductPanel, PricingCard, FaqList)
 docs/frontend/design-system.md
 ```
 
@@ -249,18 +249,25 @@ Details:
 - main.css: muat Inter dan JetBrains Mono (Charter tetap untuk isi artikel).
 - @theme: daftarkan warna utama #3730D9 sebagai token. Perbarui design-system.md
   dari #6366F1 ke #3730D9.
-- Beranda, urutan section (lihat requirements.md FR-6): hero + panel terminal ilustrasi,
-  strip angka, dua produk dari API /products, cara kerja 3 langkah, "Yang belum kami kerjakan",
-  blok ajakan email, "Catatan terbaru" (3 artikel, tanpa Popular), footer.
-- Hapus "Stay curious". Mobile satu kolom.
-- Panel terminal wajib berlabel "Ilustrasi alur kerja CAF".
+- Beranda mengikuti Opsi B di requirements.md FR-6, urutan: hero -> strip "Terhubung dengan"
+  -> 01 Apa itu Coderium -> 02 dua produk unggulan (data dari API /products, field badge
+  dan proof) -> 03 Diskusi, pilot, laporan -> 04 tabel Pasang sendiri vs Pilot ->
+  05 tiga kartu paket dan harga -> 06 Tentang -> 07 FAQ -> 08 Catatan terbaru
+  (3 artikel terbaru dengan gambar, tanpa Popular) -> 09 Kontak -> footer berkolom.
+- Konten statis (hero, definisi, proses, tabel, paket, tentang, FAQ) ditulis di kode
+  berbahasa Indonesia; hanya produk dan artikel yang dari API. Harga di kartu harus
+  sama dengan /kerja-sama (AGENCY-005): ambil dari satu sumber bersama (mis. composable
+  atau file konstanta) agar tidak berbeda.
+- Hapus "Stay curious". Mobile satu kolom, kartu harga dan panel produk bertumpuk.
+- Tidak boleh ada statistik, testimoni, atau logo klien selain data di requirements.md.
 ```
 
 Acceptance:
 
 ```txt
-- Sesuai mockup (desktop 1440 dan mobile 390), dark mode rapi
+- Sesuai mockup Opsi B (desktop), rapi di mobile dan dark mode
 - Angka hanya dari bagian Data di requirements.md
+- Harga di beranda dan /kerja-sama identik
 - typecheck dan build web lulus
 ```
 

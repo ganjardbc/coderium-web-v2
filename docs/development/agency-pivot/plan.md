@@ -34,6 +34,7 @@ Mengubah coderium.id dari blog menjadi situs AI agency untuk tim engineering. Du
 | Warna utama | Indigo `#3730D9` (token `@theme` Tailwind) |
 | Font | Inter (UI) dan JetBrains Mono (terminal/kode), Charter tetap untuk isi artikel |
 | Konten produk | Diisi lewat admin, bukan di-hardcode |
+| Arah beranda | Opsi B (editorial agency): hero "Coderium. AI Agency.", dua produk unggulan, paket dan harga, tabel perbandingan, FAQ. Acuan struktur: theaiagency.id dan template AI agents themehunk |
 
 ## Prinsip
 

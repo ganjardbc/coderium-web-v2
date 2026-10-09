@@ -21,15 +21,21 @@ Kebutuhan fungsional, non-fungsional, data, dan batasan. Arah ada di `plan.md`, 
 
 **FR-5. Navigasi menu atas.** Header memuat logo, Produk, Kerja Sama, Artikel (`/explore`), Series (`/playlists`), dan tombol pill "Kirim email". Sidebar dihapus, tombol "Write" tidak tampil di header publik. Mobile: menu bisa dilipat. Footer memuat Produk, Kerja Sama, Artikel, Tentang, dan `hello@coderium.id`.
 
-**FR-6. Beranda agency.** Urutan section:
-1. Hero: "Tiket jadi pull request. Merge tetap keputusan manusia." dengan tombol "Kirim email untuk diskusi" dan "Lihat produk"; di kanan panel gelap bergaya terminal berlabel "Ilustrasi alur kerja CAF" (plan, implement, verify, pull request, lalu baris kuning "merge: menunggu keputusan Anda").
-2. Strip angka (24 / 15 / 11 mnt / ~$10) dengan catatan jujur 7 PR menunggu review dan 2 ditutup.
-3. Dua produk dari API `/products`.
-4. Cara kerja tiga langkah dengan harga awal dan tautan ke `/kerja-sama`.
-5. "Yang belum kami kerjakan" (empat kartu).
-6. Blok ajakan email gelap.
-7. "Catatan terbaru" (tiga artikel terbaru, tanpa kolom Popular).
-8. Footer.
+**FR-6. Beranda agency (mockup Opsi B, editorial agency).** Urutan section:
+1. Hero tipografi besar: "Coderium. AI Agency." dengan subjudul yang menyebut CAF dan AI Code Reviewer dan bahwa tool dipasang di server klien; tombol "Kirim email" dan "Lihat layanan". Di bawahnya strip tiga janji (berjalan di server Anda, merge tetap keputusan manusia, pilot berharga tetap).
+2. Strip "Terhubung dengan": Linear, GitHub Issues, GitHub, GitLab, Claude Code, dengan catatan Jira dan GitLab untuk CAF segera.
+3. 01 Apa itu Coderium: satu paragraf definisi.
+4. 02 Dua produk unggulan sebagai dua panel besar berdampingan (CAF gelap dengan tiga angka dari dashboard; AI Code Reviewer terang). Catatan kaki jujur: 7 PR menunggu review, 2 ditutup (tiket keamanan).
+5. 03 Diskusi, pilot, laporan: tiga langkah bernomor besar dengan harga awal.
+6. 04 Tabel perbandingan "Pasang sendiri" vs "Pilot bersama Coderium" (pemasangan, penyesuaian, ukuran keberhasilan, kendala operasional, biaya).
+7. 05 Paket: tiga kartu harga (Pilot AI Code Review Rp13 juta, Pilot CAF Rp19,5 juta, Retainer Rp2 juta per bulan), masing-masing dengan harga perintis dan tombol email; catatan biaya server dan model ditanggung klien.
+8. 06 Tentang: "Agency awal. Pendirinya yang membangun." (jujur bahwa belum ada klien; harga perintis).
+9. 07 FAQ enam pertanyaan (dua kolom).
+10. 08 Catatan terbaru: tiga kartu artikel dengan gambar, tanggal, judul (dari API artikel).
+11. 09 Kontak: blok gelap besar "Ceritakan apa yang ingin Anda kerjakan." dengan tombol hello@coderium.id.
+12. Footer gelap berkolom: Layanan, Perusahaan, Kontak.
+
+Tidak dipakai (sengaja): statistik generik tanpa sumber, newsletter, CTA "coba gratis", dan testimoni. Mobile: satu kolom, kartu harga dan panel produk bertumpuk.
 
 **FR-7. Identitas.** Metadata default, JSON-LD Organization (dengan `description` dan `contactPoint`), halaman About, dan footer mencerminkan identitas AI agency. Tidak ada lagi teks "tech blog" di metadata dan About.
 
@@ -46,7 +52,7 @@ Kebutuhan fungsional, non-fungsional, data, dan batasan. Arah ada di `plan.md`, 
 - Warna utama indigo `#3730D9`, didaftarkan sebagai token `@theme` Tailwind. `docs/frontend/design-system.md` diperbarui dari `#6366F1`.
 - Font: Inter (UI), JetBrains Mono (terminal dan kode), Charter tetap untuk isi artikel. Muat Inter dan JetBrains Mono di `main.css`.
 - Gradien logo (biru ke ungu) hanya pada logo. Hijau/kuning terminal hanya di panel hero.
-- Mockup acuan: kanvas "Mockup Beranda Coderium (Agency)" (desktop 1440 dan mobile 390).
+- Mockup acuan: kanvas "Mockup Beranda Coderium (Agency)", **Opsi B (editorial agency, desktop 1440)**. Opsi A dan versi mobile opsi A ada di kanvas yang sama hanya sebagai pembanding visual untuk mobile.
 
 ## Data yang boleh dipakai
 

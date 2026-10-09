@@ -1634,47 +1634,60 @@ Details:
 
 ## AGENCY-007
 
-Task: Beranda agency, font, dan token warna
+Task: Beranda agency (Opsi B), font, dan token warna
 
 Status: `DONE`
 
 Details:
 
 ```txt
-- main.css: Inter dan JetBrains Mono dimuat (Google Fonts) dan didaftarkan
-  sebagai --font-sans / --font-mono; warna utama #3730D9 sebagai token
-  @theme --color-primary (kelas bg-primary dst). Charter tetap untuk isi
-  artikel (.prose-medium). Efek samping yang disengaja: seluruh UI apps/web
-  kini memakai Inter.
-- pages/index.vue ditulis ulang mengikuti FR-6: hero + panel terminal,
-  strip angka, dua produk dari GET /products, cara kerja 3 langkah + harga
-  awal + tautan /kerja-sama, "Yang belum kami kerjakan" (4 kartu), blok
-  ajakan email gelap, "Catatan terbaru" (3 artikel). "Stay curious", kolom
-  Popular, infinite scroll, dan kartu Series dihapus dari beranda.
-- Komponen baru components/HeroTerminal.vue, berlabel "Ilustrasi alur kerja
-  CAF" (plan, implement, verify, pull request, baris kuning "merge:
-  menunggu keputusan Anda"). Hijau/kuning hanya dipakai di panel ini.
-- Strip angka: memakai proof produk featured (diisi lewat admin, maks 4
-  metrik + note) bila ada; kalau belum ada, fallback ke angka dari
-  requirements.md bagian Data (24 / 15 / 11 mnt / ~$10, catatan 7 PR
-  menunggu review dan 2 ditutup).
-- Semua angka, harga, dan batasan diambil dari requirements.md. Teks tiga
-  langkah, deskripsi empat kartu, dan kalimat ajakan disusun dari fakta yang
-  sama; perlu direview pemilik produk.
-- Judul dan deskripsi SEO beranda diganti ke identitas agency.
-- FeaturedProductCard.vue dan PopularPostItem.vue tidak lagi dipakai beranda;
-  file tidak dihapus.
-- docs/frontend/design-system.md: #6366F1 -> #3730D9, catatan token dan font.
+- Dikerjakan ulang pada 2026-10-10: FR-6 diganti dari beranda lama (hero +
+  panel terminal) ke Opsi B (editorial agency). Bagian font dan token dari
+  pengerjaan pertama tidak berubah: Inter dan JetBrains Mono dimuat di
+  main.css (--font-sans / --font-mono), warna utama #3730D9 sebagai token
+  @theme --color-primary, Charter tetap untuk isi artikel, dan
+  docs/frontend/design-system.md sudah memakai #3730D9.
+- pages/index.vue ditulis ulang mengikuti FR-6 Opsi B: hero "Coderium. AI
+  Agency." + strip tiga janji, strip "Terhubung dengan", 01 Apa itu
+  Coderium, 02 dua panel produk (GET /products; panel gelap untuk produk
+  featured dengan badge dan maks 3 metrik dari proof, panel terang untuk
+  produk kedua), 03 Diskusi/pilot/laporan, 04 tabel Pasang sendiri vs Pilot
+  (tabel di desktop, satu kolom di mobile), 05 tiga kartu paket, 06 Tentang,
+  07 FAQ enam pertanyaan dua kolom + JSON-LD FAQPage, 08 tiga kartu artikel
+  (gambar, tanggal, judul), 09 blok Kontak gelap.
+- Sumber harga bersama: composables/usePricing.ts (pricingPlans,
+  PIONEER_PRICE_NOTE, CLIENT_COST_NOTE). pages/kerja-sama.vue kini membaca
+  dari file ini, jadi harga beranda dan /kerja-sama identik.
+- Komponen baru components/HomeSectionHeading.vue (nomor + judul section).
+- Footer (layouts/default.vue) diganti mengikuti FR-6.12 atas keputusan
+  pemilik produk: gelap di kedua tema, berkolom Layanan (Produk, Kerja Sama),
+  Perusahaan (Tentang, Artikel, Series), Kontak (hello@coderium.id). Berlaku
+  di semua halaman web. Terms dan Privacy tetap di baris copyright. FR-5 di
+  requirements.md masih menulis footer lama.
+- Catatan kaki panel produk: memakai proof.note dari admin; bila kosong,
+  fallback ke angka di requirements.md bagian Data (7 PR menunggu review,
+  2 ditutup, keduanya tiket keamanan). Tanpa produk terpublikasi, section 02
+  tidak dirender.
+- Kartu Retainer tidak menampilkan harga perintis: bagian Data hanya
+  mencatat harga perintis untuk dua pilot.
+- Teks hero, definisi, tiga langkah, isi tabel perbandingan, Tentang, dan FAQ
+  disusun dari fakta di requirements.md; perlu direview pemilik produk,
+  terutama baris "Ukuran keberhasilan" dan langkah "Laporan" yang tidak punya
+  rincian di bagian Data.
+- Tombol "Lihat layanan" mengarah ke /products.
+- HeroTerminal.vue, FeaturedProductCard.vue, dan PopularPostItem.vue tidak
+  lagi dipakai; file tidak dihapus.
 - MOCKUP TIDAK BISA DIBUKA: kanvas "Mockup Beranda Coderium (Agency)" tidak
-  terjangkau (server MCP pencil gagal konek), jadi acceptance "sesuai
-  mockup" BELUM diverifikasi. Tata letak dibangun dari teks FR-6.
-- Diverifikasi: build web terhadap mock API; di Chrome desktop (terang) dan
-  viewport 390px (gelap): satu kolom di mobile, tombol 44px, tanpa scroll
-  horizontal, Inter dan JetBrains Mono termuat, tombol utama rgb(55,48,217).
-  Jalur proof dari admin dan jalur tanpa produk diperiksa lewat SSR.
-  pnpm typecheck dan pnpm build PASS.
-- Belum selesai: tombol pill di header, /kerja-sama, dan detail produk masih
-  hitam (di luar daftar file task), belum memakai token primary.
+  terjangkau (server MCP pencil gagal konek), jadi acceptance "sesuai mockup
+  Opsi B" BELUM diverifikasi. Tata letak dibangun dari teks FR-6.
+- Diverifikasi: build web dijalankan terhadap mock API; /, /kerja-sama,
+  /explore, /about HTTP 200; isi SSR beranda dan /kerja-sama diperiksa
+  (harga sama, tidak ada "Stay curious" maupun hero lama). Di Chrome: desktop
+  1440 terang (bagian atas) dan gelap; lebar 390px lewat iframe: satu kolom,
+  tanpa scroll horizontal. pnpm typecheck dan build web PASS.
+- Belum diuji: bagian bawah beranda (05-09 dan footer) secara visual, footer
+  baru di halaman lain secara visual, target sentuh 44px setelah perbaikan
+  terakhir, perangkat nyata, data produksi.
 ```
 
 ---

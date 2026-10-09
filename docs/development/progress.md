@@ -247,7 +247,7 @@ AGENCY-003 Form admin untuk badge, proof, dan FAQ (Phase 17 Agency Pivot)
 AGENCY-004 Render badge, description, bukti, FAQ, dan CTA di detail produk (Phase 17 Agency Pivot)
 AGENCY-005 Halaman /kerja-sama (Phase 17 Agency Pivot)
 AGENCY-006 Layout menu atas dan footer (Phase 17 Agency Pivot)
-AGENCY-007 Beranda agency, font, dan token warna (Phase 17 Agency Pivot)
+AGENCY-007 Beranda agency (Opsi B), font, dan token warna — dikerjakan ulang 2026-10-10 (Phase 17 Agency Pivot)
 AGENCY-008 Identitas, SEO, dan About (Phase 17 Agency Pivot)
 AGENCY-010 Perbarui dokumen proyek (Phase 17 Agency Pivot)
 ```

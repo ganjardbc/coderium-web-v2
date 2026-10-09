@@ -8,7 +8,7 @@ File-based routing.
 
 | Route                   | Page File                           | Description              |
 | ----------------------- | ----------------------------------- | ------------------------ |
-| `/`                     | `pages/index.vue`                   | Beranda agency: hero, angka, produk, cara kerja, catatan terbaru |
+| `/`                     | `pages/index.vue`                   | Beranda agency (Opsi B): hero, produk unggulan, proses, perbandingan, paket dan harga, tentang, FAQ, catatan terbaru, kontak |
 | `/explore`              | `pages/explore.vue`                 | Browse & search all posts |
 | `/posts/:slug`          | `pages/posts/[slug].vue`            | Post detail (SSR + SEO)  |
 | `/playlists`            | `pages/playlists/index.vue`         | Playlist list            |

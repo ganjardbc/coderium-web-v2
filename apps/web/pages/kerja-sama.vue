@@ -49,13 +49,13 @@
         <div class="p-5 md:p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
           <h3 class="text-base font-bold text-gray-900 dark:text-white">Harga perintis</h3>
           <p class="mt-1.5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            Diskon 30% dengan izin studi kasus.
+            {{ PIONEER_PRICE_NOTE }}
           </p>
         </div>
-        <div class="p-5 md:p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
+        <div v-if="retainer" class="p-5 md:p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
           <h3 class="text-base font-bold text-gray-900 dark:text-white">Retainer (opsional)</h3>
           <p class="mt-1.5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            Rp2.000.000 per bulan, hingga 8 jam kerja.
+            {{ retainer.price }} {{ retainer.priceUnit }}, {{ retainer.scope }}.
           </p>
         </div>
       </div>
@@ -117,39 +117,16 @@ function mailto(subject: string): string {
   return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
 }
 
-interface Pilot {
-  name: string;
-  scope: string;
-  price: string;
-  pioneerPrice: string;
-  note?: string;
-  subject: string;
-}
-
-const pilots: Pilot[] = [
-  {
-    name: 'Pilot AI Code Review',
-    scope: '4 minggu, 1 repo',
-    price: 'Rp13.000.000',
-    pioneerPrice: 'Rp9.100.000',
-    subject: 'Diskusi pilot AI Code Review',
-  },
-  {
-    name: 'Pilot CAF',
-    scope: '6-8 minggu, 1 repo',
-    price: 'Rp19.500.000',
-    pioneerPrice: 'Rp13.650.000',
-    note: 'Rp2.000.000 di muka untuk fit check minggu 1.',
-    subject: 'Diskusi pilot CAF',
-  },
-];
+// Shared with the homepage pricing cards (composables/usePricing.ts).
+const pilots = pricingPlans.filter((plan) => plan.id !== 'retainer');
+const retainer = pricingPlans.find((plan) => plan.id === 'retainer');
 
 const clientRequirements = [
   'Satu penanggung jawab dari tim Anda.',
   'Akses ke repo dan server.',
   'Tiket yang jelas.',
   'Feedback PR maksimal 1 hari kerja.',
-  'Biaya server dan model ditanggung klien.',
+  CLIENT_COST_NOTE,
 ];
 
 const faq: ProductFaqItem[] = [

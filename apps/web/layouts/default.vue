@@ -91,32 +91,47 @@
       <slot />
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-dark">
-      <div class="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-10">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6">
-          <nav class="flex flex-col md:flex-row md:flex-wrap md:items-center md:gap-x-6 text-sm font-medium" aria-label="Footer">
-            <NuxtLink
-              v-for="item in footerItems"
-              :key="item.to"
-              :to="item.to"
-              class="inline-flex items-center min-h-11 md:min-h-0 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-            >
-              {{ item.label }}
+    <!-- Footer (dark in both themes) -->
+    <footer class="bg-gray-900 dark:bg-dark-secondary dark:border-t dark:border-gray-800 text-gray-300">
+      <div class="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          <div>
+            <NuxtLink to="/" class="inline-flex items-center min-h-11" aria-label="Coderium, beranda">
+              <img src="~/assets/logo-white.png" class="h-8 md:h-10" alt="Coderium" />
             </NuxtLink>
+            <p class="mt-2 text-sm leading-relaxed max-w-xs">AI agency untuk tim engineering.</p>
+          </div>
+
+          <nav v-for="column in footerColumns" :key="column.title" :aria-label="column.title">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-white">{{ column.title }}</h2>
+            <ul class="mt-2 md:mt-4 md:space-y-3">
+              <li v-for="item in column.items" :key="item.to">
+                <NuxtLink
+                  :to="item.to"
+                  class="inline-flex items-center min-h-11 md:min-h-0 text-sm hover:text-white transition-colors"
+                >
+                  {{ item.label }}
+                </NuxtLink>
+              </li>
+            </ul>
           </nav>
-          <a
-            :href="contactMailto"
-            class="inline-flex items-center min-h-11 md:min-h-0 text-sm font-semibold text-gray-900 dark:text-white underline underline-offset-4 hover:no-underline"
-          >
-            {{ CONTACT_EMAIL }}
-          </a>
+
+          <div>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-white">Kontak</h2>
+            <a
+              :href="contactMailto"
+              class="mt-2 md:mt-4 inline-flex items-center min-h-11 md:min-h-0 text-sm font-semibold text-white underline underline-offset-4 hover:no-underline"
+            >
+              {{ CONTACT_EMAIL }}
+            </a>
+          </div>
         </div>
-        <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800 flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-xs text-gray-600 dark:text-gray-400">
+
+        <div class="mt-8 md:mt-12 pt-6 border-t border-white/15 flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-xs">
           <div>&copy; {{ new Date().getFullYear() }} Coderium</div>
           <div class="flex gap-6">
-            <NuxtLink to="/terms" class="hover:text-gray-900 dark:hover:text-white transition-colors">Terms</NuxtLink>
-            <NuxtLink to="/privacy" class="hover:text-gray-900 dark:hover:text-white transition-colors">Privacy</NuxtLink>
+            <NuxtLink to="/terms" class="inline-flex items-center min-h-11 md:min-h-0 hover:text-white transition-colors">Terms</NuxtLink>
+            <NuxtLink to="/privacy" class="inline-flex items-center min-h-11 md:min-h-0 hover:text-white transition-colors">Privacy</NuxtLink>
           </div>
         </div>
       </div>
@@ -177,11 +192,22 @@ const navItems = [
   { to: '/playlists', label: 'Series', isActive: (route: NavRoute) => route.path.startsWith('/playlists') },
 ];
 
-const footerItems = [
-  { to: '/products', label: 'Produk' },
-  { to: '/kerja-sama', label: 'Kerja Sama' },
-  { to: '/explore', label: 'Artikel' },
-  { to: '/about', label: 'Tentang' },
+const footerColumns = [
+  {
+    title: 'Layanan',
+    items: [
+      { to: '/products', label: 'Produk' },
+      { to: '/kerja-sama', label: 'Kerja Sama' },
+    ],
+  },
+  {
+    title: 'Perusahaan',
+    items: [
+      { to: '/about', label: 'Tentang' },
+      { to: '/explore', label: 'Artikel' },
+      { to: '/playlists', label: 'Series' },
+    ],
+  },
 ];
 
 // Mobile menu: collapsed by default, closes again after navigating.
