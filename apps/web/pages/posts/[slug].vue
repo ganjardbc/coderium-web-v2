@@ -6,9 +6,9 @@
     aria-hidden="true"
   />
 
-  <div class="max-w-3xl mx-auto px-4 md:px-0 py-6 md:py-10">
+  <div class="page-shell">
     <!-- Loading skeleton -->
-    <div v-if="pending" class="space-y-6">
+    <div v-if="pending" class="max-w-3xl space-y-6">
       <SkeletonBlock class="h-4 rounded w-1/4" />
       <SkeletonBlock class="h-8 rounded w-3/4" />
       <SkeletonBlock class="h-4 rounded w-1/2" />
@@ -26,98 +26,98 @@
       <!-- Back link -->
       <BackButton
         label="Kembali"
-        link-class="text-gray-400 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
+        link-class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
         class="mb-6 md:mb-8"
       />
 
       <!-- Post header -->
-      <header class="space-y-3 md:space-y-4 mb-6">
-        <!-- Author row -->
-        <div class="flex items-center gap-3">
-          <UserAvatar :name="post.user?.name" :avatar-url="post.user?.avatarUrl" size="md" />
-          <div>
-            <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ post.user?.name }}</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500">
-              {{ formatDate(post.publishedAt || post.createdAt) }} &bull; {{ readingTimeDisplay }}
-            </p>
-          </div>
-        </div>
-
-        <!-- Title & subtitle -->
-        <h1 class="text-3xl md:text-5xl font-black tracking-tight leading-[1.05] text-balance text-gray-900 dark:text-white">{{ post.title }}</h1>
-        <p v-if="post.subtitle" class="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">{{ post.subtitle }}</p>
+      <header>
+        <p class="inline-flex flex-wrap items-center gap-x-2.5 gap-y-1 rounded-full border border-primary/20 bg-primary/5 dark:bg-indigo-300/10 px-3.5 py-1.5 font-mono text-xs font-medium text-primary dark:text-indigo-300">
+          <span>{{ postTypeLabel(post.type) }}</span>
+          <span aria-hidden="true">&bull;</span>
+          <span>{{ formatDate(post.publishedAt || post.createdAt, 'long') }}</span>
+          <span aria-hidden="true">&bull;</span>
+          <span>{{ readingTimeDisplay }}</span>
+        </p>
+        <h1 class="mt-5 md:mt-6 text-4xl md:text-6xl font-black tracking-tight leading-[1.05] text-balance text-gray-900 dark:text-white">
+          {{ post.title }}
+        </h1>
+        <p v-if="post.subtitle" class="mt-4 md:mt-5 max-w-3xl text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
+          {{ post.subtitle }}
+        </p>
       </header>
 
       <!-- Cover Image -->
-      <div v-if="post.cover" class="rounded-2xl overflow-hidden aspect-video bg-gray-100 dark:bg-dark-secondary my-10 border border-gray-100 dark:border-gray-800">
+      <div
+        v-if="post.cover"
+        class="mt-8 md:mt-12 aspect-video md:aspect-21/9 rounded-2xl overflow-hidden bg-gray-100 dark:bg-dark-secondary ring-1 ring-gray-200 dark:ring-gray-800"
+      >
         <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
       </div>
 
-      <!-- Content -->
-      <section v-if="post.content" class="prose-medium">
-        <div v-html="renderContent(post.content)"></div>
-      </section>
-
-      <!-- View Original Article -->
-      <a
-        v-if="post.sourceUrl"
-        :href="post.sourceUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="btn btn-outline gap-2 mt-8"
-      >
-        Lihat artikel asli<template v-if="sourceDomain"> di {{ sourceDomain }}</template> <Icon name="lucide:external-link" class="w-4 h-4" />
-      </a>
-
-      <!-- Tags -->
-      <div v-if="post.tags && post.tags.length > 0" class="flex flex-wrap gap-2 pt-8 mt-8 border-t border-gray-100 dark:border-gray-800">
-        <NuxtLink
-          v-for="tag in post.tags"
-          :key="tag"
-          :to="{ path: '/explore', query: { tags: tag } }"
-          class="px-3 py-1 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600 transition-colors"
-        >
-          #{{ tag }}
-        </NuxtLink>
-      </div>
-
-      <!-- Written by -->
-      <div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
-        <div class="flex items-center gap-5">
-          <UserAvatar :name="post.user?.name" :avatar-url="post.user?.avatarUrl" size="lg" />
-          <div class="flex justify-between items-center flex-1">
-            <div class="flex-1">
-              <p class="text-xs text-gray-400 dark:text-gray-400 uppercase tracking-wider font-medium">Ditulis oleh</p>
-              <p class="text-lg font-bold text-gray-900 dark:text-white mt-0.5">{{ post.user?.name }}</p>
+      <!-- Meta on the left, article body on the right (stacked below lg). -->
+      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)] gap-8 lg:gap-16 py-8 md:py-12 border-b border-gray-100 dark:border-gray-800">
+        <aside class="lg:sticky lg:top-24 lg:self-start space-y-6">
+          <div class="flex items-center gap-4">
+            <UserAvatar :name="post.user?.name" :avatar-url="post.user?.avatarUrl" size="lg" />
+            <div class="min-w-0">
+              <p class="font-mono text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">Ditulis oleh</p>
+              <p class="mt-0.5 text-lg font-bold text-gray-900 dark:text-white">{{ post.user?.name }}</p>
             </div>
+          </div>
+
+          <!-- Tags -->
+          <div v-if="post.tags && post.tags.length > 0" class="flex flex-wrap gap-2">
             <NuxtLink
-              to="/explore"
-              class="mt-2 inline-block text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+              v-for="tag in post.tags"
+              :key="tag"
+              :to="{ path: '/explore', query: { tags: tag } }"
+              class="inline-flex items-center min-h-11 lg:min-h-0 px-3 py-1 text-sm rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
-              Artikel lainnya <Icon name="lucide:arrow-right" class="w-4 h-4 inline" />
+              #{{ tag }}
             </NuxtLink>
           </div>
-        </div>
+
+          <!-- View Original Article -->
+          <a
+            v-if="post.sourceUrl"
+            :href="post.sourceUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-outline gap-2"
+          >
+            Lihat artikel asli<template v-if="sourceDomain"> di {{ sourceDomain }}</template>
+            <Icon name="lucide:external-link" class="w-4 h-4 shrink-0" aria-hidden="true" />
+          </a>
+        </aside>
+
+        <!-- Content -->
+        <section v-if="post.content" class="prose-medium min-w-0">
+          <div v-html="renderContent(post.content)"></div>
+        </section>
       </div>
 
       <!-- Related Articles -->
-      <div v-if="relatedPosts.length > 0" class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
-        <h2 class="section-title mb-6">Artikel terkait</h2>
+      <section v-if="relatedPosts.length > 0" class="py-10 md:py-16 border-b border-gray-100 dark:border-gray-800">
+        <h2 class="section-title mb-6 md:mb-8">Artikel terkait</h2>
         <div class="divide-y divide-gray-100 dark:divide-gray-800">
           <PostListItem v-for="related in relatedPosts" :key="related.id" :post="related" />
         </div>
-      </div>
+      </section>
 
       <!-- More from Coderium -->
-      <div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800 text-center">
-        <p class="text-sm text-gray-400 dark:text-gray-500 mb-3">Suka artikel ini?</p>
-        <NuxtLink
-          to="/explore"
-          class="btn btn-outline"
-        >
-          Lihat semua artikel
-        </NuxtLink>
-      </div>
+      <section class="py-10 md:py-16">
+        <div class="card flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 md:p-10">
+          <div>
+            <p class="section-title">Suka artikel ini?</p>
+            <p class="mt-2 body-copy">Baca artikel dan series lainnya dari Coderium.</p>
+          </div>
+          <NuxtLink to="/explore" class="btn btn-solid gap-2 shrink-0">
+            Lihat semua artikel
+            <Icon name="lucide:arrow-right" class="w-4 h-4" aria-hidden="true" />
+          </NuxtLink>
+        </div>
+      </section>
 
       <!-- Floating Action Bar: like, views, share -->
       <PostActionBar
