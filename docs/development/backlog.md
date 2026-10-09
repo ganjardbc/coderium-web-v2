@@ -1685,9 +1685,66 @@ Details:
   (harga sama, tidak ada "Stay curious" maupun hero lama). Di Chrome: desktop
   1440 terang (bagian atas) dan gelap; lebar 390px lewat iframe: satu kolom,
   tanpa scroll horizontal. pnpm typecheck dan build web PASS.
-- Belum diuji: bagian bawah beranda (05-09 dan footer) secara visual, footer
-  baru di halaman lain secara visual, target sentuh 44px setelah perbaikan
-  terakhir, perangkat nyata, data produksi.
+- Perapian layout (2026-10-10, setelah review visual): padding ganda di
+  beranda dihapus sehingga konten sejajar dengan header dan footer; tiap
+  section memakai pola yang sama (label bernomor + judul besar) lewat
+  HomeSectionHeading; hero dua kolom dengan tiga janji di kanan dan strip
+  "Terhubung dengan" di bawahnya; section 01 dan 06 dua kolom; panel produk
+  tanpa metrik menampilkan maks 3 judul features dari API; kartu Pilot CAF
+  ditonjolkan (ring + tombol penuh), dua kartu lain tombol outline; blok
+  Kontak menyatu dengan footer; tombol "Kirim email" di header memakai
+  token primary.
+- Section 08 Artikel terbaru memakai UI daftar yang sama dengan /explore
+  (PostListItem + pembatas), atas permintaan pemilik produk; bukan tiga kartu
+  bergambar seperti teks FR-6.10.
+- Judul besar tiap section adalah draf dan perlu direview pemilik produk:
+  "AI agency untuk tim engineering.", "Dua produk, kami buat dan kami pakai
+  sendiri.", "Diskusi, pilot, laporan.", "Pasang sendiri, atau pilot bersama
+  kami.", "Harga terbuka, mulai dari satu repo.", "Yang sering ditanyakan.",
+  "Artikel terbaru.".
+- Diverifikasi setelah perapian: typecheck dan build web PASS; Chrome desktop
+  1440 terang (seluruh halaman) dan lebar 390px gelap lewat iframe (tanpa
+  scroll horizontal, tidak ada tautan/tombol di bawah 44px, sebagian halaman
+  dilihat).
+- Bahasa (2026-10-10, atas permintaan pemilik produk): seluruh teks UI
+  apps/web yang masih berbahasa Inggris diterjemahkan ke Indonesia, di luar
+  daftar file task ini: /explore (judul "Artikel"), /playlists dan
+  /playlists/:slug, /products dan /products/:slug, /posts/:slug, /terms,
+  /privacy, tautan Ketentuan/Privasi di footer, NotFoundState,
+  EndOfListMessage, PostActionBar, PostListItem, PopularPostItem, UserAvatar.
+  useFormatters.ts: tanggal id-ID, "menit baca", dan postTypeLabel bersama
+  (salinan lokal di /products/:slug dihapus). Nama breadcrumb JSON-LD ikut
+  diterjemahkan. Teks /terms dan /privacy adalah terjemahan langsung dan
+  perlu direview pemilik produk. Konten dari API (artikel, series, produk)
+  tidak diterjemahkan. HeroTerminal dan FeaturedProductCard (tidak dipakai)
+  tidak disentuh.
+- Konsistensi UI seluruh apps/web (2026-10-10, atas permintaan pemilik
+  produk): kelas bersama di main.css (@layer components: page-shell,
+  section-title, body-copy, card, btn, btn-solid, btn-outline, text-link)
+  dan komponen baru PageHeader.vue (judul besar font-black + lead). Dipakai
+  di /explore, /playlists, /playlists/:slug, /products, /products/:slug,
+  /posts/:slug, /about, /terms, /privacy, /kerja-sama, NotFoundState,
+  BackButton, ProductCard, dan beranda. Padding ganda dihapus di semua
+  halaman (konten sejajar header/footer), aksen biru dan tombol hitam diganti
+  token primary, kartu rounded-2xl, judul section seragam. /products/:slug
+  kini selebar halaman dengan hero dua kolom; teks panjang dibatasi max-w-3xl
+  rata kiri. /posts/:slug tetap kolom baca terpusat.
+- Diverifikasi di Chrome desktop terang: header dan kerangka /explore,
+  /playlists, /products, /kerja-sama, /privacy, serta keadaan kosong dan
+  tidak-ditemukan. Belum diuji: daftar dan halaman detail (artikel, series,
+  produk) DENGAN DATA, karena proxy /api di build lokal mengarah ke API lokal
+  yang kosong; juga mobile dan dark mode untuk halaman selain beranda.
+- Hero beranda dibuat lebih modern (2026-10-10, atas permintaan pemilik
+  produk): latar grid tipis dan cahaya indigo selebar layar (dekoratif,
+  aria-hidden), label kecil berkedip "AI agency untuk tim engineering",
+  "AI Agency." bergradasi indigo, tiga janji dan daftar "Terhubung dengan"
+  sebagai kartu tembus pandang. Blok Kontak memakai latar grid yang sama.
+  Kelas hero-grid, hero-glow, glass-card di main.css. Gradasi memakai indigo
+  saja, bukan gradien biru-ungu logo.
+- Footer dan blok Kontak di dark mode memakai abu gelap netral #18181b (bukan biru gelap);
+  mode terang tidak berubah.
+- Belum diuji: kesesuaian dengan mockup, desktop gelap setelah perapian,
+  footer baru di halaman lain secara visual, perangkat nyata, data produksi.
 ```
 
 ---

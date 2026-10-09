@@ -1,12 +1,12 @@
 <template>
-  <button v-if="variant === 'link'" @click="router.back()" class="inline-flex items-center gap-1.5 text-sm transition-colors cursor-pointer" :class="linkClass">
+  <button v-if="variant === 'link'" @click="router.back()" class="inline-flex items-center gap-1.5 min-h-11 text-sm font-semibold transition-colors cursor-pointer" :class="linkClass">
     <Icon name="lucide:arrow-left" class="w-4 h-4" /> {{ label }}
   </button>
 
   <button
     v-else-if="variant === 'solid-blue'"
     @click="router.back()"
-    class="inline-flex items-center gap-1.5 px-6 py-2.5 bg-blue-600 dark:bg-blue-700 text-white font-medium rounded-xl hover:bg-blue-700 dark:hover:bg-blue-800 cursor-pointer"
+    class="btn btn-solid gap-1.5"
   >
     <Icon name="lucide:arrow-left" class="w-4 h-4" /> {{ label }}
   </button>
@@ -14,7 +14,7 @@
   <button
     v-else
     @click="router.back()"
-    class="inline-block px-5 py-2 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors cursor-pointer"
+    class="btn btn-solid"
   >
     {{ label }}
   </button>

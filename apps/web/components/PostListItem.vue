@@ -23,11 +23,11 @@
         <!-- Meta row -->
         <div class="flex items-center gap-3 mt-3 text-xs text-gray-400 dark:text-gray-400">
           <span class="px-2 py-0.5 rounded-full border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 capitalize">
-            {{ post.type }}
+            {{ postTypeLabel(post.type) }}
           </span>
           <span>{{ readingTime(post.subtitle ?? post.title) }}</span>
-          <span>{{ post.viewsCount }} views</span>
-          <span v-if="post.likesCount !== undefined">{{ post.likesCount }} likes</span>
+          <span>{{ post.viewsCount }} kali dilihat</span>
+          <span v-if="post.likesCount !== undefined">{{ post.likesCount }} suka</span>
         </div>
       </div>
 

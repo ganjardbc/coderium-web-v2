@@ -6,7 +6,7 @@
     aria-hidden="true"
   />
 
-  <div class="max-w-3xl mx-auto px-4 md:px-6 py-4 md:pt-6">
+  <div class="max-w-3xl mx-auto px-4 md:px-0 py-6 md:py-10">
     <!-- Loading skeleton -->
     <div v-if="pending" class="space-y-6">
       <SkeletonBlock class="h-4 rounded w-1/4" />
@@ -18,14 +18,14 @@
     <!-- Not found -->
     <NotFoundState
       v-else-if="error"
-      title="Story Not Found"
-      message="The article you are looking for might have been removed or unpublished."
+      title="Artikel tidak ditemukan"
+      message="Artikel yang Anda cari mungkin sudah dihapus atau tidak lagi dipublikasikan."
     />
 
     <article v-else-if="post">
       <!-- Back link -->
       <BackButton
-        label="Back"
+        label="Kembali"
         link-class="text-gray-400 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
         class="mb-6 md:mb-8"
       />
@@ -44,12 +44,12 @@
         </div>
 
         <!-- Title & subtitle -->
-        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight tracking-tight">{{ post.title }}</h1>
-        <p v-if="post.subtitle" class="text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed">{{ post.subtitle }}</p>
+        <h1 class="text-3xl md:text-5xl font-black tracking-tight leading-[1.05] text-balance text-gray-900 dark:text-white">{{ post.title }}</h1>
+        <p v-if="post.subtitle" class="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">{{ post.subtitle }}</p>
       </header>
 
       <!-- Cover Image -->
-      <div v-if="post.cover" class="rounded-lg overflow-hidden aspect-video bg-gray-100 dark:bg-dark-secondary my-10 border border-gray-100 dark:border-gray-800">
+      <div v-if="post.cover" class="rounded-2xl overflow-hidden aspect-video bg-gray-100 dark:bg-dark-secondary my-10 border border-gray-100 dark:border-gray-800">
         <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
       </div>
 
@@ -64,9 +64,9 @@
         :href="post.sourceUrl"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-2 px-4 py-2 mt-8 rounded-full border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+        class="btn btn-outline gap-2 mt-8"
       >
-        View Original Article<template v-if="sourceDomain"> on {{ sourceDomain }}</template> <Icon name="lucide:external-link" class="w-4 h-4" />
+        Lihat artikel asli<template v-if="sourceDomain"> di {{ sourceDomain }}</template> <Icon name="lucide:external-link" class="w-4 h-4" />
       </a>
 
       <!-- Tags -->
@@ -87,14 +87,14 @@
           <UserAvatar :name="post.user?.name" :avatar-url="post.user?.avatarUrl" size="lg" />
           <div class="flex justify-between items-center flex-1">
             <div class="flex-1">
-              <p class="text-xs text-gray-400 dark:text-gray-400 uppercase tracking-wider font-medium">Written by</p>
+              <p class="text-xs text-gray-400 dark:text-gray-400 uppercase tracking-wider font-medium">Ditulis oleh</p>
               <p class="text-lg font-bold text-gray-900 dark:text-white mt-0.5">{{ post.user?.name }}</p>
             </div>
             <NuxtLink
               to="/explore"
               class="mt-2 inline-block text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
-              More stories <Icon name="lucide:arrow-right" class="w-4 h-4 inline" />
+              Artikel lainnya <Icon name="lucide:arrow-right" class="w-4 h-4 inline" />
             </NuxtLink>
           </div>
         </div>
@@ -102,7 +102,7 @@
 
       <!-- Related Articles -->
       <div v-if="relatedPosts.length > 0" class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
-        <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm mb-5">Related Articles</h2>
+        <h2 class="section-title mb-6">Artikel terkait</h2>
         <div class="divide-y divide-gray-100 dark:divide-gray-800">
           <PostListItem v-for="related in relatedPosts" :key="related.id" :post="related" />
         </div>
@@ -110,12 +110,12 @@
 
       <!-- More from Coderium -->
       <div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800 text-center">
-        <p class="text-sm text-gray-400 dark:text-gray-500 mb-3">Enjoyed this story?</p>
+        <p class="text-sm text-gray-400 dark:text-gray-500 mb-3">Suka artikel ini?</p>
         <NuxtLink
           to="/explore"
-          class="inline-block px-5 py-2 rounded-full border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+          class="btn btn-outline"
         >
-          Explore all stories
+          Lihat semua artikel
         </NuxtLink>
       </div>
 
@@ -207,8 +207,8 @@ if (post.value) {
       mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
     },
     breadcrumbJsonLd([
-      { name: 'Home', url: siteUrl },
-      { name: 'Explore', url: `${siteUrl}/explore` },
+      { name: 'Beranda', url: siteUrl },
+      { name: 'Artikel', url: `${siteUrl}/explore` },
       { name: p.title, url: postUrl },
     ]),
   ]);

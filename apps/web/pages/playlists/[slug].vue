@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full mx-auto py-6 md:py-12 px-4 md:px-6">
+  <div class="page-shell">
     <div v-if="pending" class="space-y-6">
       <SkeletonBlock class="h-6 rounded-sm w-1/4" />
       <SkeletonBlock class="h-10 rounded-sm w-3/4" />
@@ -8,38 +8,38 @@
     </div>
 
     <div v-else-if="error" class="text-center py-10 md:py-20 bg-gray-50 dark:bg-dark-secondary rounded-2xl border dark:border-gray-800">
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Playlist Not Found</h1>
-      <p class="text-gray-500 dark:text-gray-400 mt-2">The playlist you are looking for might have been removed or unpublished.</p>
+      <h1 class="section-title">Series tidak ditemukan</h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-2">Series yang Anda cari mungkin sudah dihapus atau tidak lagi dipublikasikan.</p>
     </div>
 
     <div v-else-if="playlist" class="space-y-8 md:space-y-12">
       <!-- Back Link -->
-      <BackButton label="Back" link-class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400" />
+      <BackButton label="Kembali" link-class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white" />
 
       <!-- Playlist Info Header -->
-      <header class="flex flex-col md:flex-row gap-4 md:gap-8 items-start pb-6 md:pb-8 border-b dark:border-gray-800">
+      <header class="flex flex-col md:flex-row gap-6 md:gap-10 items-start pb-8 md:pb-12 border-b border-gray-100 dark:border-gray-800">
         <div v-if="playlist.cover" class="w-full md:w-64 aspect-square rounded-2xl overflow-hidden border dark:border-gray-800 shrink-0 bg-gray-50 dark:bg-dark-secondary">
           <img :src="playlist.cover" :alt="playlist.title" class="w-full h-full object-cover" />
         </div>
         <div class="space-y-3 md:space-y-4 flex-1">
-          <span class="px-2.5 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-semibold rounded-full uppercase tracking-wider">Playlist</span>
-          <h1 class="text-2xl md:text-3xl font-black text-gray-900 dark:text-white leading-tight">{{ playlist.title }}</h1>
-          <p v-if="playlist.description" class="text-gray-500 dark:text-gray-400 text-sm md:text-base leading-relaxed">{{ playlist.description }}</p>
+          <p class="text-sm font-bold uppercase tracking-wider text-primary dark:text-indigo-300">Series</p>
+          <h1 class="text-3xl md:text-5xl font-black tracking-tight leading-[1.05] text-balance text-gray-900 dark:text-white">{{ playlist.title }}</h1>
+          <p v-if="playlist.description" class="body-copy max-w-2xl">{{ playlist.description }}</p>
           <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-            <span>By {{ playlist.user?.name }}</span>
+            <span>Oleh {{ playlist.user?.name }}</span>
             <span>&bull;</span>
-            <span>{{ playlist.posts?.length || 0 }} stories</span>
+            <span>{{ playlist.posts?.length || 0 }} artikel</span>
           </div>
         </div>
       </header>
 
       <!-- Playlist Posts List -->
       <section class="space-y-4 md:space-y-6">
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Curated Stories in this Playlist</h2>
+        <h2 class="section-title">Artikel dalam series ini</h2>
 
         <EmptyState
           v-if="!playlist.posts || playlist.posts.length === 0"
-          message="No stories added to this playlist yet."
+          message="Belum ada artikel di series ini."
           padding="py-6 md:py-8 bg-gray-50 dark:bg-dark-secondary rounded-2xl border dark:border-gray-800"
         />
 
@@ -47,7 +47,7 @@
           <div
             v-for="(item, index) in playlist.posts"
             :key="item.id"
-            class="group flex gap-3 md:gap-4 p-3 md:p-4 rounded-2xl border dark:border-gray-800 bg-white dark:bg-dark-secondary hover:shadow-sm transition-shadow relative"
+            class="group card flex gap-3 md:gap-4 p-4 md:p-5 hover:border-gray-300 dark:hover:border-gray-700 transition-colors relative"
           >
             <div class="text-xl md:text-2xl font-black text-gray-200 dark:text-gray-800 w-6 md:w-8 text-center shrink-0 flex items-center justify-center">
               {{ index + 1 }}
@@ -56,13 +56,13 @@
               <img :src="item.post.cover" :alt="item.post.title" class="w-full h-full object-cover" />
             </div>
             <div class="flex-1 min-w-0 flex flex-col justify-center">
-              <span class="text-[10px] md:text-xs text-blue-600 dark:text-blue-400 font-semibold uppercase">{{ item.post.type }}</span>
-              <h3 class="text-sm md:text-base font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mt-0.5 leading-snug line-clamp-2">
+              <span class="text-xs text-primary dark:text-indigo-300 font-bold uppercase tracking-wider">{{ postTypeLabel(item.post.type) }}</span>
+              <h3 class="text-sm md:text-base font-bold text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors mt-0.5 leading-snug line-clamp-2">
                 <NuxtLink :to="`/posts/${item.post.slug}`" class="after:absolute after:inset-0">{{ item.post.title }}</NuxtLink>
               </h3>
             </div>
             <div class="flex items-center shrink-0 pr-1 md:pr-2">
-              <Icon name="lucide:arrow-right" class="w-5 h-5 text-gray-400 dark:text-gray-700 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+              <Icon name="lucide:arrow-right" class="w-5 h-5 text-gray-400 dark:text-gray-700 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
             </div>
           </div>
         </div>
@@ -131,7 +131,7 @@ if (playlist.value) {
   const siteUrl = (config.public.siteUrl as string).replace(/\/$/, '');
   useJsonLd(
     breadcrumbJsonLd([
-      { name: 'Home', url: siteUrl },
+      { name: 'Beranda', url: siteUrl },
       { name: 'Series', url: `${siteUrl}/playlists` },
       { name: pl.title, url: `${siteUrl}/playlists/${slug}` },
     ])

@@ -15,6 +15,82 @@
 
 @variant dark (&:where(.dark, .dark *));
 
+/* Shared UI vocabulary for every page of the public site, so type scale,
+   spacing, buttons, and cards cannot drift between pages. */
+@layer components {
+  /* Page wrapper: the layout's <main> already supplies the desktop gutter. */
+  .page-shell {
+    @apply w-full px-4 md:px-0 py-6 md:py-10;
+  }
+
+  .section-title {
+    @apply text-2xl md:text-3xl font-black tracking-tight text-gray-900 dark:text-white;
+  }
+
+  .body-copy {
+    @apply text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed;
+  }
+
+  .card {
+    @apply rounded-2xl border border-gray-100 dark:border-gray-800;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center min-h-11 px-6 py-2.5 rounded-full text-sm font-semibold transition-colors cursor-pointer;
+  }
+
+  .btn-solid {
+    @apply bg-primary text-white hover:bg-primary/90;
+  }
+
+  .btn-outline {
+    @apply border border-gray-300 text-gray-800 hover:border-gray-500 dark:border-gray-700 dark:text-gray-200 dark:hover:border-gray-500;
+  }
+
+  .text-link {
+    @apply inline-flex items-center min-h-11 font-semibold text-gray-900 underline underline-offset-4 hover:no-underline dark:text-white;
+  }
+}
+
+/* Homepage decoration: faint engineering grid and primary-colour glow. Purely
+   visual (aria-hidden in markup); the grid fades out through a mask so it
+   never competes with text. */
+.hero-grid {
+  --hero-grid-line: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  background-image:
+    linear-gradient(to right, var(--hero-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--hero-grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center top;
+  mask-image: radial-gradient(ellipse 75% 85% at 60% 0%, #000 25%, transparent 78%);
+}
+
+.dark .hero-grid,
+.hero-grid-inverse {
+  --hero-grid-line: rgb(255 255 255 / 0.07);
+}
+
+.hero-glow {
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--color-primary) 38%, transparent), transparent);
+}
+
+.dark .hero-glow {
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--color-primary) 55%, transparent), transparent);
+}
+
+/* Translucent surface that lets the backdrop show through. */
+.glass-card {
+  border-radius: 1rem;
+  border: 1px solid rgb(17 24 39 / 0.08);
+  background: rgb(255 255 255 / 0.7);
+  backdrop-filter: blur(8px);
+}
+
+.dark .glass-card {
+  border-color: rgb(255 255 255 / 0.1);
+  background: rgb(255 255 255 / 0.04);
+}
+
 /* Custom Global Styles */
 body {
   @apply bg-white text-gray-900 transition-colors duration-200;
@@ -292,15 +368,9 @@ body {
 
 /* Topic pill active state */
 .topic-pill-active {
-  background: #1a1a1a;
+  background: var(--color-primary);
   color: #ffffff;
-  border-color: #1a1a1a;
-}
-
-.dark .topic-pill-active {
-  background: #e6e6e6;
-  color: #1a1a1a;
-  border-color: #e6e6e6;
+  border-color: var(--color-primary);
 }
 
 /* Clap/like button animation */

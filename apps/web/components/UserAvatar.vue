@@ -3,7 +3,7 @@
     class="rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center font-bold text-gray-600 dark:text-gray-400 shrink-0 overflow-hidden"
     :class="sizeClass"
   >
-    <img v-if="avatarUrl" :src="avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
+    <img v-if="avatarUrl" :src="avatarUrl" alt="Foto profil" class="w-full h-full object-cover" />
     <span v-else>{{ initials }}</span>
   </div>
 </template>

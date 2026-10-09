@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-white text-gray-900 dark:bg-dark dark:text-gray-100 transition-colors duration-200">
+  <div class="min-h-screen flex flex-col overflow-x-clip bg-white text-gray-900 dark:bg-dark dark:text-gray-100 transition-colors duration-200">
     <!-- Header (Top Menu) -->
     <header class="border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-dark backdrop-blur-md sticky top-0 z-50 transition-colors duration-200">
       <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-4">
@@ -28,7 +28,7 @@
         <div class="flex items-center gap-1 md:gap-3 shrink-0">
           <a
             :href="contactMailto"
-            class="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors"
+            class="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors"
           >
             <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
             <span>Kirim email</span>
@@ -78,7 +78,7 @@
         </NuxtLink>
         <a
           :href="contactMailto"
-          class="mt-3 flex items-center justify-center gap-1.5 min-h-11 px-4 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors"
+          class="mt-3 flex items-center justify-center gap-1.5 min-h-11 px-4 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors"
         >
           <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
           <span>Kirim email</span>
@@ -91,15 +91,16 @@
       <slot />
     </main>
 
-    <!-- Footer (dark in both themes) -->
+    <!-- Footer: dark in both themes; neutral dark gray (not navy) in dark mode. -->
     <footer class="bg-gray-900 dark:bg-dark-secondary dark:border-t dark:border-gray-800 text-gray-300">
       <div class="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-16">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <!-- Centered on mobile, left-aligned columns from md up. -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 text-center md:text-left">
           <div>
             <NuxtLink to="/" class="inline-flex items-center min-h-11" aria-label="Coderium, beranda">
               <img src="~/assets/logo-white.png" class="h-8 md:h-10" alt="Coderium" />
             </NuxtLink>
-            <p class="mt-2 text-sm leading-relaxed max-w-xs">AI agency untuk tim engineering.</p>
+            <p class="mt-2 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">AI agency untuk tim engineering.</p>
           </div>
 
           <nav v-for="column in footerColumns" :key="column.title" :aria-label="column.title">
@@ -127,11 +128,11 @@
           </div>
         </div>
 
-        <div class="mt-8 md:mt-12 pt-6 border-t border-white/15 flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-xs">
+        <div class="mt-8 md:mt-12 pt-6 border-t border-white/15 flex flex-col items-center md:flex-row md:justify-between gap-2 text-xs">
           <div>&copy; {{ new Date().getFullYear() }} Coderium</div>
           <div class="flex gap-6">
-            <NuxtLink to="/terms" class="inline-flex items-center min-h-11 md:min-h-0 hover:text-white transition-colors">Terms</NuxtLink>
-            <NuxtLink to="/privacy" class="inline-flex items-center min-h-11 md:min-h-0 hover:text-white transition-colors">Privacy</NuxtLink>
+            <NuxtLink to="/terms" class="inline-flex items-center min-h-11 md:min-h-0 hover:text-white transition-colors">Ketentuan</NuxtLink>
+            <NuxtLink to="/privacy" class="inline-flex items-center min-h-11 md:min-h-0 hover:text-white transition-colors">Privasi</NuxtLink>
           </div>
         </div>
       </div>

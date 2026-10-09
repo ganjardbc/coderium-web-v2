@@ -1,13 +1,10 @@
 <template>
-  <div class="w-full max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-10">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-2">Tentang Coderium</h1>
-    <p class="text-sm md:text-base text-gray-600 dark:text-gray-400 mb-8">
-      AI agency untuk tim engineering.
-    </p>
+  <div class="page-shell">
+    <PageHeader title="Tentang Coderium" lead="AI agency untuk tim engineering." />
 
-    <div class="space-y-8 text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+    <div class="max-w-3xl space-y-8 md:space-y-10 body-copy">
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Apa yang kami buat</h2>
+        <h2 class="section-title mb-3">Apa yang kami buat</h2>
         <p>Kami membuat dua produk untuk tim engineering:</p>
         <ul class="mt-2 list-disc pl-5 space-y-1">
           <li><strong>CAF (Coderium Agent Framework)</strong>: tiket dikerjakan menjadi pull request. Merge tetap keputusan manusia.</li>
@@ -20,7 +17,7 @@
       </section>
 
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Cara kerja pilot</h2>
+        <h2 class="section-title mb-3">Cara kerja pilot</h2>
         <ul class="list-disc pl-5 space-y-1">
           <li>Kami mulai dari pilot di satu repo.</li>
           <li>Pilot AI Code Review berjalan 4 minggu.</li>
@@ -34,7 +31,7 @@
       </section>
 
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Artikel</h2>
+        <h2 class="section-title mb-3">Artikel</h2>
         <p>
           Kami juga menulis
           <NuxtLink to="/explore" class="text-gray-900 dark:text-white underline underline-offset-4 hover:no-underline">artikel</NuxtLink>
@@ -45,7 +42,7 @@
       </section>
 
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Kontak</h2>
+        <h2 class="section-title mb-3">Kontak</h2>
         <p>
           Kontak hanya lewat email:
           <a :href="contactMailto" class="text-gray-900 dark:text-white underline underline-offset-4 hover:no-underline">{{ CONTACT_EMAIL }}</a>.

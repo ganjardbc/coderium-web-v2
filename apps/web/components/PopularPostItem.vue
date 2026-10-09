@@ -13,7 +13,7 @@
           {{ post.title }}
         </h4>
       </NuxtLink>
-      <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ formatDate(post.publishedAt || post.createdAt) }} &bull; {{ post.viewsCount }} views</p>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ formatDate(post.publishedAt || post.createdAt) }} &bull; {{ post.viewsCount }} kali dilihat</p>
     </div>
   </div>
 </template>

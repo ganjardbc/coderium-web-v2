@@ -46,6 +46,9 @@ export const pricingPlans: PricingPlan[] = [
   },
 ];
 
+// The plan shown with a filled button wherever the cards are listed.
+export const HIGHLIGHTED_PLAN_ID: PricingPlan['id'] = 'caf';
+
 export const PIONEER_PRICE_NOTE = 'Diskon 30% dengan izin studi kasus.';
 
 export const CLIENT_COST_NOTE = 'Biaya server dan model ditanggung klien.';

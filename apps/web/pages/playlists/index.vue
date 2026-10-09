@@ -1,14 +1,10 @@
 <template>
-  <div class="w-full mx-auto px-4 md:px-6 py-6 md:py-10">
-    <!-- Header -->
-    <div class="border-b border-gray-100 dark:border-gray-800 pb-4 md:pb-6 mb-6 md:mb-8">
-      <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Series</h1>
-      <p class="text-gray-500 dark:text-gray-400 mt-1 text-sm">Curated reading paths on web development and architecture</p>
-    </div>
+  <div class="page-shell">
+    <PageHeader title="Series" lead="Kumpulan bacaan berurutan tentang pengembangan web dan arsitektur." />
 
     <!-- Skeleton -->
     <div v-if="pending" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-      <div v-for="i in 6" :key="i" class="border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden bg-white dark:bg-dark-secondary">
+      <div v-for="i in 6" :key="i" class="card overflow-hidden">
         <SkeletonBlock class="aspect-4/3 w-full" />
         <div class="p-4 space-y-2">
           <SkeletonBlock class="h-4 rounded w-3/4" />
@@ -19,7 +15,7 @@
     </div>
 
     <!-- Empty -->
-    <EmptyState v-else-if="items.length === 0" message="No series created yet. Check back later!" padding="py-16" />
+    <EmptyState v-else-if="items.length === 0" message="Belum ada series. Silakan cek lagi nanti." padding="py-16" />
 
     <!-- Grid -->
     <template v-else>
@@ -28,7 +24,7 @@
         v-for="pl in items"
         :key="pl.id"
         :to="`/playlists/${pl.slug}`"
-        class="group block border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden hover:border-gray-400 dark:hover:border-gray-600 bg-white dark:bg-dark-secondary transition-colors"
+        class="group block card overflow-hidden hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
       >
         <!-- Cover -->
         <div class="aspect-square bg-gray-100 dark:bg-dark overflow-hidden relative">
@@ -46,26 +42,26 @@
               {{ pl.title.charAt(0).toUpperCase() }}
             </span>
           </div>
-          <span class="absolute top-3 left-3 px-2 py-0.5 bg-black/60 text-white text-xs font-medium rounded">
-            {{ pl._count?.posts || 0 }} stories
+          <span class="absolute top-3 left-3 px-2 py-0.5 bg-black/60 text-white text-xs font-semibold rounded-full">
+            {{ pl._count?.posts || 0 }} artikel
           </span>
         </div>
 
         <!-- Body -->
-        <div class="p-4">
-          <h2 class="font-bold text-gray-900 dark:text-white leading-snug group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors line-clamp-2">
+        <div class="p-5">
+          <h2 class="text-base md:text-lg font-bold text-gray-900 dark:text-white leading-snug group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors line-clamp-2">
             {{ pl.title }}
           </h2>
           <p v-if="pl.description" class="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
             {{ pl.description }}
           </p>
-          <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">By {{ pl.user?.name }}</p>
+          <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">Oleh {{ pl.user?.name }}</p>
         </div>
       </NuxtLink>
       </div>
 
       <InfiniteScrollLoader v-if="loading" />
-      <EndOfListMessage v-else-if="finished" message="You've reached the end. No more series to show." />
+      <EndOfListMessage v-else-if="finished" message="Sudah sampai akhir. Tidak ada series lain." />
       <div ref="sentinel" aria-hidden="true" class="h-px" />
     </template>
   </div>
@@ -79,8 +75,8 @@ definePageMeta({
 });
 
 useSeo({
-  title: 'Series - Curated Tech Guides',
-  description: 'Browse step-by-step guides and curated stories on web development and architecture.',
+  title: 'Series - Panduan teknologi pilihan',
+  description: 'Telusuri panduan langkah demi langkah dan artikel pilihan tentang pengembangan web dan arsitektur.',
 });
 
 const config = useRuntimeConfig();

@@ -9,6 +9,6 @@ withDefaults(
   defineProps<{
     message?: string;
   }>(),
-  { message: "You've reached the end. No more items to load." }
+  { message: 'Sudah sampai akhir. Tidak ada lagi yang bisa dimuat.' }
 );
 </script>
