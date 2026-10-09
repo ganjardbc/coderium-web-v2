@@ -1,33 +1,54 @@
 <template>
   <div class="w-full max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-10">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-2">About Coderium</h1>
-    <p class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8">
-      Web development resources, guides, and tools for developers.
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-2">Tentang Coderium</h1>
+    <p class="text-sm md:text-base text-gray-600 dark:text-gray-400 mb-8">
+      AI agency untuk tim engineering.
     </p>
 
-    <div class="prose prose-sm md:prose-base dark:prose-invert max-w-none space-y-6 text-gray-700 dark:text-gray-300">
+    <div class="space-y-8 text-base text-gray-700 dark:text-gray-300 leading-relaxed">
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">What we do</h2>
-        <p>
-          Coderium is a tech blog and resource hub focused on web development. We publish articles, curated series,
-          and tools that help developers learn, build, and ship better software.
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Apa yang kami buat</h2>
+        <p>Kami membuat dua produk untuk tim engineering:</p>
+        <ul class="mt-2 list-disc pl-5 space-y-1">
+          <li><strong>CAF (Coderium Agent Framework)</strong>: tiket dikerjakan menjadi pull request. Merge tetap keputusan manusia.</li>
+          <li><strong>AI Code Reviewer</strong>: review kode dengan AI.</li>
+        </ul>
+        <p class="mt-3">
+          Detail tiap produk ada di halaman
+          <NuxtLink to="/products" class="text-gray-900 dark:text-white underline underline-offset-4 hover:no-underline">Produk</NuxtLink>.
         </p>
       </section>
 
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">What you'll find here</h2>
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Cara kerja pilot</h2>
         <ul class="list-disc pl-5 space-y-1">
-          <li><strong>Posts</strong> — practical guides and write-ups on web technologies.</li>
-          <li><strong>Series</strong> — curated playlists that walk through a topic step by step.</li>
-          <li><strong>Products</strong> — tools and pilots we build and ship ourselves.</li>
+          <li>Kami mulai dari pilot di satu repo.</li>
+          <li>Pilot AI Code Review berjalan 4 minggu.</li>
+          <li>Pilot CAF berjalan 6-8 minggu dan dibuka dengan fit check di minggu 1.</li>
+          <li>Tim Anda yang mereview pull request dan memutuskan merge.</li>
         </ul>
+        <p class="mt-3">
+          Harga dan syarat dari klien ada di halaman
+          <NuxtLink to="/kerja-sama" class="text-gray-900 dark:text-white underline underline-offset-4 hover:no-underline">Kerja Sama</NuxtLink>.
+        </p>
       </section>
 
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Contact</h2>
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Artikel</h2>
         <p>
-          Have feedback, a topic suggestion, or found an issue on the site? Reach out via
-          <a href="mailto:hello@coderium.id" class="text-gray-900 dark:text-white underline hover:no-underline">hello@coderium.id</a>.
+          Kami juga menulis
+          <NuxtLink to="/explore" class="text-gray-900 dark:text-white underline underline-offset-4 hover:no-underline">artikel</NuxtLink>
+          dan
+          <NuxtLink to="/playlists" class="text-gray-900 dark:text-white underline underline-offset-4 hover:no-underline">series</NuxtLink>
+          sebagai pelengkap.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Kontak</h2>
+        <p>
+          Kontak hanya lewat email:
+          <a :href="contactMailto" class="text-gray-900 dark:text-white underline underline-offset-4 hover:no-underline">{{ CONTACT_EMAIL }}</a>.
         </p>
       </section>
     </div>
@@ -39,8 +60,12 @@ definePageMeta({
   layout: 'default',
 });
 
+const CONTACT_EMAIL = 'hello@coderium.id';
+const contactMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Diskusi pilot')}`;
+
 useSeo({
-  title: 'About',
-  description: 'Learn about Coderium, a platform curating trustworthy articles, tutorials, and insights on AI and software development.',
+  title: 'Tentang',
+  description:
+    'Coderium adalah AI agency untuk tim engineering. Kami membuat CAF (Coderium Agent Framework) dan AI Code Reviewer, dan bekerja lewat pilot di satu repo.',
 });
 </script>

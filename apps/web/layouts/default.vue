@@ -142,6 +142,14 @@ useJsonLd([
     name: 'Coderium',
     url: siteUrl,
     logo: `${siteUrl}/favicon.png`,
+    description:
+      'Coderium adalah AI agency untuk tim engineering, dengan dua produk: CAF (Coderium Agent Framework) dan AI Code Reviewer.',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      email: CONTACT_EMAIL,
+      availableLanguage: ['id'],
+    },
   },
   {
     '@context': 'https://schema.org',

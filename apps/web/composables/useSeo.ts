@@ -16,7 +16,7 @@ export interface SeoOptions {
 
 const SITE_NAME = 'Coderium';
 const DEFAULT_DESCRIPTION =
-  'Coderium curates trustworthy articles, tutorials, and insights on AI and software development.';
+  'Coderium adalah AI agency untuk tim engineering, dengan dua produk: CAF (Coderium Agent Framework) dan AI Code Reviewer.';
 
 /**
  * Centralized title/description/canonical/Open Graph/Twitter Card meta for a

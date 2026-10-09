@@ -1683,7 +1683,30 @@ Details:
 
 Task: Identitas, SEO, dan About
 
-Status: `TODO`
+Status: `DONE`
+
+Details:
+
+```txt
+- nuxt.config.ts: meta description default diganti dari "Coderium - Tech
+  Blog & Resources" ke identitas AI agency; ditambah htmlAttrs lang="id"
+  (tambahan di luar daftar detail task, karena halaman baru berbahasa
+  Indonesia).
+- composables/useSeo.ts: DEFAULT_DESCRIPTION memakai kalimat yang sama.
+- layouts/default.vue: JSON-LD Organization menambah description dan
+  contactPoint (email hello@coderium.id, contactType "sales",
+  availableLanguage id).
+- pages/about.vue ditulis ulang dalam bahasa Indonesia: apa yang kami buat
+  (CAF, AI Code Reviewer), cara kerja pilot, artikel sebagai pelengkap,
+  kontak email (mailto bersubjek). Isi hanya dari fakta di requirements.md.
+- Tidak ada lagi teks "tech blog" di apps/web (grep bersih). Teks halaman
+  Series/Explore yang memang soal artikel tidak diubah.
+- Diverifikasi lewat SSR (build web + mock API): lang, title/description
+  About, dan Organization JSON-LD. Description default tidak diperiksa di
+  halaman nyata (semua halaman yang dicek punya description sendiri).
+  pnpm typecheck dan pnpm build PASS.
+- Belum diuji: pratinjau OG di layanan nyata (masuk AGENCY-011).
+```
 
 ---
 

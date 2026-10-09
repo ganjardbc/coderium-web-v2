@@ -268,7 +268,7 @@ Acceptance:
 
 ## AGENCY-008 [CAF] Identitas, SEO, dan About
 
-Status: `TODO`
+Status: `DONE`
 
 Files:
 

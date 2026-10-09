@@ -24,11 +24,16 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      htmlAttrs: { lang: 'id' },
       title: 'Coderium',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Coderium - Tech Blog & Resources' },
+        {
+          name: 'description',
+          content:
+            'Coderium adalah AI agency untuk tim engineering, dengan dua produk: CAF (Coderium Agent Framework) dan AI Code Reviewer.',
+        },
         { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#0a0a0a', media: '(prefers-color-scheme: dark)' },
       ],
