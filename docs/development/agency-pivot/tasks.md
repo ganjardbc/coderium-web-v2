@@ -109,7 +109,7 @@ Catatan: mengubah skema database. Backup dulu, review PR dengan teliti.
 
 ## AGENCY-003 [CAF] Form admin untuk badge, proof, dan FAQ
 
-Status: `TODO`
+Status: `DONE`
 
 Files:
 

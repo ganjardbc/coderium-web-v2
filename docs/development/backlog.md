@@ -1497,7 +1497,31 @@ Details:
 
 Task: Form admin untuk badge, proof, dan FAQ
 
-Status: `TODO`
+Status: `DONE`
+
+Details:
+
+```txt
+- ProductForm.vue: input Badge, editor Proof (daftar metrik label + value
+  dengan tambah/hapus/urut, plus textarea catatan), editor FAQ (question +
+  answer, tambah/hapus/urut).
+- RepeatableListField.vue digeneralisasi (bukan komponen baru): prop opsional
+  titleKey/descriptionKey, label, placeholder, descriptionRequired,
+  descriptionMultiline, maxlength, maxItems. Default tidak berubah, jadi
+  pemakaian pipelineSteps/features tetap sama. Perubahan internal: baris
+  diperbarui lewat emit array baru, tidak lagi mutasi item di tempat.
+- product.store.ts: Product/ProductPayload/ProductFormData menambah badge,
+  proof, faq (tipe dari @coderium/shared-types, devDependency baru di
+  apps/admin). Form menyimpan proof sebagai proofMetrics + proofNote dan
+  dirakit ulang di toProductPayload. Field kosong dikirim null supaya bisa
+  dikosongkan saat edit. PRODUCT_LIMITS menyalin batas dari DTO API.
+- Validasi: baris metrik/FAQ yang belum lengkap ditandai merah dan kedua
+  tombol simpan ditahan (pesan di atas tombol) sampai baris dilengkapi atau
+  dihapus. maxlength dan batas jumlah item mengikuti DTO.
+- typecheck (vue-tsc) dan build admin PASS.
+- Belum diuji di browser: simpan, muat ulang saat edit, tampilan error, dan
+  regresi editor pipelineSteps/features setelah generalisasi komponen.
+```
 
 ---
 
