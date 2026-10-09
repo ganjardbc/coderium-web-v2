@@ -1747,6 +1747,10 @@ Details:
   (2026-10-10, keputusan pemilik produk; file pages/work-with-us.vue). Label
   menu tetap "Kerja Sama". Tanpa redirect dari rute lama. Baris rute di
   "Keputusan yang sudah final" plan.md dan semua dokumen ikut diperbarui.
+- Istilah "pilot" di teks situs diganti "uji coba" (2026-10-10, permintaan
+  pemilik produk, supaya lebih mudah dipahami), termasuk nama paket ("Uji
+  coba AI Code Review", "Uji coba CAF") dan subjek email. requirements.md
+  dan plan.md masih memakai kata "pilot".
 - Belum diuji: kesesuaian dengan mockup, desktop gelap setelah perapian,
   footer baru di halaman lain secara visual, perangkat nyata, data produksi.
 ```

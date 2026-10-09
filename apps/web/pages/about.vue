@@ -3,7 +3,7 @@
     <PageHeader title="Tentang Coderium" lead="AI agency untuk tim engineering." />
 
     <!-- Apa yang kami buat -->
-    <section :class="[SPLIT_SECTION, 'pt-0!']">
+    <section class="split-section pt-0!">
       <h2 class="section-title">Apa yang kami buat</h2>
       <div>
         <p class="body-copy">Kami membuat dua produk untuk tim engineering.</p>
@@ -21,8 +21,8 @@
     </section>
 
     <!-- Cara kerja pilot -->
-    <section :class="SPLIT_SECTION">
-      <h2 class="section-title">Cara kerja pilot</h2>
+    <section class="split-section">
+      <h2 class="section-title">Cara kerja uji coba</h2>
       <div>
         <ul class="divide-y divide-gray-100 dark:divide-gray-800 border-y border-gray-100 dark:border-gray-800">
           <li v-for="item in pilotSteps" :key="item" class="flex gap-3 py-4 body-copy">
@@ -38,7 +38,7 @@
     </section>
 
     <!-- Artikel -->
-    <section :class="SPLIT_SECTION">
+    <section class="split-section">
       <h2 class="section-title">Artikel</h2>
       <div>
         <p class="body-copy">Kami juga menulis artikel dan series sebagai pelengkap.</p>
@@ -78,11 +78,7 @@ definePageMeta({
 });
 
 const CONTACT_EMAIL = 'hello@coderium.id';
-const contactMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Diskusi pilot')}`;
-
-// Heading on the left, content on the right (stacked below lg).
-const SPLIT_SECTION =
-  'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] gap-6 lg:gap-16 py-10 md:py-16 border-b border-gray-100 dark:border-gray-800';
+const contactMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Diskusi uji coba')}`;
 
 const products = [
   {
@@ -96,9 +92,9 @@ const products = [
 ];
 
 const pilotSteps = [
-  'Kami mulai dari pilot di satu repo.',
-  'Pilot AI Code Review berjalan 4 minggu.',
-  'Pilot CAF berjalan 6-8 minggu dan dibuka dengan fit check di minggu 1.',
+  'Kami mulai dari uji coba di satu repo.',
+  'Uji coba AI Code Review berjalan 4 minggu.',
+  'Uji coba CAF berjalan 6-8 minggu dan dibuka dengan fit check di minggu 1.',
   'Tim Anda yang mereview pull request dan memutuskan merge.',
 ];
 
@@ -110,6 +106,6 @@ const readingLinks = [
 useSeo({
   title: 'Tentang',
   description:
-    'Coderium adalah AI agency untuk tim engineering. Kami membuat CAF (Coderium Agent Framework) dan AI Code Reviewer, dan bekerja lewat pilot di satu repo.',
+    'Coderium adalah AI agency untuk tim engineering. Kami membuat CAF (Coderium Agent Framework) dan AI Code Reviewer, dan bekerja lewat uji coba di satu repo.',
 });
 </script>

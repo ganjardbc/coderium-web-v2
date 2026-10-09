@@ -1,6 +1,6 @@
 <template>
   <div class="page-shell">
-    <PageHeader title="Kerja Sama" lead="Kami mulai dari pilot di satu repo, dengan harga yang terbuka. Kontak lewat email." />
+    <PageHeader title="Kerja Sama" lead="Kami mulai dari uji coba di satu repo, dengan harga yang terbuka. Kontak lewat email." />
 
     <!-- Paket dan harga -->
     <section class="pb-10 md:pb-16 border-b border-gray-100 dark:border-gray-800">
@@ -19,7 +19,7 @@
     </section>
 
     <!-- Syarat dari klien -->
-    <section :class="SPLIT_SECTION">
+    <section class="split-section">
       <h2 class="section-title">Yang kami butuhkan dari Anda</h2>
       <ul class="divide-y divide-gray-100 dark:divide-gray-800 border-y border-gray-100 dark:border-gray-800">
         <li
@@ -34,7 +34,7 @@
     </section>
 
     <!-- FAQ -->
-    <section :class="SPLIT_SECTION">
+    <section class="split-section">
       <h2 class="section-title">Yang sering ditanyakan</h2>
       <FaqAccordion :items="faq" />
     </section>
@@ -43,12 +43,12 @@
     <section class="py-10 md:py-16">
       <div class="card flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 md:p-10">
         <div>
-          <p class="section-title">Mau diskusi pilot?</p>
+          <p class="section-title">Mau diskusi uji coba?</p>
           <p class="mt-2 body-copy">
             Kirim email ke {{ CONTACT_EMAIL }}. Tidak ada form, tidak perlu membuat akun.
           </p>
         </div>
-        <a :href="mailto('Diskusi pilot')" class="btn btn-solid gap-2 shrink-0">
+        <a :href="mailto('Diskusi uji coba')" class="btn btn-solid gap-2 shrink-0">
           <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
           Kirim email
         </a>
@@ -74,10 +74,6 @@ function mailto(subject: string): string {
 }
 
 // Prices come from composables/usePricing.ts, shared with the homepage cards.
-
-// Heading on the left, content on the right (stacked below lg).
-const SPLIT_SECTION =
-  'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] gap-6 lg:gap-16 py-10 md:py-16 border-b border-gray-100 dark:border-gray-800';
 
 const clientRequirements = [
   'Satu penanggung jawab dari tim Anda.',
@@ -106,7 +102,7 @@ const faq: ProductFaqItem[] = [
   },
   {
     question: 'Apa itu harga perintis?',
-    answer: 'Diskon 30% dari harga pilot, dengan izin dari Anda untuk menuliskan studi kasus.',
+    answer: 'Diskon 30% dari harga uji coba, dengan izin dari Anda untuk menuliskan studi kasus.',
   },
   {
     question: 'Bagaimana cara memulai?',
@@ -117,7 +113,7 @@ const faq: ProductFaqItem[] = [
 useSeo({
   title: 'Kerja Sama',
   description:
-    'Pilot AI Code Review dan pilot CAF untuk tim engineering: harga terbuka, syarat dari klien, dan kontak lewat email hello@coderium.id.',
+    'Uji coba AI Code Review dan uji coba CAF untuk tim engineering: harga terbuka, syarat dari klien, dan kontak lewat email hello@coderium.id.',
 });
 
 useJsonLd(faqPageJsonLd(faq));

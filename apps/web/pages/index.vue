@@ -30,7 +30,7 @@
             Kami membuat CAF (Coderium Agent Framework) dan AI Code Reviewer untuk tim engineering, lalu memasangnya di server Anda.
           </p>
           <div class="mt-6 md:mt-8 flex flex-col sm:flex-row gap-3">
-            <a :href="mailto('Diskusi pilot')" class="btn btn-solid gap-2 shadow-lg shadow-primary/30">
+            <a :href="mailto('Diskusi uji coba')" class="btn btn-solid gap-2 shadow-lg shadow-primary/30">
               Kirim email
               <Icon name="lucide:arrow-right" class="w-4 h-4" aria-hidden="true" />
             </a>
@@ -77,7 +77,7 @@
     <section :class="SPLIT_SECTION">
       <HomeSectionHeading number="01" label="Apa itu Coderium" title="AI agency untuk tim engineering." />
       <p class="text-md md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
-        Kami membuat dua produk, CAF (Coderium Agent Framework) dan AI Code Reviewer, lalu memasangnya di server Anda lewat pilot di satu repo. CAF mengerjakan tiket menjadi pull request. Merge tetap keputusan manusia di tim Anda.
+        Kami membuat dua produk, CAF (Coderium Agent Framework) dan AI Code Reviewer, lalu memasangnya di server Anda lewat uji coba di satu repo. CAF mengerjakan tiket menjadi pull request. Merge tetap keputusan manusia di tim Anda.
       </p>
     </section>
 
@@ -155,7 +155,7 @@
 
     <!-- 03 Diskusi, pilot, laporan -->
     <section>
-      <HomeSectionHeading number="03" label="Proses" title="Diskusi, pilot, laporan." class="mb-8 md:mb-12" />
+      <HomeSectionHeading number="03" label="Proses" title="Diskusi, uji coba, laporan." class="mb-8 md:mb-12" />
       <ol class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
         <li v-for="(step, index) in steps" :key="step.title" class="border-t-2 border-gray-900 dark:border-white pt-5">
           <span class="block font-mono text-sm font-medium text-primary dark:text-indigo-300" aria-hidden="true">
@@ -166,14 +166,14 @@
         </li>
       </ol>
       <p class="mt-8 text-sm md:text-base text-gray-700 dark:text-gray-300">
-        Pilot mulai {{ startingPlan.price }}, harga perintis mulai {{ startingPlan.pioneerPrice }}.
+        Uji coba mulai {{ startingPlan.price }}, harga perintis mulai {{ startingPlan.pioneerPrice }}.
         <NuxtLink to="/work-with-us" class="text-link">Lihat harga dan syarat</NuxtLink>
       </p>
     </section>
 
     <!-- 04 Pasang sendiri vs pilot -->
     <section>
-      <HomeSectionHeading number="04" label="Perbandingan" title="Pasang sendiri, atau pilot bersama kami." class="mb-8 md:mb-12" />
+      <HomeSectionHeading number="04" label="Perbandingan" title="Pasang sendiri, atau uji coba bersama kami." class="mb-8 md:mb-12" />
 
       <!-- Desktop: table -->
       <table class="hidden md:table w-full text-left border-collapse">
@@ -181,7 +181,7 @@
           <tr class="border-b border-gray-200 dark:border-gray-800">
             <th scope="col" class="w-1/5 py-4 pr-6"><span class="sr-only">Aspek</span></th>
             <th scope="col" class="w-2/5 py-4 pr-6 text-lg font-bold text-gray-600 dark:text-gray-400">Pasang sendiri</th>
-            <th scope="col" class="w-2/5 py-4 text-lg font-bold text-gray-900 dark:text-white">Pilot bersama Coderium</th>
+            <th scope="col" class="w-2/5 py-4 text-lg font-bold text-gray-900 dark:text-white">Uji coba bersama Coderium</th>
           </tr>
         </thead>
         <tbody>
@@ -205,7 +205,7 @@
               <dd class="mt-0.5 text-base text-gray-600 dark:text-gray-400 leading-relaxed">{{ row.self }}</dd>
             </div>
             <div>
-              <dt class="text-sm font-semibold text-gray-900 dark:text-white">Pilot bersama Coderium</dt>
+              <dt class="text-sm font-semibold text-gray-900 dark:text-white">Uji coba bersama Coderium</dt>
               <dd class="mt-0.5 text-base text-gray-900 dark:text-white leading-relaxed">{{ row.pilot }}</dd>
             </div>
           </dl>
@@ -299,7 +299,7 @@
           <p class="text-base md:text-lg text-gray-300 leading-relaxed">
             Tidak ada form, tidak perlu membuat akun.
           </p>
-          <a :href="mailto('Diskusi pilot')" class="btn btn-solid mt-4 gap-2 w-full sm:w-auto">
+          <a :href="mailto('Diskusi uji coba')" class="btn btn-solid mt-4 gap-2 w-full sm:w-auto">
             <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
             {{ CONTACT_EMAIL }}
           </a>
@@ -321,7 +321,7 @@ useSeo({
   title: 'Coderium - AI agency untuk tim engineering',
   titleSuffix: false,
   description:
-    'Coderium adalah AI agency untuk tim engineering. CAF (Coderium Agent Framework) dan AI Code Reviewer, dipasang di server Anda lewat pilot berharga tetap.',
+    'Coderium adalah AI agency untuk tim engineering. CAF (Coderium Agent Framework) dan AI Code Reviewer, dipasang di server Anda lewat uji coba berharga tetap.',
 });
 
 // Every figure, price, and limitation on this page comes from the "Data yang
@@ -421,7 +421,7 @@ const proofNote = computed(() => {
 const promises = [
   { icon: 'lucide:server', title: 'Berjalan di server Anda' },
   { icon: 'lucide:git-merge', title: 'Merge tetap keputusan manusia' },
-  { icon: 'lucide:tag', title: 'Pilot berharga tetap' },
+  { icon: 'lucide:tag', title: 'Uji coba berharga tetap' },
 ];
 
 const integrations = ['Linear', 'GitHub Issues', 'GitHub', 'GitLab', 'Claude Code'];
@@ -435,12 +435,12 @@ const steps = [
     description: `Kirim email ke ${CONTACT_EMAIL} dan ceritakan repo serta tim Anda.`,
   },
   {
-    title: 'Pilot',
-    description: 'Pilot di satu repo: AI Code Review 4 minggu, atau CAF 6-8 minggu yang dibuka dengan fit check di minggu 1.',
+    title: 'Uji coba',
+    description: 'Uji coba di satu repo: AI Code Review 4 minggu, atau CAF 6-8 minggu yang dibuka dengan fit check di minggu 1.',
   },
   {
     title: 'Laporan',
-    description: 'Pilot ditutup dengan laporan hasil di repo Anda.',
+    description: 'Uji coba ditutup dengan laporan hasil di repo Anda.',
   },
 ];
 
@@ -453,22 +453,22 @@ const comparison = [
   {
     aspect: 'Penyesuaian',
     self: 'Tim Anda menyesuaikan sendiri dengan repo dan alur kerjanya.',
-    pilot: 'Kami menyesuaikan dengan repo dan tiket Anda selama pilot.',
+    pilot: 'Kami menyesuaikan dengan repo dan tiket Anda selama uji coba.',
   },
   {
     aspect: 'Ukuran keberhasilan',
     self: 'Tim Anda menentukan dan mengukur sendiri.',
-    pilot: 'Disepakati di awal pilot dan dilaporkan di akhir.',
+    pilot: 'Disepakati di awal uji coba dan dilaporkan di akhir.',
   },
   {
     aspect: 'Kendala operasional',
     self: 'Ditangani tim Anda. Pada pemakaian kami sendiri, worker sempat tertahan dan kuota model sempat habis.',
-    pilot: 'Kami tangani selama pilot.',
+    pilot: 'Kami tangani selama uji coba.',
   },
   {
     aspect: 'Biaya',
     self: 'Biaya server dan model, ditambah waktu tim Anda.',
-    pilot: `Harga pilot tetap, mulai ${startingPlan.price}. Biaya server dan model ditanggung klien.`,
+    pilot: `Harga uji coba tetap, mulai ${startingPlan.price}. Biaya server dan model ditanggung klien.`,
   },
 ];
 

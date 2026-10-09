@@ -144,7 +144,7 @@
 import { ref, watch, onMounted } from 'vue';
 
 const CONTACT_EMAIL = 'hello@coderium.id';
-const contactMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Diskusi pilot')}`;
+const contactMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Diskusi uji coba')}`;
 
 // Site-wide structured data: lets Google understand the brand/organization
 // and enables a sitelinks search box for "Coderium" queries.

@@ -47,6 +47,40 @@
     @apply border border-gray-300 text-gray-800 hover:border-gray-500 dark:border-gray-700 dark:text-gray-200 dark:hover:border-gray-500;
   }
 
+  /* Section with its heading on the left and content on the right (stacked below lg). */
+  .split-section {
+    @apply grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] gap-6 lg:gap-16 py-10 md:py-16 border-b border-gray-100 dark:border-gray-800;
+  }
+
+  /* Admin-authored rich text shown in the UI font (articles keep .prose-medium). */
+  .rich-copy {
+    @apply text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed;
+  }
+
+  .rich-copy > * + * {
+    @apply mt-4;
+  }
+
+  .rich-copy :is(h1, h2, h3, h4) {
+    @apply text-lg md:text-xl font-bold text-gray-900 dark:text-white;
+  }
+
+  .rich-copy :is(strong, b) {
+    @apply font-semibold text-gray-900 dark:text-white;
+  }
+
+  .rich-copy a {
+    @apply text-gray-900 underline underline-offset-4 hover:no-underline dark:text-white;
+  }
+
+  .rich-copy ul {
+    @apply list-disc pl-5 space-y-1;
+  }
+
+  .rich-copy ol {
+    @apply list-decimal pl-5 space-y-1;
+  }
+
   .text-link {
     @apply inline-flex items-center min-h-11 font-semibold text-gray-900 underline underline-offset-4 hover:no-underline dark:text-white;
   }

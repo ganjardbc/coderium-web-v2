@@ -21,20 +21,20 @@ export interface PricingPlan {
 export const pricingPlans: PricingPlan[] = [
   {
     id: 'ai-code-review',
-    name: 'Pilot AI Code Review',
+    name: 'Uji coba AI Code Review',
     scope: '4 minggu, 1 repo',
     price: 'Rp13.000.000',
     pioneerPrice: 'Rp9.100.000',
-    subject: 'Diskusi pilot AI Code Review',
+    subject: 'Diskusi uji coba AI Code Review',
   },
   {
     id: 'caf',
-    name: 'Pilot CAF',
+    name: 'Uji coba CAF',
     scope: '6-8 minggu, 1 repo',
     price: 'Rp19.500.000',
     pioneerPrice: 'Rp13.650.000',
     note: 'Rp2.000.000 di muka untuk fit check minggu 1.',
-    subject: 'Diskusi pilot CAF',
+    subject: 'Diskusi uji coba CAF',
   },
   {
     id: 'retainer',
