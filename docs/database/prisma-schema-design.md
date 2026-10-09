@@ -310,6 +310,9 @@ model Product {
   features       Json?         @default("[]")
   ctaLabel       String?       @map("cta_label")
   ctaUrl         String?       @map("cta_url")
+  badge          String?
+  proof          Json?
+  faq            Json?
   order          Int           @default(0)
   featured       Boolean       @default(false)
   createdAt      DateTime      @default(now()) @map("created_at")
@@ -334,8 +337,12 @@ Catatan:
   boolean.
 * `pipelineSteps`/`features` adalah `Json` array of `{ title, description }`,
   urutan array = urutan render (tidak ada field sorting terpisah).
-* Wajib diisi untuk transisi ke `published`: `cover`, `ctaUrl` (format URL
-  valid), minimal 1 `pipelineSteps`, minimal 1 `features` — divalidasi di
+* `badge` (teks pendek), `proof` (`{ metrics: [{ label, value }], note? }`),
+  dan `faq` (`[{ question, answer }]`) opsional dan tidak wajib untuk publish
+  (AGENCY-002). Bentuk dan batas panjang divalidasi di DTO; tipe bersama ada
+  di `packages/shared-types`.
+* Wajib diisi untuk transisi ke `published`: `cover`, `ctaUrl` (URL http(s)
+  atau `mailto:`), minimal 1 `pipelineSteps`, minimal 1 `features` — divalidasi di
   service layer (`ProductsService`), bukan di level constraint database.
 
 ---

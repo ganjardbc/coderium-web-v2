@@ -4,8 +4,11 @@ import {
   IsEnum,
   IsArray,
   IsBoolean,
+  IsObject,
   IsNumber,
+  ArrayMaxSize,
   MinLength,
+  MaxLength,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -13,6 +16,8 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { PipelineStepDto } from './pipeline-step.dto';
 import { FeatureItemDto } from './feature-item.dto';
 import { IsCtaUrl } from './cta-url.validator';
+import { ProductProofDto } from './product-proof.dto';
+import { FaqItemDto } from './faq-item.dto';
 
 export enum ProductStatusEnum {
   draft = 'draft',
@@ -77,6 +82,39 @@ export class CreateProductDto {
   @IsOptional()
   @IsCtaUrl()
   ctaUrl?: string;
+
+  @ApiPropertyOptional({
+    example: 'Early access v0.1.9',
+    nullable: true,
+    description: 'Short status label. Send null to clear.',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(60)
+  badge?: string | null;
+
+  @ApiPropertyOptional({
+    type: ProductProofDto,
+    nullable: true,
+    description: 'Send null to clear.',
+  })
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => ProductProofDto)
+  proof?: ProductProofDto | null;
+
+  @ApiPropertyOptional({
+    type: [FaqItemDto],
+    nullable: true,
+    description: 'Send null or [] to clear.',
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(20)
+  @ValidateNested({ each: true })
+  @Type(() => FaqItemDto)
+  faq?: FaqItemDto[] | null;
 
   @ApiPropertyOptional({ default: 0 })
   @IsOptional()

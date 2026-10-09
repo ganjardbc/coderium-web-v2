@@ -44,7 +44,7 @@ IN_PROGRESS
 Current Phase:
 
 ```txt
-Phase 17 - Agency Pivot (Public Site) — TASK-0 dan AGENCY-001 DONE, berikutnya AGENCY-002
+Phase 17 - Agency Pivot (Public Site) — TASK-0, AGENCY-001, AGENCY-002 DONE, berikutnya AGENCY-003
 ```
 
 Current Milestone:
@@ -84,7 +84,7 @@ Last Updated:
 | Phase 14 - Product Catalog (Public Site) | DONE | 100% |
 | Phase 15 - Hermes Integration (Backend & Admin UI) | DONE | 100% |
 | Phase 16 - AI Content Generation (Backend, ticket 24) | DONE | 100% |
-| Phase 17 - Agency Pivot (Public Site) | IN_PROGRESS | 17% (2/12) |
+| Phase 17 - Agency Pivot (Public Site) | IN_PROGRESS | 25% (3/12) |
 
 ---
 
@@ -122,7 +122,6 @@ Phase 0 - Foundation Setup
 ### TODO
 
 ```txt
-AGENCY-002 Tambah field badge, proof, faq pada Product
 AGENCY-003 Form admin untuk badge, proof, dan FAQ
 AGENCY-004 Render badge, description, bukti, FAQ, dan CTA di detail produk
 AGENCY-005 Halaman /kerja-sama
@@ -250,6 +249,7 @@ HERMES-002 Admin UI — tampilkan atribusi sumber draft hermes (ticket 19)
 AI-CONTENT-001 Implement AI Content Generation module — generate + cover commit (ticket 24)
 TASK-0 Isi CLAUDE.md — konvensi kode, konteks bisnis, perintah verifikasi (Phase 17 Agency Pivot)
 AGENCY-001 Izinkan mailto: pada CTA produk (Phase 17 Agency Pivot)
+AGENCY-002 Tambah field badge, proof, faq pada Product (Phase 17 Agency Pivot)
 ```
 
 ---
@@ -288,7 +288,7 @@ Path di atas.
 Priority Order:
 
 ```txt
-Phase 17 - Agency Pivot: AGENCY-002 Tambah field badge, proof, faq pada Product
+Phase 17 - Agency Pivot: AGENCY-003 Form admin untuk badge, proof, dan FAQ
 (urutan lengkap di docs/development/agency-pivot/tasks.md)
 
 Ticket 25 — apps/admin UI untuk AI Content Generation (grid card "AI Agent",

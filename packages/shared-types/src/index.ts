@@ -73,3 +73,18 @@ export interface ApiListResponse<T> {
   data: T[];
   meta: PaginationMeta;
 }
+
+export interface ProductProofMetric {
+  label: string;
+  value: string;
+}
+
+export interface ProductProof {
+  metrics: ProductProofMetric[];
+  note?: string;
+}
+
+export interface ProductFaqItem {
+  question: string;
+  answer: string;
+}

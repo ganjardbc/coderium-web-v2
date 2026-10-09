@@ -151,6 +151,9 @@ importers:
         specifier: ^7.8.0
         version: 7.8.2
     devDependencies:
+      '@coderium/shared-types':
+        specifier: workspace:*
+        version: link:../../packages/shared-types
       '@coderium/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig

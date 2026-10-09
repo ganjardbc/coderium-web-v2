@@ -73,7 +73,7 @@ Acceptance:
 
 ## AGENCY-002 [CAF] Tambah field `badge`, `proof`, `faq` pada Product
 
-Status: `TODO`
+Status: `DONE`
 
 Files:
 

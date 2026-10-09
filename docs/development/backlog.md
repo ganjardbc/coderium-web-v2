@@ -1463,7 +1463,33 @@ Details:
 
 Task: Tambah field `badge`, `proof`, `faq` pada Product
 
-Status: `TODO`
+Status: `DONE`
+
+Details:
+
+```txt
+- schema.prisma: Product.badge String?, proof Json?, faq Json? (tanpa default).
+  Migration 20261009120000_add_product_badge_proof_faq: satu ALTER TABLE
+  "products" ADD COLUMN x3, additive, tidak menyentuh tabel lain. SQL ditulis
+  tangan (tidak ada DB lokal yang dipakai) dan sama persis dengan keluaran
+  `prisma migrate diff` skema lama -> skema baru.
+- MIGRATION BELUM DIJALANKAN di database mana pun. Backup dulu sebelum
+  deploy (prisma migrate deploy).
+- packages/shared-types: ProductProofMetric, ProductProof, ProductFaqItem.
+  apps/api menambah devDependency @coderium/shared-types (app pertama yang
+  memakainya; pnpm-lock.yaml ikut berubah); DTO meng-implements tipe itu.
+- DTO baru product-proof.dto.ts (ProofMetricDto, ProductProofDto) dan
+  faq-item.dto.ts (FaqItemDto). Batas (keputusan implementasi, bisa diubah):
+  badge <= 60 karakter; proof.metrics <= 8 item, label <= 60, value <= 40,
+  note <= 500; faq <= 20 item, question <= 200, answer <= 2000.
+- Mengosongkan field: kirim null (badge, proof, faq) atau [] (faq).
+  ProductsService memetakan null pada proof/faq ke Prisma.DbNull.
+- Response publik dan admin mengembalikan field baru tanpa perubahan lain
+  (service mengembalikan baris Product utuh, tidak ada select whitelist).
+- Validasi DTO diuji ad-hoc lewat dist (18 kasus valid/tidak valid, semua
+  sesuai). pnpm typecheck dan pnpm build PASS.
+- Belum diuji: simpan dan baca field lewat HTTP + DB nyata.
+```
 
 ---
 
