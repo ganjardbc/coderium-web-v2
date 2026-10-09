@@ -31,8 +31,13 @@ Visitor membaca konten dari berbagai device.
 ## Brand Primary
 
 ```txt
-#6366F1  # Indigo — primary brand color
+#3730D9  # Indigo — primary brand color
 ```
+
+Di `apps/web` terdaftar sebagai token Tailwind `@theme` `--color-primary`
+(`apps/web/assets/css/main.css`), dipakai lewat kelas `bg-primary`,
+`text-primary`, dst. Gradien logo (biru ke ungu) hanya dipakai pada logo.
+Warna hijau/kuning terminal hanya dipakai di panel terminal hero beranda.
 
 Digunakan untuk:
 
@@ -106,8 +111,12 @@ stack_gallery → Emerald badge
 
 ```txt
 Inter (UI, body text)
-JetBrains Mono (code blocks)
+JetBrains Mono (terminal, code blocks)
+Charter (isi artikel, lewat .prose-medium)
 ```
+
+Di `apps/web`, Inter dan JetBrains Mono dimuat di `assets/css/main.css` dan
+didaftarkan sebagai `--font-sans` / `--font-mono` (`@theme`).
 
 Fallback:
 

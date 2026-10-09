@@ -1,9 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Charter:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import 'tailwindcss';
 
 @theme {
   --color-dark: #0e0e0f;
   --color-dark-secondary: #18181b;
+  /* Brand primary (indigo). The logo gradient is used on the logo only. */
+  --color-primary: #3730d9;
+  /* Inter for UI, JetBrains Mono for terminal/code. Article body keeps
+     Charter via .prose-medium below. */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 @variant dark (&:where(.dark, .dark *));

@@ -232,7 +232,7 @@ Acceptance:
 
 ## AGENCY-007 [CAF] Beranda agency, font, dan token warna
 
-Status: `TODO`
+Status: `DONE`
 
 Files:
 

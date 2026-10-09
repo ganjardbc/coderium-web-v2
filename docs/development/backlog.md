@@ -1636,7 +1636,46 @@ Details:
 
 Task: Beranda agency, font, dan token warna
 
-Status: `TODO`
+Status: `DONE`
+
+Details:
+
+```txt
+- main.css: Inter dan JetBrains Mono dimuat (Google Fonts) dan didaftarkan
+  sebagai --font-sans / --font-mono; warna utama #3730D9 sebagai token
+  @theme --color-primary (kelas bg-primary dst). Charter tetap untuk isi
+  artikel (.prose-medium). Efek samping yang disengaja: seluruh UI apps/web
+  kini memakai Inter.
+- pages/index.vue ditulis ulang mengikuti FR-6: hero + panel terminal,
+  strip angka, dua produk dari GET /products, cara kerja 3 langkah + harga
+  awal + tautan /kerja-sama, "Yang belum kami kerjakan" (4 kartu), blok
+  ajakan email gelap, "Catatan terbaru" (3 artikel). "Stay curious", kolom
+  Popular, infinite scroll, dan kartu Series dihapus dari beranda.
+- Komponen baru components/HeroTerminal.vue, berlabel "Ilustrasi alur kerja
+  CAF" (plan, implement, verify, pull request, baris kuning "merge:
+  menunggu keputusan Anda"). Hijau/kuning hanya dipakai di panel ini.
+- Strip angka: memakai proof produk featured (diisi lewat admin, maks 4
+  metrik + note) bila ada; kalau belum ada, fallback ke angka dari
+  requirements.md bagian Data (24 / 15 / 11 mnt / ~$10, catatan 7 PR
+  menunggu review dan 2 ditutup).
+- Semua angka, harga, dan batasan diambil dari requirements.md. Teks tiga
+  langkah, deskripsi empat kartu, dan kalimat ajakan disusun dari fakta yang
+  sama; perlu direview pemilik produk.
+- Judul dan deskripsi SEO beranda diganti ke identitas agency.
+- FeaturedProductCard.vue dan PopularPostItem.vue tidak lagi dipakai beranda;
+  file tidak dihapus.
+- docs/frontend/design-system.md: #6366F1 -> #3730D9, catatan token dan font.
+- MOCKUP TIDAK BISA DIBUKA: kanvas "Mockup Beranda Coderium (Agency)" tidak
+  terjangkau (server MCP pencil gagal konek), jadi acceptance "sesuai
+  mockup" BELUM diverifikasi. Tata letak dibangun dari teks FR-6.
+- Diverifikasi: build web terhadap mock API; di Chrome desktop (terang) dan
+  viewport 390px (gelap): satu kolom di mobile, tombol 44px, tanpa scroll
+  horizontal, Inter dan JetBrains Mono termuat, tombol utama rgb(55,48,217).
+  Jalur proof dari admin dan jalur tanpa produk diperiksa lewat SSR.
+  pnpm typecheck dan pnpm build PASS.
+- Belum selesai: tombol pill di header, /kerja-sama, dan detail produk masih
+  hitam (di luar daftar file task), belum memakai token primary.
+```
 
 ---
 

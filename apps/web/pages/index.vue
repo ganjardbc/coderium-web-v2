@@ -1,149 +1,248 @@
 <template>
-  <div class="w-full mx-auto px-4 md:px-6 py-6 md:py-10 space-y-10 md:space-y-14">
-    <!-- Hero Section -->
-    <section class="border-b border-gray-100 dark:border-gray-800 pb-8 md:pb-12">
-      <h1 class="text-4xl md:text-7xl font-bold tracking-tight text-gray-900 dark:text-white leading-none">
-        Stay curious.
-      </h1>
-      <p class="mt-3 md:mt-4 text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-md">
-        Coderium curates trustworthy articles, tutorials, and insights on AI and software development — all in one place.
+  <div class="w-full mx-auto px-4 md:px-6 py-6 md:py-10 space-y-12 md:space-y-20">
+    <!-- 1. Hero -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <div>
+        <h1 class="text-4xl md:text-6xl font-black tracking-tight text-gray-900 dark:text-white leading-[1.05]">
+          Tiket jadi pull request. Merge tetap keputusan manusia.
+        </h1>
+        <p class="mt-4 md:mt-5 text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-xl">
+          Coderium adalah AI agency untuk tim engineering, dengan dua produk: CAF (Coderium Agent Framework) dan AI Code Reviewer.
+        </p>
+        <div class="mt-6 md:mt-8 flex flex-col sm:flex-row gap-3">
+          <a
+            :href="mailto('Diskusi pilot')"
+            class="inline-flex items-center justify-center min-h-11 px-6 py-2.5 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors"
+          >
+            Kirim email untuk diskusi
+          </a>
+          <NuxtLink
+            to="/products"
+            class="inline-flex items-center justify-center min-h-11 px-6 py-2.5 rounded-full border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 text-sm font-semibold hover:border-gray-500 dark:hover:border-gray-500 transition-colors"
+          >
+            Lihat produk
+          </NuxtLink>
+        </div>
+      </div>
+      <HeroTerminal />
+    </section>
+
+    <!-- 2. Strip angka -->
+    <section aria-labelledby="home-numbers">
+      <h2 id="home-numbers" class="sr-only">Angka dari pemakaian kami sendiri</h2>
+      <dl class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 py-6 md:py-8 border-y border-gray-100 dark:border-gray-800">
+        <div v-for="metric in numbers.metrics" :key="metric.label" class="flex flex-col-reverse">
+          <dt class="mt-1 text-sm text-gray-600 dark:text-gray-400 leading-snug">{{ metric.label }}</dt>
+          <dd class="text-3xl md:text-4xl font-black tracking-tight text-gray-900 dark:text-white">{{ metric.value }}</dd>
+        </div>
+      </dl>
+      <p v-if="numbers.note" class="mt-3 text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line">
+        {{ numbers.note }}
       </p>
-      <div class="mt-6 flex gap-3">
-        <NuxtLink
-          to="/explore"
-          class="px-5 py-2 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors"
-        >
-          Start reading
+    </section>
+
+    <!-- 3. Produk -->
+    <section v-if="pendingProducts || homeProducts.length > 0">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm">Produk</h2>
+        <NuxtLink to="/products" class="inline-flex items-center gap-2 min-h-11 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+          Semua produk <Icon name="lucide:arrow-right" class="w-4 h-4" />
         </NuxtLink>
-        <NuxtLink
-          to="/playlists"
-          class="px-5 py-2 rounded-full border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:border-gray-500 dark:hover:border-gray-500 transition-colors"
-        >
-          Browse series
-        </NuxtLink>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <template v-if="pendingProducts">
+          <SkeletonBlock v-for="i in 2" :key="i" class="aspect-video rounded-lg w-full" />
+        </template>
+        <ProductCard v-for="product in homeProducts" v-else :key="product.id" :product="product" />
       </div>
     </section>
 
-    <!-- Featured Product -->
-    <section v-if="pendingProducts" class="border-b border-gray-100 dark:border-gray-800 pb-8 md:pb-12">
-      <SkeletonBlock class="aspect-16/7 rounded-2xl w-full" />
+    <!-- 4. Cara kerja -->
+    <section>
+      <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm mb-6">Cara kerja</h2>
+      <ol class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <li
+          v-for="(step, index) in steps"
+          :key="step.title"
+          class="p-5 md:p-6 rounded-2xl border border-gray-100 dark:border-gray-800"
+        >
+          <span class="text-2xl font-black text-gray-300 dark:text-gray-700 leading-none select-none">0{{ index + 1 }}</span>
+          <h3 class="mt-3 text-base md:text-lg font-bold text-gray-900 dark:text-white">{{ step.title }}</h3>
+          <p class="mt-1.5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{{ step.description }}</p>
+        </li>
+      </ol>
+      <p class="mt-5 md:mt-6 text-sm md:text-base text-gray-700 dark:text-gray-300">
+        Pilot mulai Rp13.000.000, harga perintis mulai Rp9.100.000.
+        <NuxtLink to="/kerja-sama" class="font-semibold text-gray-900 dark:text-white underline underline-offset-4 hover:no-underline">
+          Lihat harga dan syarat
+        </NuxtLink>
+      </p>
     </section>
-    <section v-else-if="featuredProduct" class="border-b border-gray-100 dark:border-gray-800 pb-8 md:pb-12">
-      <FeaturedProductCard :product="featuredProduct" />
+
+    <!-- 5. Yang belum kami kerjakan -->
+    <section>
+      <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm mb-6">Yang belum kami kerjakan</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div
+          v-for="item in notYet"
+          :key="item.title"
+          class="p-5 rounded-2xl border border-gray-100 dark:border-gray-800"
+        >
+          <h3 class="text-base font-bold text-gray-900 dark:text-white leading-snug">{{ item.title }}</h3>
+          <p class="mt-1.5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{{ item.description }}</p>
+        </div>
+      </div>
     </section>
 
-    <!-- Recent Stories + Sidebar -->
-    <div class="grid lg:grid-cols-3 gap-8 md:gap-12">
-      <!-- Main: Recent Stories -->
-      <section class="order-2 lg:order-1 lg:col-span-2">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm">Recent Stories</h2>
-          <NuxtLink to="/explore" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-2">
-            See all <Icon name="lucide:arrow-right" class="w-4 h-4" />
-          </NuxtLink>
+    <!-- 6. Ajakan email (dark block in both themes) -->
+    <section class="rounded-2xl bg-gray-900 dark:bg-dark-secondary border border-gray-900 dark:border-gray-800 px-6 py-10 md:px-12 md:py-14 text-center">
+      <h2 class="text-2xl md:text-3xl font-black tracking-tight text-white">Mau coba di satu repo dulu?</h2>
+      <p class="mt-3 text-sm md:text-base text-gray-300 leading-relaxed">
+        Kirim email ke {{ CONTACT_EMAIL }}. Tidak ada form, tidak perlu membuat akun.
+      </p>
+      <a
+        :href="mailto('Diskusi pilot')"
+        class="mt-6 inline-flex items-center justify-center min-h-11 px-6 py-2.5 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors"
+      >
+        Kirim email
+      </a>
+    </section>
+
+    <!-- 7. Catatan terbaru -->
+    <section v-if="pending || recentPosts.length > 0">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm">Catatan terbaru</h2>
+        <NuxtLink to="/explore" class="inline-flex items-center gap-2 min-h-11 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+          Semua artikel <Icon name="lucide:arrow-right" class="w-4 h-4" />
+        </NuxtLink>
+      </div>
+
+      <div v-if="pending" class="divide-y divide-gray-100 dark:divide-gray-800">
+        <div v-for="i in 3" :key="i" class="py-6 md:py-8 first:pt-0 space-y-3">
+          <SkeletonBlock class="h-3 rounded w-24" />
+          <SkeletonBlock class="h-5 rounded w-3/4" />
+          <SkeletonBlock class="h-3 rounded w-1/2" />
         </div>
-
-        <!-- Skeleton -->
-        <div v-if="pending" class="divide-y divide-gray-100 dark:divide-gray-800">
-          <div v-for="i in 3" :key="i" class="py-6 md:py-8 first:pt-0">
-            <div class="flex gap-4 items-start justify-between">
-              <div class="flex-1 space-y-3">
-                <div class="flex items-center gap-2">
-                  <SkeletonBlock class="w-6 h-6 rounded-full" />
-                  <SkeletonBlock class="h-3 rounded w-24" />
-                </div>
-                <SkeletonBlock class="h-5 rounded w-3/4" />
-                <SkeletonBlock class="h-3 rounded w-full" />
-                <SkeletonBlock class="h-3 rounded w-1/2" />
-              </div>
-              <SkeletonBlock class="w-16 h-16 rounded shrink-0 ml-4" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Empty -->
-        <EmptyState v-else-if="recentPosts.length === 0" message="No stories published yet." padding="py-8 md:py-12" />
-
-        <!-- Article list -->
-        <template v-else>
-          <div class="divide-y divide-gray-100 dark:divide-gray-800">
-            <PostListItem v-for="post in recentPosts" :key="post.id" :post="post" />
-          </div>
-
-          <InfiniteScrollLoader v-if="loadingMore" />
-          <EndOfListMessage v-else-if="recentFinished" message="You've reached the end. No more stories to show." />
-          <div ref="recentSentinel" aria-hidden="true" class="h-px" />
-        </template>
-      </section>
-
-      <!-- Sidebar -->
-      <aside class="order-1 lg:order-2 space-y-10">
-        <!-- Popular on Coderium -->
-        <section>
-          <h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-5">Popular on Coderium</h3>
-
-          <div v-if="pendingPopular" class="space-y-5">
-            <div v-for="i in 3" :key="i" class="flex gap-3">
-              <SkeletonBlock class="w-6 h-4 rounded shrink-0 mt-1" />
-              <div class="flex-1 space-y-2">
-                <SkeletonBlock class="h-3 rounded w-full" />
-                <SkeletonBlock class="h-3 rounded w-2/3" />
-              </div>
-            </div>
-          </div>
-
-          <EmptyState v-else-if="popularPosts.length === 0" message="No popular posts yet." padding="" :center="false" />
-
-          <div v-else class="space-y-5">
-            <PopularPostItem
-              v-for="(post, index) in popularPosts"
-              :key="post.id"
-              :post="post"
-              :rank="index + 1"
-            />
-          </div>
-        </section>
-
-        <!-- Series CTA -->
-        <section class="border border-gray-100 dark:border-gray-800 rounded-xl p-5 bg-gray-50/50 dark:bg-dark-secondary/30">
-          <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Curated Series</p>
-          <h3 class="mt-2 text-base font-bold text-gray-900 dark:text-white leading-snug">
-            Master topics with guided reading paths
-          </h3>
-          <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            Step-by-step series guide you from core concepts to advanced production setups.
-          </p>
-          <NuxtLink
-            to="/playlists"
-            class="mt-4 text-sm font-medium text-gray-900 dark:text-white hover:underline flex items-center gap-2"
-          >
-            Browse all series <Icon name="lucide:arrow-right" class="w-4 h-4 inline" />
-          </NuxtLink>
-        </section>
-      </aside>
-    </div>
+      </div>
+      <div v-else class="divide-y divide-gray-100 dark:divide-gray-800">
+        <PostListItem v-for="post in recentPosts" :key="post.id" :post="post" />
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { InfiniteListMeta } from '~/composables/useInfiniteList';
+import type { ProductProof } from '@coderium/shared-types';
 
 definePageMeta({
   layout: 'default',
 });
 
 useSeo({
-  title: 'Coderium - Web Development Resources & Guides',
+  title: 'Coderium - AI agency untuk tim engineering',
   titleSuffix: false,
-  description: 'Explore high quality web development articles, carousel summaries, video tutorials, and interactive galleries.',
+  description:
+    'Tiket jadi pull request, merge tetap keputusan manusia. CAF (Coderium Agent Framework) dan AI Code Reviewer untuk tim engineering.',
 });
+
+// Every figure, price, and limitation on this page comes from the "Data yang
+// boleh dipakai" / "Di luar lingkup" sections of
+// docs/development/agency-pivot/requirements.md. Do not add new claims here.
+const CONTACT_EMAIL = 'hello@coderium.id';
+
+function mailto(subject: string): string {
+  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
+}
 
 const config = useRuntimeConfig();
 // SSR uses the internal API URL; browser calls remain same-origin.
 const apiBase = import.meta.server
   ? (config.apiInternalBase as string)
   : (config.public.apiBase as string);
+
+// ─── Produk ───────────────────────────────────────────────────────────────────
+
+interface Product {
+  id: string;
+  slug: string;
+  name: string;
+  tagline?: string | null;
+  cover?: string | null;
+  featured?: boolean;
+  order?: number;
+  proof?: ProductProof | null;
+}
+
+const HOME_PRODUCT_COUNT = 2;
+
+const { data: productsRes, pending: pendingProducts } = await useAsyncData<{ data: Product[] }>(
+  'homepageProducts',
+  () => $fetch(`${apiBase}/products?limit=24`),
+  { default: () => ({ data: [] }) }
+);
+
+// GET /products is already ordered by `order` asc.
+const homeProducts = computed(() => (productsRes.value?.data ?? []).slice(0, HOME_PRODUCT_COUNT));
+
+// ─── Strip angka ──────────────────────────────────────────────────────────────
+
+// Fallback copy of the dashboard numbers recorded in requirements.md. The
+// featured product's `proof` (filled in via admin) takes precedence, so the
+// strip can be updated without a deploy.
+const FALLBACK_NUMBERS: ProductProof = {
+  metrics: [
+    { value: '24', label: 'Tiket dikerjakan' },
+    { value: '15', label: 'PR di-merge' },
+    { value: '11 mnt', label: 'Median pemrosesan' },
+    { value: '~$10', label: 'Biaya model per tiket' },
+  ],
+  note: 'Dari pemakaian internal kami pada dua repo. 7 PR masih menunggu review dan 2 ditutup.',
+};
+
+const numbers = computed<ProductProof>(() => {
+  const proof = productsRes.value?.data?.find((p) => p.featured)?.proof;
+  if (!proof?.metrics?.length) return FALLBACK_NUMBERS;
+  return { metrics: proof.metrics.slice(0, 4), note: proof.note };
+});
+
+// ─── Konten statis ────────────────────────────────────────────────────────────
+
+const steps = [
+  {
+    title: 'Kirim email',
+    description: `Ceritakan repo dan tim Anda lewat ${CONTACT_EMAIL}.`,
+  },
+  {
+    title: 'Pilot di satu repo',
+    description: 'Pilot AI Code Review 4 minggu, atau pilot CAF 6-8 minggu yang dibuka dengan fit check di minggu 1.',
+  },
+  {
+    title: 'Review dan merge di tim Anda',
+    description: 'Tiket dikerjakan menjadi pull request. Tim Anda yang mereview dan memutuskan merge.',
+  },
+];
+
+const notYet = [
+  {
+    title: 'Tiket keamanan dan hak akses',
+    description: 'Dua PR yang ditutup pada pemakaian kami sendiri adalah tiket keamanan.',
+  },
+  {
+    title: 'Merge otomatis',
+    description: 'Merge tetap keputusan manusia.',
+  },
+  {
+    title: 'Jira dan GitLab untuk CAF',
+    description: 'Ada di rencana, belum tersedia.',
+  },
+  {
+    title: 'Tiket besar lintas sistem',
+    description: 'Pilot berjalan di satu repo.',
+  },
+];
+
+// ─── Catatan terbaru ──────────────────────────────────────────────────────────
 
 interface Author {
   id: string;
@@ -165,46 +264,13 @@ interface Post {
   user?: Author;
 }
 
-const RECENT_LIMIT = 6;
+const RECENT_LIMIT = 3;
 
-const { data: recentFirstPage, pending } = await useAsyncData<{ data: Post[]; meta: InfiniteListMeta }>(
+const { data: recentRes, pending } = await useAsyncData<{ data: Post[] }>(
   'recentPosts',
-  () => $fetch(`${apiBase}/posts?page=1&limit=${RECENT_LIMIT}`)
+  () => $fetch(`${apiBase}/posts?page=1&limit=${RECENT_LIMIT}`),
+  { default: () => ({ data: [] }) }
 );
 
-
-async function fetchRecentPage(page: number) {
-  return $fetch<{ data: Post[]; meta: InfiniteListMeta }>(`${apiBase}/posts?page=${page}&limit=${RECENT_LIMIT}`);
-}
-
-const {
-  items: recentPosts,
-  loading: loadingMore,
-  finished: recentFinished,
-  sentinel: recentSentinel,
-} = useInfiniteList(fetchRecentPage, recentFirstPage.value ?? null);
-
-const { data: popularRes, pending: pendingPopular } = await useAsyncData<{ data: Post[] }>(
-  'popularPosts',
-  () => $fetch(`${apiBase}/posts/popular`)
-);
-
-const popularPosts = computed(() => popularRes.value?.data || []);
-
-interface Product {
-  id: string;
-  slug: string;
-  name: string;
-  tagline?: string | null;
-  cover?: string | null;
-  featured?: boolean;
-  order?: number;
-}
-
-const { data: productsRes, pending: pendingProducts } = await useAsyncData<{ data: Product[] }>(
-  'homepageProducts',
-  () => $fetch(`${apiBase}/products?limit=24`)
-);
-
-const featuredProduct = computed(() => productsRes.value?.data?.find((p) => p.featured) ?? null);
+const recentPosts = computed(() => (recentRes.value?.data ?? []).slice(0, RECENT_LIMIT));
 </script>
