@@ -1397,3 +1397,117 @@ Details:
 
 ---
 
+---
+
+# Phase 17 - Agency Pivot (Public Site)
+
+Sumber kebenaran: `docs/development/agency-pivot/plan.md`, `requirements.md`,
+dan `tasks.md` (detail, file, dan acceptance tiap task ada di `tasks.md`).
+Dikerjakan satu task pada satu waktu, berurutan.
+
+## TASK-0
+
+Task: Isi CLAUDE.md (konvensi kode, konteks bisnis, perintah verifikasi)
+
+Status: `DONE`
+
+Details:
+
+```txt
+- Semua TODO di CLAUDE.md diisi dari kondisi repo dan dokumen agency-pivot
+- Perintah verifikasi nyata: pnpm typecheck, pnpm lint, pnpm build (root, turbo)
+- Dicatat: tidak ada workspace yang punya skrip lint maupun test (pnpm lint
+  menjalankan 0 task); *.spec.ts di apps/api tidak bisa dieksekusi
+- Referensi .ai/tasks/README.md diperbaiki ke .caf/tasks/README.md (folder .ai
+  tidak ada di repo)
+```
+
+---
+
+## AGENCY-001
+
+Task: Izinkan `mailto:` pada CTA produk
+
+Status: `TODO`
+
+---
+
+## AGENCY-002
+
+Task: Tambah field `badge`, `proof`, `faq` pada Product
+
+Status: `TODO`
+
+---
+
+## AGENCY-003
+
+Task: Form admin untuk badge, proof, dan FAQ
+
+Status: `TODO`
+
+---
+
+## AGENCY-004
+
+Task: Render badge, description, bukti, FAQ, dan CTA di detail produk
+
+Status: `TODO`
+
+---
+
+## AGENCY-005
+
+Task: Halaman `/kerja-sama`
+
+Status: `TODO`
+
+---
+
+## AGENCY-006
+
+Task: Layout menu atas dan footer
+
+Status: `TODO`
+
+---
+
+## AGENCY-007
+
+Task: Beranda agency, font, dan token warna
+
+Status: `TODO`
+
+---
+
+## AGENCY-008
+
+Task: Identitas, SEO, dan About
+
+Status: `TODO`
+
+---
+
+## AGENCY-009
+
+Task: [Manual] Isi konten produk lewat admin
+
+Status: `TODO`
+
+---
+
+## AGENCY-010
+
+Task: [Manual + CAF] Perbarui dokumen proyek
+
+Status: `TODO`
+
+---
+
+## AGENCY-011
+
+Task: [Manual] QA dan rilis
+
+Status: `TODO`
+
+---

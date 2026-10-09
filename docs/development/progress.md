@@ -44,7 +44,7 @@ IN_PROGRESS
 Current Phase:
 
 ```txt
-Phase 16 - AI Content Generation (Backend done, ticket 24; apps/admin UI — ticket 25 — pending)
+Phase 17 - Agency Pivot (Public Site) — TASK-0 DONE, berikutnya AGENCY-001
 ```
 
 Current Milestone:
@@ -56,7 +56,7 @@ M11 - AI Agent Ready (IN_PROGRESS — admin UI ticket 25 DONE, backend ticket 24
 Last Updated:
 
 ```txt
-2026-08-30
+2026-10-09
 ```
 
 ---
@@ -84,6 +84,7 @@ Last Updated:
 | Phase 14 - Product Catalog (Public Site) | DONE | 100% |
 | Phase 15 - Hermes Integration (Backend & Admin UI) | DONE | 100% |
 | Phase 16 - AI Content Generation (Backend, ticket 24) | DONE | 100% |
+| Phase 17 - Agency Pivot (Public Site) | IN_PROGRESS | 8% (1/12) |
 
 ---
 
@@ -121,7 +122,17 @@ Phase 0 - Foundation Setup
 ### TODO
 
 ```txt
-None
+AGENCY-001 Izinkan mailto: pada CTA produk
+AGENCY-002 Tambah field badge, proof, faq pada Product
+AGENCY-003 Form admin untuk badge, proof, dan FAQ
+AGENCY-004 Render badge, description, bukti, FAQ, dan CTA di detail produk
+AGENCY-005 Halaman /kerja-sama
+AGENCY-006 Layout menu atas dan footer
+AGENCY-007 Beranda agency, font, dan token warna
+AGENCY-008 Identitas, SEO, dan About
+AGENCY-009 [Manual] Isi konten produk lewat admin
+AGENCY-010 [Manual + CAF] Perbarui dokumen proyek
+AGENCY-011 [Manual] QA dan rilis
 ```
 
 ---
@@ -238,6 +249,7 @@ WEB-PROD-001 Create Product Public Pages (ticket 14)
 HERMES-001 Extend Post API — atribusi sumber, dedup, kontrak untuk hermes (ticket 18)
 HERMES-002 Admin UI — tampilkan atribusi sumber draft hermes (ticket 19)
 AI-CONTENT-001 Implement AI Content Generation module — generate + cover commit (ticket 24)
+TASK-0 Isi CLAUDE.md — konvensi kode, konteks bisnis, perintah verifikasi (Phase 17 Agency Pivot)
 ```
 
 ---
@@ -276,6 +288,9 @@ Path di atas.
 Priority Order:
 
 ```txt
+Phase 17 - Agency Pivot: AGENCY-001 Izinkan mailto: pada CTA produk
+(urutan lengkap di docs/development/agency-pivot/tasks.md)
+
 Ticket 25 — apps/admin UI untuk AI Content Generation (grid card "AI Agent",
 trigger POST /admin/ai-content/generate, preview, commit cover via
 POST /admin/ai-content/cover, lalu POST /admin/posts)
