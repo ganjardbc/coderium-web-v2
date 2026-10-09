@@ -14,6 +14,19 @@ export function breadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
   };
 }
 
+/** Builds a FAQPage JSON-LD object from a list of {question, answer}. */
+export function faqPageJsonLd(items: Array<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  };
+}
+
 /** Injects one or more JSON-LD <script> tags for structured data / rich results. */
 export function useJsonLd(data: MaybeRefOrGetter<Record<string, unknown> | Record<string, unknown>[]>) {
   useHead(() => {

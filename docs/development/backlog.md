@@ -1529,7 +1529,33 @@ Details:
 
 Task: Render badge, description, bukti, FAQ, dan CTA di detail produk
 
-Status: `TODO`
+Status: `DONE`
+
+Details:
+
+```txt
+- apps/web/pages/products/[slug].vue: badge (pill di atas judul), description
+  setelah hero, blok "Hasil dari pemakaian kami sendiri" (metrics + note),
+  FAQ, CTA penutup memakai ctaUrl (mailto tanpa target="_blank", dari
+  AGENCY-001). Tiap bagian v-if sendiri; bagian kosong tidak dirender.
+- description adalah HTML dari RichTextEditor admin: disanitasi dengan
+  DOMPurify (profil html) lalu dirender v-html di dalam .prose-medium, pola
+  yang sama dengan isi artikel. Markup kosong (<p></p>) dianggap tidak ada.
+  Fallback meta description kini membuang tag HTML.
+- Komponen baru apps/web/components/FaqAccordion.vue: button + aria-expanded
+  + aria-controls, tinggi minimal 44px, jawaban v-show (tetap ada di HTML
+  SSR). Generik (props items), bisa dipakai lagi di /kerja-sama.
+- composables/useJsonLd.ts: helper faqPageJsonLd(); JSON-LD FAQPage hanya
+  dipasang bila faq ada.
+- Tipe proof/faq dari @coderium/shared-types (devDependency baru di apps/web).
+- Diverifikasi lewat SSR nyata: build web dijalankan terhadap mock API,
+  HTML produk "lengkap" dan "kosong" diperiksa: badge, description
+  (tag <script> terbuang), blok bukti, FAQ, FAQPage, CTA mailto tanpa
+  target; produk kosong tidak merender satu pun bagian baru dan CTA http
+  tetap target="_blank". pnpm typecheck dan pnpm build PASS.
+- Belum diuji: tampilan visual di browser (mobile, dark mode), klik
+  buka-tutup FAQ, dan data dari API/DB nyata.
+```
 
 ---
 

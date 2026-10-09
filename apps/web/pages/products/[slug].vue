@@ -29,6 +29,12 @@
         >
           <img :src="product.cover" :alt="product.name" class="w-full h-full object-cover" />
         </div>
+        <span
+          v-if="product.badge"
+          class="inline-block mb-3 md:mb-4 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 text-xs font-semibold text-gray-700 dark:text-gray-300"
+        >
+          {{ product.badge }}
+        </span>
         <h1 class="text-3xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
           {{ product.name }}
         </h1>
@@ -43,6 +49,14 @@
         >
           {{ product.ctaLabel || 'Request pilot' }}
         </a>
+      </section>
+
+      <!-- Description -->
+      <section
+        v-if="descriptionHtml"
+        class="prose-medium py-8 md:py-12 border-b border-gray-100 dark:border-gray-800"
+      >
+        <div v-html="descriptionHtml"></div>
       </section>
 
       <!-- Section 2: Pipeline strip -->
@@ -88,6 +102,30 @@
             </p>
           </div>
         </div>
+      </section>
+
+      <!-- Proof: numbers from our own usage (filled in via admin) -->
+      <section v-if="hasProof" class="py-8 md:py-12 border-b border-gray-100 dark:border-gray-800">
+        <h2 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-6">
+          Hasil dari pemakaian kami sendiri
+        </h2>
+        <dl v-if="proofMetrics.length > 0" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div
+            v-for="(metric, index) in proofMetrics"
+            :key="index"
+            class="flex flex-col-reverse p-4 md:p-5 rounded-xl border border-gray-100 dark:border-gray-800"
+          >
+            <dt class="mt-1 text-sm text-gray-600 dark:text-gray-400 leading-snug">{{ metric.label }}</dt>
+            <dd class="text-2xl md:text-3xl font-black text-gray-900 dark:text-white tracking-tight">{{ metric.value }}</dd>
+          </div>
+        </dl>
+        <p
+          v-if="proofNote"
+          class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line"
+          :class="proofMetrics.length > 0 ? 'mt-4 md:mt-6' : ''"
+        >
+          {{ proofNote }}
+        </p>
       </section>
 
       <!-- Section 4: Bukti -->
@@ -140,6 +178,12 @@
         </div>
       </section>
 
+      <!-- FAQ -->
+      <section v-if="faqItems.length > 0" class="py-8 md:py-12 border-b border-gray-100 dark:border-gray-800">
+        <h2 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-6">FAQ</h2>
+        <FaqAccordion :items="faqItems" />
+      </section>
+
       <!-- Section 5: CTA penutup -->
       <section class="py-8 md:py-12 text-center">
         <p class="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-4">Ready to piloting?</p>
@@ -158,6 +202,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import DOMPurify from 'isomorphic-dompurify';
+import type { ProductProof, ProductFaqItem } from '@coderium/shared-types';
 
 definePageMeta({
   layout: 'default',
@@ -190,6 +236,9 @@ interface ProductData {
   features?: ProductFeature[];
   ctaLabel?: string | null;
   ctaUrl?: string;
+  badge?: string | null;
+  proof?: ProductProof | null;
+  faq?: ProductFaqItem[] | null;
 }
 
 interface PlaylistData {
@@ -213,6 +262,20 @@ const { data: productRes, pending, error } = await useAsyncData<{ data: ProductD
 const product = computed(() => productRes.value?.data);
 // mailto: opens the mail client in place; only real web links get a new tab.
 const ctaIsMailto = computed(() => product.value?.ctaUrl?.toLowerCase().startsWith('mailto:') ?? false);
+
+// `description` is rich-text HTML authored in the admin editor.
+const descriptionHtml = computed(() => {
+  const raw = product.value?.description;
+  if (!raw) return '';
+  const html = DOMPurify.sanitize(raw, { USE_PROFILES: { html: true } });
+  // An "empty" editor still saves markup like <p></p>; treat that as no description.
+  return html.replace(/<[^>]*>/g, '').trim() ? html : '';
+});
+
+const proofMetrics = computed(() => product.value?.proof?.metrics ?? []);
+const proofNote = computed(() => product.value?.proof?.note?.trim() ?? '');
+const hasProof = computed(() => proofMetrics.value.length > 0 || proofNote.value !== '');
+const faqItems = computed(() => product.value?.faq ?? []);
 
 const { data: playlistRes, error: playlistError } = await useAsyncData<{ data: PlaylistData }>(
   `product-playlist-${slug}`,
@@ -247,7 +310,7 @@ if (product.value) {
   const p = product.value;
   useSeo({
     title: p.name,
-    description: p.tagline || p.description || undefined,
+    description: p.tagline || p.description?.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() || undefined,
     image: p.cover,
   });
 
@@ -259,6 +322,9 @@ if (product.value) {
       { name: p.name, url: `${siteUrl}/products/${p.slug}` },
     ])
   );
+  if (p.faq && p.faq.length > 0) {
+    useJsonLd(faqPageJsonLd(p.faq));
+  }
 } else if (error.value) {
   if (import.meta.server) {
     const event = useRequestEvent();

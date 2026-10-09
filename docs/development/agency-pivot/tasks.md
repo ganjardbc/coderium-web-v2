@@ -137,7 +137,7 @@ Acceptance:
 
 ## AGENCY-004 [CAF] Render badge, description, bukti, FAQ, dan CTA di detail produk
 
-Status: `TODO`
+Status: `DONE`
 
 Files:
 
