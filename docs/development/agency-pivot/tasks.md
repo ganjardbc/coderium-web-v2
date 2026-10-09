@@ -56,14 +56,14 @@ Details:
 ```txt
 - ctaUrl menerima URL http(s) atau mailto:. Validasi publish (isURL) memakai aturan
   yang sama. URL tidak valid tetap ditolak.
-- Hint di ProductForm: contoh mailto:hello@coderium.id?subject=Diskusi%20pilot
+- Hint di ProductForm: contoh mailto:coderium.id@gmail.com?subject=Diskusi%20pilot
 - Di web, tautan mailto: tidak memakai target="_blank".
 ```
 
 Acceptance:
 
 ```txt
-- Produk dengan ctaUrl mailto:hello@coderium.id?subject=Diskusi%20pilot bisa disimpan dan dipublish
+- Produk dengan ctaUrl mailto:coderium.id@gmail.com?subject=Diskusi%20pilot bisa disimpan dan dipublish
 - URL tidak valid tetap ditolak
 - Unit test service diperbarui
 - typecheck dan build lulus
@@ -214,11 +214,11 @@ Details:
 
 ```txt
 - Ganti sidebar dan bottom nav dengan header menu atas: logo, Produk, Kerja Sama,
-  Artikel (/explore), Series (/playlists), tombol pill "Kirim email" (mailto).
+  Artikel (/articles), Series (/playlists), tombol pill "Kirim email" (mailto).
 - Hapus tombol "Write" dari header publik. Dark mode toggle dipertahankan.
 - Mobile: menu bisa dilipat, target sentuh minimal 44px.
-- Footer: Produk, Kerja Sama, Artikel, Tentang, hello@coderium.id.
-- Perubahan berlaku untuk semua halaman web: uji /explore, /playlists, /posts/:slug.
+- Footer: Produk, Kerja Sama, Artikel, Tentang, coderium.id@gmail.com.
+- Perubahan berlaku untuk semua halaman web: uji /articles, /playlists, /articles/:slug.
 ```
 
 Acceptance:

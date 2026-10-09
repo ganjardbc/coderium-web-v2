@@ -28,7 +28,7 @@ Tetapi:
 Rinciannya:
 
 * Dua produk: **CAF (Coderium Agent Framework)** dan **AI Code Reviewer**.
-* Kontak hanya lewat email `hello@coderium.id`.
+* Kontak hanya lewat email `coderium.id@gmail.com`.
 * Artikel dan series tetap ada sebagai pelengkap.
 * Platform publishing (post, playlist, media, admin) yang dijelaskan di
   dokumen ini tetap menjadi fondasi teknisnya.

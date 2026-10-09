@@ -392,7 +392,7 @@ async function main() {
   // a mailto: CTA) for local development. Figures come from the "Data yang
   // boleh dipakai" section of docs/development/agency-pivot/requirements.md.
   // They sort before the legacy samples above so the homepage panels use them.
-  const DUMMY_CTA_URL = 'mailto:hello@coderium.id?subject=Diskusi%20uji%20coba';
+  const DUMMY_CTA_URL = 'mailto:coderium.id@gmail.com?subject=Diskusi%20uji%20coba';
   const agencyProducts = [
     {
       name: 'CAF (Coderium Agent Framework)',

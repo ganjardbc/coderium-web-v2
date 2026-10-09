@@ -77,7 +77,7 @@ definePageMeta({
   layout: 'default',
 });
 
-const CONTACT_EMAIL = 'hello@coderium.id';
+const CONTACT_EMAIL = 'coderium.id@gmail.com';
 const contactMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Diskusi uji coba')}`;
 
 const products = [
@@ -99,7 +99,7 @@ const pilotSteps = [
 ];
 
 const readingLinks = [
-  { to: '/explore', label: 'Artikel' },
+  { to: '/articles', label: 'Artikel' },
   { to: '/playlists', label: 'Series' },
 ];
 

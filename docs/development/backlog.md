@@ -1444,7 +1444,7 @@ Details:
   sesuai FR-1 (hanya http(s) atau mailto:). Produk lama dengan ctaUrl
   tanpa protokol akan gagal disimpan ulang/dipublish sampai diperbaiki.
 - apps/admin ProductForm.vue: hint dan placeholder memakai contoh
-  mailto:hello@coderium.id?subject=Diskusi%20pilot; cek format di klien
+  mailto:coderium.id@gmail.com?subject=Diskusi%20pilot; cek format di klien
   mengikuti aturan yang sama. Label ctaUrl di PUBLISH_FIELD_LABELS
   (product.store.ts) disesuaikan.
 - apps/web pages/products/[slug].vue: kedua tombol CTA tidak memakai
@@ -1578,7 +1578,7 @@ Details:
   keputusan manusia, tiket yang belum dikerjakan, Jira/GitLab di rencana,
   belum ada SLA, arti harga perintis, cara mulai). Teksnya perlu direview
   pemilik produk.
-- CTA: mailto:hello@coderium.id dengan subjek terisi ("Diskusi pilot",
+- CTA: mailto:coderium.id@gmail.com dengan subjek terisi ("Diskusi pilot",
   "Diskusi pilot AI Code Review", "Diskusi pilot CAF"), tanpa target.
 - Pakai ulang useSeo, useJsonLd + faqPageJsonLd (FAQPage), FaqAccordion.
 - Warna masih abu/hitam seperti halaman produk; token indigo baru masuk di
@@ -1606,12 +1606,12 @@ Details:
   diganti header menu atas: logo, Produk (/products), Kerja Sama
   (/work-with-us), Artikel (/explore, aktif juga di /posts/*), Series
   (/playlists), tombol pill "Kirim email"
-  (mailto:hello@coderium.id?subject=Diskusi%20pilot). Tombol "Write" dan
+  (mailto:coderium.id@gmail.com?subject=Diskusi%20pilot). Tombol "Write" dan
   variabel adminUrl dihapus dari layout. Dark mode toggle dipertahankan.
 - Mobile (< md): tombol menu (aria-expanded, aria-controls) membuka panel
   lipat berisi empat tautan + tombol "Kirim email"; menutup otomatis setelah
   navigasi. Tombol dan tautan menu 44px.
-- Footer: Produk, Kerja Sama, Artikel, Tentang, hello@coderium.id (mailto).
+- Footer: Produk, Kerja Sama, Artikel, Tentang, coderium.id@gmail.com (mailto).
   Tautan Terms dan Privacy dipertahankan di baris copyright supaya halaman
   legal tidak yatim.
 - Konten utama kini selebar max-w-7xl tanpa kolom sidebar; padding bawah
@@ -1661,7 +1661,7 @@ Details:
 - Komponen baru components/HomeSectionHeading.vue (nomor + judul section).
 - Footer (layouts/default.vue) diganti mengikuti FR-6.12 atas keputusan
   pemilik produk: gelap di kedua tema, berkolom Layanan (Produk, Kerja Sama),
-  Perusahaan (Tentang, Artikel, Series), Kontak (hello@coderium.id). Berlaku
+  Perusahaan (Tentang, Artikel, Series), Kontak (coderium.id@gmail.com). Berlaku
   di semua halaman web. Terms dan Privacy tetap di baris copyright. FR-5 di
   requirements.md masih menulis footer lama.
 - Catatan kaki panel produk: memakai proof.note dari admin; bila kosong,
@@ -1751,6 +1751,17 @@ Details:
   pemilik produk, supaya lebih mudah dipahami), termasuk nama paket ("Uji
   coba AI Code Review", "Uji coba CAF") dan subjek email. requirements.md
   dan plan.md masih memakai kata "pilot".
+- Rute artikel diganti (2026-10-10, keputusan pemilik produk): daftar
+  /explore -> /articles (pages/articles/index.vue), detail /posts/:slug ->
+  /articles/:slug (pages/articles/[slug].vue). Semua tautan, sitemap,
+  canonical, breadcrumb, dan SearchAction JSON-LD ikut. Redirect 301 dari
+  /explore dan /posts/** ditambahkan di routeRules (nuxt.config.ts) supaya
+  URL artikel lama tetap jalan. Endpoint API /posts tidak berubah. Entri
+  backlog di atas masih menyebut rute lama.
+- Email kontak diganti dari alamat @coderium.id lama ke coderium.id@gmail.com
+  (2026-10-10, keputusan pemilik produk) di seluruh repo: apps/web, hint
+  admin, contoh DTO dan spec API, seeder, CLAUDE.md, dan dokumen termasuk
+  "Keputusan yang sudah final" di plan.md.
 - Belum diuji: kesesuaian dengan mockup, desktop gelap setelah perapian,
   footer baru di halaman lain secara visual, perangkat nyata, data produksi.
 ```
@@ -1772,7 +1783,7 @@ Details:
   Indonesia).
 - composables/useSeo.ts: DEFAULT_DESCRIPTION memakai kalimat yang sama.
 - layouts/default.vue: JSON-LD Organization menambah description dan
-  contactPoint (email hello@coderium.id, contactType "sales",
+  contactPoint (email coderium.id@gmail.com, contactType "sales",
   availableLanguage id).
 - pages/about.vue ditulis ulang dalam bahasa Indonesia: apa yang kami buat
   (CAF, AI Code Reviewer), cara kerja pilot, artikel sebagai pelengkap,

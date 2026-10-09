@@ -33,5 +33,5 @@ defineProps<{
   highlighted?: boolean;
 }>();
 
-const CONTACT_EMAIL = 'hello@coderium.id';
+const CONTACT_EMAIL = 'coderium.id@gmail.com';
 </script>

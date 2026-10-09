@@ -91,7 +91,7 @@ sering menentukan kualitas PR:
   dan `tasks.md` (Phase 17 - Agency Pivot).
 - Dua produk: **CAF (Coderium Agent Framework)** dan **AI Code Reviewer**. Artikel
   tetap ada sebagai pelengkap.
-- Kontak hanya lewat email `hello@coderium.id` (tautan `mailto:` dengan subjek terisi).
+- Kontak hanya lewat email `coderium.id@gmail.com` (tautan `mailto:` dengan subjek terisi).
   Tidak ada form kontak, penyimpanan lead, pembayaran, atau akun klien.
 - Halaman baru berbahasa Indonesia penuh.
 - Konten produk diisi lewat admin, bukan di-hardcode di kode.

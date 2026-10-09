@@ -261,12 +261,12 @@
     <section v-if="pending || recentPosts.length > 0">
       <div class="mb-8 md:mb-12 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 sm:gap-6">
         <HomeSectionHeading number="08" label="Artikel" title="Artikel terbaru." />
-        <NuxtLink to="/explore" class="inline-flex items-center gap-2 min-h-11 shrink-0 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+        <NuxtLink to="/articles" class="inline-flex items-center gap-2 min-h-11 shrink-0 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
           Semua artikel <Icon name="lucide:arrow-right" class="w-4 h-4" aria-hidden="true" />
         </NuxtLink>
       </div>
 
-      <!-- Same list UI as /explore. -->
+      <!-- Same list UI as /articles. -->
       <div v-if="pending" class="divide-y divide-gray-100 dark:divide-gray-800">
         <div v-for="i in 3" :key="i" class="py-6 md:py-8 first:pt-0">
           <div class="flex gap-4 items-start justify-between">
@@ -328,7 +328,7 @@ useSeo({
 // boleh dipakai" / "Di luar lingkup" sections of
 // docs/development/agency-pivot/requirements.md. Do not add new claims here.
 // Prices come from composables/usePricing.ts, shared with /work-with-us.
-const CONTACT_EMAIL = 'hello@coderium.id';
+const CONTACT_EMAIL = 'coderium.id@gmail.com';
 
 function mailto(subject: string): string {
   return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;

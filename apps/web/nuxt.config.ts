@@ -58,6 +58,10 @@ export default defineNuxtConfig({
     // Keep browser requests same-origin while routing SSR/API proxy traffic
     // directly over the Docker network. Avoid hairpinning through Cloudflare.
     '/api/**': { proxy: `${process.env.NUXT_API_INTERNAL_BASE || 'http://localhost:3030/api/v1'}/**` },
+    // Old article URLs (the list lived at /explore, details at /posts/:slug)
+    // keep working and pass their search ranking on to the new paths.
+    '/explore': { redirect: { to: '/articles', statusCode: 301 } },
+    '/posts/**': { redirect: { to: '/articles/**', statusCode: 301 } },
   },
 
   // Unified site metadata consumed by @nuxtjs/sitemap and @nuxtjs/robots

@@ -11,7 +11,7 @@
         </div>
 
         <!-- Title + subtitle -->
-        <NuxtLink :to="`/posts/${post.slug}`" class="block">
+        <NuxtLink :to="`/articles/${post.slug}`" class="block">
           <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white leading-snug group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors line-clamp-2">
             {{ post.title }}
           </h2>
@@ -32,7 +32,7 @@
       </div>
 
       <!-- Thumbnail -->
-      <NuxtLink v-if="post.cover" :to="`/posts/${post.slug}`" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 rounded-sm overflow-hidden shrink-0 ml-3 sm:ml-4 bg-gray-100 dark:bg-dark-secondary border dark:border-gray-800">
+      <NuxtLink v-if="post.cover" :to="`/articles/${post.slug}`" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 rounded-sm overflow-hidden shrink-0 ml-3 sm:ml-4 bg-gray-100 dark:bg-dark-secondary border dark:border-gray-800">
         <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
       </NuxtLink>
     </div>

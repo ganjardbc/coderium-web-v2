@@ -56,7 +56,7 @@
         <h2 class="section-title mb-3">7. Kontak</h2>
         <p>
           Pertanyaan tentang ketentuan ini dapat dikirim ke
-          <a href="mailto:hello@coderium.id" class="text-gray-900 dark:text-white underline hover:no-underline">hello@coderium.id</a>.
+          <a href="mailto:coderium.id@gmail.com" class="text-gray-900 dark:text-white underline hover:no-underline">coderium.id@gmail.com</a>.
         </p>
       </section>
     </div>

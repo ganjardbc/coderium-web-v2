@@ -83,7 +83,7 @@ describe('ProductsService', () => {
     it.each([
       'mailto:',
       'mailto:not-an-email',
-      'mailto:hello@coderium.id?subject=Diskusi pilot',
+      'mailto:coderium.id@gmail.com?subject=Diskusi pilot',
       'ftp://example.com',
       'example.com',
       'javascript:alert(1)',
@@ -98,8 +98,8 @@ describe('ProductsService', () => {
     });
 
     it.each([
-      'mailto:hello@coderium.id',
-      'mailto:hello@coderium.id?subject=Diskusi%20pilot',
+      'mailto:coderium.id@gmail.com',
+      'mailto:coderium.id@gmail.com?subject=Diskusi%20pilot',
       'https://example.com/pilot',
       'http://example.com',
     ])('publishes when ctaUrl is %s', async (ctaUrl) => {

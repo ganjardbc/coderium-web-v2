@@ -96,7 +96,7 @@
                 <div class="flex-1 min-w-0">
                   <span class="text-xs text-primary dark:text-indigo-300 font-bold uppercase tracking-wider">{{ postTypeLabel(item.post.type) }}</span>
                   <h3 class="mt-0.5 text-base md:text-lg font-bold text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors leading-snug line-clamp-2">
-                    <NuxtLink :to="`/posts/${item.post.slug}`" class="after:absolute after:inset-0">{{ item.post.title }}</NuxtLink>
+                    <NuxtLink :to="`/articles/${item.post.slug}`" class="after:absolute after:inset-0">{{ item.post.title }}</NuxtLink>
                   </h3>
                 </div>
                 <Icon name="lucide:arrow-right" class="w-5 h-5 shrink-0 text-gray-400 dark:text-gray-700 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" aria-hidden="true" />

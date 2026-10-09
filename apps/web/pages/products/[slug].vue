@@ -176,7 +176,7 @@
               <NuxtLink
                 v-for="post in relatedPosts"
                 :key="post.id"
-                :to="`/posts/${post.slug}`"
+                :to="`/articles/${post.slug}`"
                 class="group card flex items-center gap-3 p-4 md:p-5 hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
               >
                 <div class="flex-1 min-w-0">

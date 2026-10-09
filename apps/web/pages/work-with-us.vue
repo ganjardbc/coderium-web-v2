@@ -67,7 +67,7 @@ definePageMeta({
 // Prices, durations, and terms on this page come from the "Data yang boleh
 // dipakai" section of docs/development/agency-pivot/requirements.md. Do not
 // add figures or claims that are not recorded there.
-const CONTACT_EMAIL = 'hello@coderium.id';
+const CONTACT_EMAIL = 'coderium.id@gmail.com';
 
 function mailto(subject: string): string {
   return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
@@ -113,7 +113,7 @@ const faq: ProductFaqItem[] = [
 useSeo({
   title: 'Kerja Sama',
   description:
-    'Uji coba AI Code Review dan uji coba CAF untuk tim engineering: harga terbuka, syarat dari klien, dan kontak lewat email hello@coderium.id.',
+    'Uji coba AI Code Review dan uji coba CAF untuk tim engineering: harga terbuka, syarat dari klien, dan kontak lewat email coderium.id@gmail.com.',
 });
 
 useJsonLd(faqPageJsonLd(faq));

@@ -87,7 +87,7 @@
     </header>
 
     <!-- Main Content Slot -->
-    <main class="flex-1 min-w-0 w-full max-w-7xl mx-auto md:px-6 py-6 md:py-8 flex flex-col">
+    <main class="flex-1 min-w-0 w-full max-w-7xl mx-auto md:px-6 pb-6 md:py-8 flex flex-col">
       <slot />
     </main>
 
@@ -143,7 +143,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 
-const CONTACT_EMAIL = 'hello@coderium.id';
+const CONTACT_EMAIL = 'coderium.id@gmail.com';
 const contactMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Diskusi uji coba')}`;
 
 // Site-wide structured data: lets Google understand the brand/organization
@@ -174,7 +174,7 @@ useJsonLd([
     url: siteUrl,
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${siteUrl}/explore?q={search_term_string}`,
+      target: `${siteUrl}/articles?q={search_term_string}`,
       'query-input': 'required name=search_term_string',
     },
   },
@@ -186,9 +186,9 @@ const navItems = [
   { to: '/products', label: 'Produk', isActive: (route: NavRoute) => route.path.startsWith('/products') },
   { to: '/work-with-us', label: 'Kerja Sama', isActive: (route: NavRoute) => route.path === '/work-with-us' },
   {
-    to: '/explore',
+    to: '/articles',
     label: 'Artikel',
-    isActive: (route: NavRoute) => route.path === '/explore' || route.path.startsWith('/posts'),
+    isActive: (route: NavRoute) => route.path.startsWith('/articles'),
   },
   { to: '/playlists', label: 'Series', isActive: (route: NavRoute) => route.path.startsWith('/playlists') },
 ];
@@ -205,7 +205,7 @@ const footerColumns = [
     title: 'Perusahaan',
     items: [
       { to: '/about', label: 'Tentang' },
-      { to: '/explore', label: 'Artikel' },
+      { to: '/articles', label: 'Artikel' },
       { to: '/playlists', label: 'Series' },
     ],
   },

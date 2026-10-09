@@ -101,12 +101,12 @@
       <FormField
         label="CTA URL"
         :invalid="isInvalid('ctaUrl')"
-        hint="Must be an http(s) URL or a mailto: link to publish, e.g. mailto:hello@coderium.id?subject=Diskusi%20pilot"
+        hint="Must be an http(s) URL or a mailto: link to publish, e.g. mailto:coderium.id@gmail.com?subject=Diskusi%20pilot"
       >
         <InputText
           id="product-cta-url"
           v-model="form.ctaUrl"
-          placeholder="mailto:hello@coderium.id?subject=Diskusi%20pilot"
+          placeholder="mailto:coderium.id@gmail.com?subject=Diskusi%20pilot"
           class="w-full"
         />
         <p v-if="ctaUrlLooksInvalid" class="text-xs text-red-500 mt-1">

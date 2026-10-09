@@ -4,7 +4,7 @@ Dokumen ini menjelaskan arah dan urutan kerja. Detail kebutuhan ada di `requirem
 
 ## Tujuan
 
-Mengubah coderium.id dari blog menjadi situs AI agency untuk tim engineering. Dua produk: **CAF (Coderium Agent Framework)** dan **AI Code Reviewer**. Kontak hanya lewat email `hello@coderium.id`. Artikel tetap ada sebagai pelengkap.
+Mengubah coderium.id dari blog menjadi situs AI agency untuk tim engineering. Dua produk: **CAF (Coderium Agent Framework)** dan **AI Code Reviewer**. Kontak hanya lewat email `coderium.id@gmail.com`. Artikel tetap ada sebagai pelengkap.
 
 ## Temuan di repo
 
@@ -12,7 +12,7 @@ Mengubah coderium.id dari blog menjadi situs AI agency untuk tim engineering. Du
 - Katalog produk lengkap dari ujung ke ujung: model `Product` (name, tagline, description, cover, pipelineSteps, features, ctaLabel, ctaUrl, featured, order, status), API publik `/products`, admin CRUD dengan publish/unpublish, halaman web `/products` dan `/products/:slug`.
 - Halaman detail produk sudah punya hero, "How it works", Features, bagian "Bukti" (playlist dan artikel terkait), dan CTA penutup.
 - Beranda punya slot produk unggulan (`FeaturedProductCard`). Sitemap otomatis mengambil slug produk.
-- Alamat `hello@coderium.id` sudah ada di halaman About.
+- Alamat `coderium.id@gmail.com` sudah ada di halaman About.
 
 **Celah**
 - **Blocker:** `ctaUrl` divalidasi `@IsUrl()` dan `isURL()` saat publish, sehingga `mailto:` ditolak.
@@ -29,7 +29,7 @@ Mengubah coderium.id dari blog menjadi situs AI agency untuk tim engineering. Du
 | Bahasa halaman baru | Indonesia penuh |
 | Rute halaman baru | `/work-with-us` |
 | Navigasi | Menu atas: logo, Produk, Kerja Sama, Artikel, Series, tombol "Kirim email". Sidebar dihapus. Tombol "Write" dihapus dari header publik |
-| Kontak | Hanya email `hello@coderium.id`, tautan `mailto:` dengan subjek terisi |
+| Kontak | Hanya email `coderium.id@gmail.com`, tautan `mailto:` dengan subjek terisi |
 | Harga | Tampil terbuka di `/work-with-us` |
 | Warna utama | Indigo `#3730D9` (token `@theme` Tailwind) |
 | Font | Inter (UI) dan JetBrains Mono (terminal/kode), Charter tetap untuk isi artikel |

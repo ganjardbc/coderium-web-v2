@@ -21,7 +21,7 @@ const DEFAULT_DESCRIPTION =
 /**
  * Centralized title/description/canonical/Open Graph/Twitter Card meta for a
  * page. `route.path` (query-string free) is always used as the canonical
- * URL, so filtered variants of the same page (e.g. /explore?q=...) collapse
+ * URL, so filtered variants of the same page (e.g. /articles?q=...) collapse
  * onto one canonical instead of being treated as separate pages.
  */
 export function useSeo(options: MaybeRefOrGetter<SeoOptions>) {

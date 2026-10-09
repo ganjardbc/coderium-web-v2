@@ -4,7 +4,7 @@ Kebutuhan fungsional, non-fungsional, data, dan batasan. Arah ada di `plan.md`, 
 
 ## Fungsional
 
-**FR-1. CTA email.** CTA produk dan halaman Kerja Sama membuka email ke `hello@coderium.id` lewat tautan `mailto:` dengan subjek terisi (contoh: `mailto:hello@coderium.id?subject=Diskusi%20pilot`), tanpa tab baru. `ctaUrl` menerima URL http(s) atau `mailto:`; URL tidak valid tetap ditolak, termasuk saat publish.
+**FR-1. CTA email.** CTA produk dan halaman Kerja Sama membuka email ke `coderium.id@gmail.com` lewat tautan `mailto:` dengan subjek terisi (contoh: `mailto:coderium.id@gmail.com?subject=Diskusi%20pilot`), tanpa tab baru. `ctaUrl` menerima URL http(s) atau `mailto:`; URL tidak valid tetap ditolak, termasuk saat publish.
 
 **FR-2. Field produk baru.** Admin dapat mengisi, per produk dan secara opsional:
 - `badge`: teks pendek (misalnya "Early access v0.1.9").
@@ -19,7 +19,7 @@ Kebutuhan fungsional, non-fungsional, data, dan batasan. Arah ada di `plan.md`, 
 - FAQ singkat.
 - CTA email.
 
-**FR-5. Navigasi menu atas.** Header memuat logo, Produk, Kerja Sama, Artikel (`/explore`), Series (`/playlists`), dan tombol pill "Kirim email". Sidebar dihapus, tombol "Write" tidak tampil di header publik. Mobile: menu bisa dilipat. Footer memuat Produk, Kerja Sama, Artikel, Tentang, dan `hello@coderium.id`.
+**FR-5. Navigasi menu atas.** Header memuat logo, Produk, Kerja Sama, Artikel (`/articles`), Series (`/playlists`), dan tombol pill "Kirim email". Sidebar dihapus, tombol "Write" tidak tampil di header publik. Mobile: menu bisa dilipat. Footer memuat Produk, Kerja Sama, Artikel, Tentang, dan `coderium.id@gmail.com`.
 
 **FR-6. Beranda agency (mockup Opsi B, editorial agency).** Urutan section:
 1. Hero tipografi besar: "Coderium. AI Agency." dengan subjudul yang menyebut CAF dan AI Code Reviewer dan bahwa tool dipasang di server klien; tombol "Kirim email" dan "Lihat layanan". Di bawahnya strip tiga janji (berjalan di server Anda, merge tetap keputusan manusia, pilot berharga tetap).
@@ -32,7 +32,7 @@ Kebutuhan fungsional, non-fungsional, data, dan batasan. Arah ada di `plan.md`, 
 8. 06 Tentang: "Agency awal. Pendirinya yang membangun." (jujur bahwa belum ada klien; harga perintis).
 9. 07 FAQ enam pertanyaan (dua kolom).
 10. 08 Catatan terbaru: tiga kartu artikel dengan gambar, tanggal, judul (dari API artikel).
-11. 09 Kontak: blok gelap besar "Ceritakan apa yang ingin Anda kerjakan." dengan tombol hello@coderium.id.
+11. 09 Kontak: blok gelap besar "Ceritakan apa yang ingin Anda kerjakan." dengan tombol coderium.id@gmail.com.
 12. Footer gelap berkolom: Layanan, Perusahaan, Kontak.
 
 Tidak dipakai (sengaja): statistik generik tanpa sumber, newsletter, CTA "coba gratis", dan testimoni. Mobile: satu kolom, kartu harga dan panel produk bertumpuk.

@@ -5,7 +5,7 @@
     <div class="mt-6 flex items-center justify-center gap-3">
       <BackButton :label="backLabel" variant="solid-dark" />
       <NuxtLink
-        to="/explore"
+        to="/articles"
         class="btn btn-outline"
       >
         Lihat artikel

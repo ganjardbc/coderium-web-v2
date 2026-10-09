@@ -2,39 +2,49 @@
   <div class="page-shell">
     <PageHeader title="Artikel" lead="Artikel, video, carousel, dan galeri tentang AI dan pengembangan software." />
 
-    <!-- Search bar -->
-    <div class="relative mb-5 flex items-center">
-      <Icon name="lucide:search" class="absolute left-4 top-3 md:top-4 w-5 h-5 text-gray-400 dark:text-gray-400" />
-      <input
-        v-model="searchInput"
-        type="text"
-        placeholder="Cari artikel..."
-        class="w-full pl-11 pr-4 py-2.5 md:py-3 border border-gray-200 dark:border-gray-800 rounded-full bg-gray-50 dark:bg-dark-secondary focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700 focus:bg-white dark:focus:bg-gray-800 text-sm md:text-base dark:text-gray-100 transition-colors"
-        @input="onSearch"
-      />
-    </div>
+    <!-- Search and type filter -->
+    <div class="mb-6 md:mb-8 flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6">
+      <div class="relative lg:w-96 lg:shrink-0">
+        <Icon
+          name="lucide:search"
+          class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400"
+          aria-hidden="true"
+        />
+        <input
+          v-model="searchInput"
+          type="search"
+          placeholder="Cari artikel..."
+          aria-label="Cari artikel"
+          class="w-full min-h-11 pl-11 pr-4 rounded-full border border-gray-200 dark:border-gray-800 bg-transparent text-base text-gray-900 dark:text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/40 dark:focus:ring-indigo-300/40 transition-shadow"
+          @input="onSearch"
+        />
+      </div>
 
-    <!-- Type filter chips -->
-    <div class="flex gap-2 flex-wrap mb-4">
-      <button
-        v-for="t in types"
-        :key="t.value"
-        @click="setType(t.value)"
-        :class="filterType === t.value ? 'topic-pill-active' : 'border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-gray-500 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white'"
-        class="px-4 py-1.5 rounded-full border text-xs md:text-sm font-semibold transition-colors cursor-pointer"
-      >
-        {{ t.label }}
-      </button>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Filter tipe">
+        <button
+          v-for="t in types"
+          :key="t.value"
+          type="button"
+          :aria-pressed="filterType === t.value"
+          :class="filterType === t.value ? 'topic-pill-active' : 'border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-gray-500 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white'"
+          class="inline-flex items-center min-h-11 px-4 rounded-full border text-sm font-semibold transition-colors cursor-pointer"
+          @click="setType(t.value)"
+        >
+          {{ t.label }}
+        </button>
+      </div>
     </div>
 
     <!-- Active tag filter -->
-    <div v-if="filterTag" class="flex items-center gap-2 mb-6 md:mb-8">
-      <span class="text-xs md:text-sm text-gray-500 dark:text-gray-400">Difilter dengan tag:</span>
+    <div v-if="filterTag" class="flex flex-wrap items-center gap-2 mb-6 md:mb-8">
+      <span class="text-sm text-gray-600 dark:text-gray-400">Difilter dengan tag:</span>
       <button
+        type="button"
+        :aria-label="`Hapus filter tag ${filterTag}`"
+        class="inline-flex items-center gap-1.5 min-h-11 px-4 rounded-full bg-primary text-white text-sm font-semibold cursor-pointer hover:bg-primary/90 transition-colors"
         @click="clearTag"
-        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-white text-xs md:text-sm font-semibold cursor-pointer"
       >
-        #{{ filterTag }} <Icon name="lucide:x" class="w-3.5 h-3.5" />
+        #{{ filterTag }} <Icon name="lucide:x" class="w-4 h-4" aria-hidden="true" />
       </button>
     </div>
 
@@ -104,7 +114,7 @@ const filterType = computed(() => (route.query.type as string) ?? '');
 const filterTag = computed(() => (route.query.tags as string) ?? '');
 
 // A specific search/filter result is a thin, ever-changing subset of the
-// same underlying content — keep only the bare /explore page indexable so
+// same underlying content — keep only the bare /articles page indexable so
 // search engines don't treat every query combination as a distinct page.
 useSeo(() => ({
   title: 'Artikel',

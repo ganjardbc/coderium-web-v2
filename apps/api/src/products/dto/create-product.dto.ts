@@ -77,7 +77,7 @@ export class CreateProductDto {
 
   @ApiPropertyOptional({
     description: 'http(s) URL or mailto: link',
-    example: 'mailto:hello@coderium.id?subject=Diskusi%20pilot',
+    example: 'mailto:coderium.id@gmail.com?subject=Diskusi%20pilot',
   })
   @IsOptional()
   @IsCtaUrl()

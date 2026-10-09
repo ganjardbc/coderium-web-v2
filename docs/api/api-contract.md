@@ -960,7 +960,7 @@ Request:
 ```
 
 `ctaUrl` menerima URL http(s) atau `mailto:` (mis.
-`mailto:hello@coderium.id?subject=Diskusi%20pilot`). `badge`, `proof`, dan
+`mailto:coderium.id@gmail.com?subject=Diskusi%20pilot`). `badge`, `proof`, dan
 `faq` opsional; kirim `null` untuk mengosongkan. Ketiganya ikut dikembalikan
 di semua response product (publik dan admin).
 
