@@ -61,7 +61,7 @@ import { Button, Toast, ConfirmDialog, ProgressSpinner } from 'primevue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import api from '@/lib/api';
-import MediaUploader from '@/components/MediaUploader.vue';
+import MediaUploader, { type UploadedMedia } from '@/components/MediaUploader.vue';
 
 interface MediaItem {
   id: string;
@@ -98,8 +98,8 @@ async function fetchMedia(page = 1, limit = 20) {
   }
 }
 
-function onUploaded(newMedia: Record<string, unknown>[]) {
-  mediaItems.value.unshift(...(newMedia as unknown as MediaItem[]));
+function onUploaded(newMedia: UploadedMedia[]) {
+  mediaItems.value.unshift(...newMedia);
   meta.value.total += newMedia.length;
 }
 
