@@ -1722,7 +1722,26 @@ Status: `TODO`
 
 Task: [Manual + CAF] Perbarui dokumen proyek
 
-Status: `TODO`
+Status: `DONE`
+
+Details:
+
+```txt
+- CLAUDE.md: sudah diisi di TASK-0 (masih menunggu review manusia).
+- docs/product/requirements.md: Product Positioning diganti ke situs AI
+  agency untuk tim engineering (dua produk, kontak email, artikel sebagai
+  pelengkap). Bagian lain PRD tidak diubah.
+- docs/frontend/frontend-routes.md: tambah /products, /products/:slug
+  (/kerja-sama sudah masuk di AGENCY-005); deskripsi route / diperbarui.
+- backlog.md dan progress.md: Phase 17 dan status tiap task diperbarui di
+  akhir setiap task.
+- Bagian manual yang tersisa: review teks Product Positioning dan CLAUDE.md.
+- Belum disentuh (di luar daftar task): Product Summary di AGENTS.md masih
+  menyebut platform Content Publishing; docs/frontend/layouts.md,
+  ui-pages.md, dan module-breakdown.md masih menggambarkan sidebar/beranda
+  lama; api-contract.md dan prisma-schema-design.md sudah diperbarui untuk
+  field produk baru.
+```
 
 ---
 

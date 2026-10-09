@@ -316,7 +316,7 @@ Details:
 
 ## AGENCY-010 [Manual + CAF] Perbarui dokumen proyek
 
-Status: `TODO`
+Status: `DONE`
 
 Details:
 

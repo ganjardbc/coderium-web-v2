@@ -8,11 +8,13 @@ File-based routing.
 
 | Route                   | Page File                           | Description              |
 | ----------------------- | ----------------------------------- | ------------------------ |
-| `/`                     | `pages/index.vue`                   | Home — latest & popular  |
+| `/`                     | `pages/index.vue`                   | Beranda agency: hero, angka, produk, cara kerja, catatan terbaru |
 | `/explore`              | `pages/explore.vue`                 | Browse & search all posts |
 | `/posts/:slug`          | `pages/posts/[slug].vue`            | Post detail (SSR + SEO)  |
 | `/playlists`            | `pages/playlists/index.vue`         | Playlist list            |
 | `/playlists/:slug`      | `pages/playlists/[slug].vue`        | Playlist detail          |
+| `/products`             | `pages/products/index.vue`          | Daftar produk terpublikasi |
+| `/products/:slug`       | `pages/products/[slug].vue`         | Detail produk: badge, description, bukti, FAQ, CTA (SSR + SEO) |
 | `/kerja-sama`           | `pages/kerja-sama.vue`              | Kerja Sama — pilot, harga, syarat klien, FAQ, CTA email (statis, SSR) |
 
 ---

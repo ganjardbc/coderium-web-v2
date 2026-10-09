@@ -44,7 +44,7 @@ IN_PROGRESS
 Current Phase:
 
 ```txt
-Phase 17 - Agency Pivot (Public Site) — TASK-0, AGENCY-001..008 DONE, berikutnya AGENCY-010 (bagian dokumen); AGENCY-009 dan AGENCY-011 manual
+Phase 17 - Agency Pivot (Public Site) — TASK-0, AGENCY-001..008 dan AGENCY-010 DONE; sisa AGENCY-009 dan AGENCY-011 (keduanya manual)
 ```
 
 Current Milestone:
@@ -84,7 +84,7 @@ Last Updated:
 | Phase 14 - Product Catalog (Public Site) | DONE | 100% |
 | Phase 15 - Hermes Integration (Backend & Admin UI) | DONE | 100% |
 | Phase 16 - AI Content Generation (Backend, ticket 24) | DONE | 100% |
-| Phase 17 - Agency Pivot (Public Site) | IN_PROGRESS | 75% (9/12) |
+| Phase 17 - Agency Pivot (Public Site) | IN_PROGRESS | 83% (10/12) |
 
 ---
 
@@ -123,7 +123,6 @@ Phase 0 - Foundation Setup
 
 ```txt
 AGENCY-009 [Manual] Isi konten produk lewat admin
-AGENCY-010 [Manual + CAF] Perbarui dokumen proyek
 AGENCY-011 [Manual] QA dan rilis
 ```
 
@@ -250,6 +249,7 @@ AGENCY-005 Halaman /kerja-sama (Phase 17 Agency Pivot)
 AGENCY-006 Layout menu atas dan footer (Phase 17 Agency Pivot)
 AGENCY-007 Beranda agency, font, dan token warna (Phase 17 Agency Pivot)
 AGENCY-008 Identitas, SEO, dan About (Phase 17 Agency Pivot)
+AGENCY-010 Perbarui dokumen proyek (Phase 17 Agency Pivot)
 ```
 
 ---
@@ -288,7 +288,7 @@ Path di atas.
 Priority Order:
 
 ```txt
-Phase 17 - Agency Pivot: AGENCY-009 [Manual] Isi konten produk lewat admin
+Phase 17 - Agency Pivot: AGENCY-009 [Manual] Isi konten produk lewat admin, lalu AGENCY-011 [Manual] QA dan rilis
 (urutan lengkap di docs/development/agency-pivot/tasks.md)
 
 Ticket 25 — apps/admin UI untuk AI Content Generation (grid card "AI Agent",
