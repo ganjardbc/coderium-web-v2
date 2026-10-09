@@ -30,7 +30,7 @@
             <span>{{ item }}</span>
           </li>
         </ul>
-        <NuxtLink to="/kerja-sama" class="text-link gap-2 mt-3 text-sm">
+        <NuxtLink to="/work-with-us" class="text-link gap-2 mt-3 text-sm">
           Lihat harga dan syarat dari klien
           <Icon name="lucide:arrow-right" class="w-4 h-4" aria-hidden="true" />
         </NuxtLink>

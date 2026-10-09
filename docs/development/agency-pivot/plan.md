@@ -27,10 +27,10 @@ Mengubah coderium.id dari blog menjadi situs AI agency untuk tim engineering. Du
 | Hal | Keputusan |
 |---|---|
 | Bahasa halaman baru | Indonesia penuh |
-| Rute halaman baru | `/kerja-sama` |
+| Rute halaman baru | `/work-with-us` |
 | Navigasi | Menu atas: logo, Produk, Kerja Sama, Artikel, Series, tombol "Kirim email". Sidebar dihapus. Tombol "Write" dihapus dari header publik |
 | Kontak | Hanya email `hello@coderium.id`, tautan `mailto:` dengan subjek terisi |
-| Harga | Tampil terbuka di `/kerja-sama` |
+| Harga | Tampil terbuka di `/work-with-us` |
 | Warna utama | Indigo `#3730D9` (token `@theme` Tailwind) |
 | Font | Inter (UI) dan JetBrains Mono (terminal/kode), Charter tetap untuk isi artikel |
 | Konten produk | Diisi lewat admin, bukan di-hardcode |

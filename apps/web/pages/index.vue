@@ -167,7 +167,7 @@
       </ol>
       <p class="mt-8 text-sm md:text-base text-gray-700 dark:text-gray-300">
         Pilot mulai {{ startingPlan.price }}, harga perintis mulai {{ startingPlan.pioneerPrice }}.
-        <NuxtLink to="/kerja-sama" class="text-link">Lihat harga dan syarat</NuxtLink>
+        <NuxtLink to="/work-with-us" class="text-link">Lihat harga dan syarat</NuxtLink>
       </p>
     </section>
 
@@ -226,7 +226,7 @@
       </div>
       <p class="mt-5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
         Harga perintis: {{ PIONEER_PRICE_NOTE }} {{ CLIENT_COST_NOTE }}
-        <NuxtLink to="/kerja-sama" class="text-link">Lihat syarat lengkap</NuxtLink>
+        <NuxtLink to="/work-with-us" class="text-link">Lihat syarat lengkap</NuxtLink>
       </p>
     </section>
 
@@ -327,7 +327,7 @@ useSeo({
 // Every figure, price, and limitation on this page comes from the "Data yang
 // boleh dipakai" / "Di luar lingkup" sections of
 // docs/development/agency-pivot/requirements.md. Do not add new claims here.
-// Prices come from composables/usePricing.ts, shared with /kerja-sama.
+// Prices come from composables/usePricing.ts, shared with /work-with-us.
 const CONTACT_EMAIL = 'hello@coderium.id';
 
 function mailto(subject: string): string {

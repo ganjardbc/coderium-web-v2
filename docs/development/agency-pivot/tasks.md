@@ -13,7 +13,7 @@ Keterangan: **[CAF]** cocok diserahkan ke pipeline CAF. **[Manual]** dikerjakan 
 | AGENCY-002 | Tambah `badge`, `proof`, `faq` pada Product | CAF | AGENCY-001 |
 | AGENCY-003 | Form admin untuk badge, proof, FAQ | CAF | AGENCY-002 |
 | AGENCY-004 | Render badge, description, bukti, FAQ, CTA di detail produk | CAF | AGENCY-002 |
-| AGENCY-005 | Halaman `/kerja-sama` | CAF | AGENCY-001 |
+| AGENCY-005 | Halaman `/work-with-us` | CAF | AGENCY-001 |
 | AGENCY-006 | Layout menu atas dan footer | CAF | AGENCY-005 |
 | AGENCY-007 | Beranda agency (Opsi B), font Inter, token warna | CAF | AGENCY-004, AGENCY-006 |
 | AGENCY-008 | Identitas, SEO, dan About | CAF | - |
@@ -165,14 +165,14 @@ Acceptance:
 
 ---
 
-## AGENCY-005 [CAF] Halaman `/kerja-sama`
+## AGENCY-005 [CAF] Halaman `/work-with-us`
 
 Status: `DONE`
 
 Files:
 
 ```txt
-apps/web/pages/kerja-sama.vue
+apps/web/pages/work-with-us.vue
 docs/frontend/frontend-routes.md
 ```
 
@@ -256,7 +256,7 @@ Details:
   (3 artikel terbaru dengan gambar, tanpa Popular) -> 09 Kontak -> footer berkolom.
 - Konten statis (hero, definisi, proses, tabel, paket, tentang, FAQ) ditulis di kode
   berbahasa Indonesia; hanya produk dan artikel yang dari API. Harga di kartu harus
-  sama dengan /kerja-sama (AGENCY-005): ambil dari satu sumber bersama (mis. composable
+  sama dengan /work-with-us (AGENCY-005): ambil dari satu sumber bersama (mis. composable
   atau file konstanta) agar tidak berbeda.
 - Hapus "Stay curious". Mobile satu kolom, kartu harga dan panel produk bertumpuk.
 - Tidak boleh ada statistik, testimoni, atau logo klien selain data di requirements.md.
@@ -267,7 +267,7 @@ Acceptance:
 ```txt
 - Sesuai mockup Opsi B (desktop), rapi di mobile dan dark mode
 - Angka hanya dari bagian Data di requirements.md
-- Harga di beranda dan /kerja-sama identik
+- Harga di beranda dan /work-with-us identik
 - typecheck dan build web lulus
 ```
 
@@ -330,7 +330,7 @@ Details:
 ```txt
 - CLAUDE.md: dikerjakan di TASK-0.
 - docs/product/requirements.md: perbarui Product Positioning.
-- docs/frontend/frontend-routes.md: tambah /products, /products/:slug, /kerja-sama.
+- docs/frontend/frontend-routes.md: tambah /products, /products/:slug, /work-with-us.
 - docs/development/backlog.md dan progress.md: tambah Phase 17 dan status tiap task.
 ```
 

@@ -1,5 +1,5 @@
 // Single source for package names, durations, and prices shown on the homepage
-// and on /kerja-sama, so the two pages can never disagree. Every value comes
+// and on /work-with-us, so the two pages can never disagree. Every value comes
 // from the "Data yang boleh dipakai" section of
 // docs/development/agency-pivot/requirements.md. Do not add figures here that
 // are not recorded there.

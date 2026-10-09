@@ -1544,7 +1544,7 @@ Details:
   Fallback meta description kini membuang tag HTML.
 - Komponen baru apps/web/components/FaqAccordion.vue: button + aria-expanded
   + aria-controls, tinggi minimal 44px, jawaban v-show (tetap ada di HTML
-  SSR). Generik (props items), bisa dipakai lagi di /kerja-sama.
+  SSR). Generik (props items), bisa dipakai lagi di /work-with-us.
 - composables/useJsonLd.ts: helper faqPageJsonLd(); JSON-LD FAQPage hanya
   dipasang bila faq ada.
 - Tipe proof/faq dari @coderium/shared-types (devDependency baru di apps/web).
@@ -1561,14 +1561,14 @@ Details:
 
 ## AGENCY-005
 
-Task: Halaman `/kerja-sama`
+Task: Halaman `/work-with-us`
 
 Status: `DONE`
 
 Details:
 
 ```txt
-- Halaman baru apps/web/pages/kerja-sama.vue, statis, bahasa Indonesia:
+- Halaman baru apps/web/pages/work-with-us.vue, statis, bahasa Indonesia:
   header + CTA, dua pilot dan harganya (termasuk harga perintis dan
   Rp2.000.000 di muka fit check CAF), kartu harga perintis (diskon 30%
   dengan izin studi kasus) dan retainer, syarat dari klien, FAQ, CTA penutup.
@@ -1586,7 +1586,7 @@ Details:
 - Route dicatat di docs/frontend/frontend-routes.md.
 - Diverifikasi lewat SSR nyata (build web + mock API): HTTP 200, semua harga
   dan syarat ada di HTML, title/canonical/FAQPage ada, tiga tautan mailto
-  bersubjek, /kerja-sama muncul di sitemap.xml. pnpm typecheck dan
+  bersubjek, /work-with-us muncul di sitemap.xml. pnpm typecheck dan
   pnpm build PASS.
 - Belum diuji: tampilan visual di browser (mobile, dark mode).
 ```
@@ -1604,7 +1604,7 @@ Details:
 ```txt
 - apps/web/layouts/default.vue: sidebar desktop dan bottom nav mobile dihapus,
   diganti header menu atas: logo, Produk (/products), Kerja Sama
-  (/kerja-sama), Artikel (/explore, aktif juga di /posts/*), Series
+  (/work-with-us), Artikel (/explore, aktif juga di /posts/*), Series
   (/playlists), tombol pill "Kirim email"
   (mailto:hello@coderium.id?subject=Diskusi%20pilot). Tombol "Write" dan
   variabel adminUrl dihapus dari layout. Dark mode toggle dipertahankan.
@@ -1620,10 +1620,10 @@ Details:
   PostActionBar.vue mobile bottom-20 -> bottom-6.
 - JSON-LD Organization/WebSite di layout tidak diubah (AGENCY-008).
 - Diverifikasi: build web dijalankan terhadap mock API; /, /products,
-  /products/:slug, /kerja-sama, /explore, /playlists, /playlists/:slug,
+  /products/:slug, /work-with-us, /explore, /playlists, /playlists/:slug,
   /posts/:slug, /about, /terms semua HTTP 200 dengan menu baru, tanpa
   "Write". Di Chrome: desktop terang dan gelap (/explore, /posts/:slug,
-  /playlists, /kerja-sama), viewport 390px (menu buka/tutup, tutup setelah
+  /playlists, /work-with-us), viewport 390px (menu buka/tutup, tutup setelah
   navigasi, target 44px, tanpa scroll horizontal, dark mode).
   pnpm typecheck dan pnpm build PASS.
 - Belum diuji: perangkat nyata, data produksi, halaman beranda secara visual
@@ -1656,8 +1656,8 @@ Details:
   07 FAQ enam pertanyaan dua kolom + JSON-LD FAQPage, 08 tiga kartu artikel
   (gambar, tanggal, judul), 09 blok Kontak gelap.
 - Sumber harga bersama: composables/usePricing.ts (pricingPlans,
-  PIONEER_PRICE_NOTE, CLIENT_COST_NOTE). pages/kerja-sama.vue kini membaca
-  dari file ini, jadi harga beranda dan /kerja-sama identik.
+  PIONEER_PRICE_NOTE, CLIENT_COST_NOTE). pages/work-with-us.vue kini membaca
+  dari file ini, jadi harga beranda dan /work-with-us identik.
 - Komponen baru components/HomeSectionHeading.vue (nomor + judul section).
 - Footer (layouts/default.vue) diganti mengikuti FR-6.12 atas keputusan
   pemilik produk: gelap di kedua tema, berkolom Layanan (Produk, Kerja Sama),
@@ -1680,8 +1680,8 @@ Details:
 - MOCKUP TIDAK BISA DIBUKA: kanvas "Mockup Beranda Coderium (Agency)" tidak
   terjangkau (server MCP pencil gagal konek), jadi acceptance "sesuai mockup
   Opsi B" BELUM diverifikasi. Tata letak dibangun dari teks FR-6.
-- Diverifikasi: build web dijalankan terhadap mock API; /, /kerja-sama,
-  /explore, /about HTTP 200; isi SSR beranda dan /kerja-sama diperiksa
+- Diverifikasi: build web dijalankan terhadap mock API; /, /work-with-us,
+  /explore, /about HTTP 200; isi SSR beranda dan /work-with-us diperiksa
   (harga sama, tidak ada "Stay curious" maupun hero lama). Di Chrome: desktop
   1440 terang (bagian atas) dan gelap; lebar 390px lewat iframe: satu kolom,
   tanpa scroll horizontal. pnpm typecheck dan build web PASS.
@@ -1723,14 +1723,14 @@ Details:
   section-title, body-copy, card, btn, btn-solid, btn-outline, text-link)
   dan komponen baru PageHeader.vue (judul besar font-black + lead). Dipakai
   di /explore, /playlists, /playlists/:slug, /products, /products/:slug,
-  /posts/:slug, /about, /terms, /privacy, /kerja-sama, NotFoundState,
+  /posts/:slug, /about, /terms, /privacy, /work-with-us, NotFoundState,
   BackButton, ProductCard, dan beranda. Padding ganda dihapus di semua
   halaman (konten sejajar header/footer), aksen biru dan tombol hitam diganti
   token primary, kartu rounded-2xl, judul section seragam. /products/:slug
   kini selebar halaman dengan hero dua kolom; teks panjang dibatasi max-w-3xl
   rata kiri. /posts/:slug tetap kolom baca terpusat.
 - Diverifikasi di Chrome desktop terang: header dan kerangka /explore,
-  /playlists, /products, /kerja-sama, /privacy, serta keadaan kosong dan
+  /playlists, /products, /work-with-us, /privacy, serta keadaan kosong dan
   tidak-ditemukan. Belum diuji: daftar dan halaman detail (artikel, series,
   produk) DENGAN DATA, karena proxy /api di build lokal mengarah ke API lokal
   yang kosong; juga mobile dan dark mode untuk halaman selain beranda.
@@ -1743,6 +1743,10 @@ Details:
   saja, bukan gradien biru-ungu logo.
 - Footer dan blok Kontak di dark mode memakai abu gelap netral #18181b (bukan biru gelap);
   mode terang tidak berubah.
+- Rute halaman Kerja Sama diganti dari /kerja-sama ke /work-with-us
+  (2026-10-10, keputusan pemilik produk; file pages/work-with-us.vue). Label
+  menu tetap "Kerja Sama". Tanpa redirect dari rute lama. Baris rute di
+  "Keputusan yang sudah final" plan.md dan semua dokumen ikut diperbarui.
 - Belum diuji: kesesuaian dengan mockup, desktop gelap setelah perapian,
   footer baru di halaman lain secara visual, perangkat nyata, data produksi.
 ```
@@ -1802,7 +1806,7 @@ Details:
   agency untuk tim engineering (dua produk, kontak email, artikel sebagai
   pelengkap). Bagian lain PRD tidak diubah.
 - docs/frontend/frontend-routes.md: tambah /products, /products/:slug
-  (/kerja-sama sudah masuk di AGENCY-005); deskripsi route / diperbarui.
+  (/work-with-us sudah masuk di AGENCY-005); deskripsi route / diperbarui.
 - backlog.md dan progress.md: Phase 17 dan status tiap task diperbarui di
   akhir setiap task.
 - Bagian manual yang tersisa: review teks Product Positioning dan CLAUDE.md.

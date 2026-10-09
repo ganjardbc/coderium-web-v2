@@ -184,7 +184,7 @@ type NavRoute = { path: string };
 
 const navItems = [
   { to: '/products', label: 'Produk', isActive: (route: NavRoute) => route.path.startsWith('/products') },
-  { to: '/kerja-sama', label: 'Kerja Sama', isActive: (route: NavRoute) => route.path === '/kerja-sama' },
+  { to: '/work-with-us', label: 'Kerja Sama', isActive: (route: NavRoute) => route.path === '/work-with-us' },
   {
     to: '/explore',
     label: 'Artikel',
@@ -198,7 +198,7 @@ const footerColumns = [
     title: 'Layanan',
     items: [
       { to: '/products', label: 'Produk' },
-      { to: '/kerja-sama', label: 'Kerja Sama' },
+      { to: '/work-with-us', label: 'Kerja Sama' },
     ],
   },
   {

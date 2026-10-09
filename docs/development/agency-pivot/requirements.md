@@ -13,7 +13,7 @@ Kebutuhan fungsional, non-fungsional, data, dan batasan. Arah ada di `plan.md`, 
 
 **FR-3. Halaman detail produk.** Menampilkan badge, `description`, blok "Hasil dari pemakaian kami sendiri" dari `proof`, FAQ (buka-tutup, aksesibel, dengan JSON-LD FAQPage), dan CTA email. Bagian yang kosong tidak dirender.
 
-**FR-4. Halaman `/kerja-sama` (statis di kode).** Berisi:
+**FR-4. Halaman `/work-with-us` (statis di kode).** Berisi:
 - Dua pilot dan harganya, harga perintis, dan retainer.
 - Syarat dari klien.
 - FAQ singkat.
@@ -84,7 +84,7 @@ Tiket keamanan dan hak akses, merge otomatis, Jira dan GitLab untuk CAF (di renc
 ## Kriteria selesai (seluruh pivot)
 
 - `pnpm typecheck` dan `pnpm build` lulus untuk web, api, dan admin.
-- Beranda, `/products`, `/products/:slug`, dan `/kerja-sama` tampil benar di mobile dan dark mode.
+- Beranda, `/products`, `/products/:slug`, dan `/work-with-us` tampil benar di mobile dan dark mode.
 - Tombol email membuka klien email dengan subjek terisi di perangkat nyata.
 - Dua produk (CAF dan AI Code Reviewer) terpublikasi dengan badge, bukti, FAQ, dan CTA email.
 - `backlog.md`, `progress.md`, `requirements.md` (produk), dan `frontend-routes.md` sudah diperbarui.
