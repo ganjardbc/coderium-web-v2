@@ -196,6 +196,9 @@ model Product {
   features      Json?         @default("[]")
   ctaLabel      String?       @map("cta_label")
   ctaUrl        String?       @map("cta_url")
+  badge         String?
+  proof         Json?
+  faq           Json?
   order         Int           @default(0)
   featured      Boolean       @default(false)
   createdAt     DateTime      @default(now()) @map("created_at")

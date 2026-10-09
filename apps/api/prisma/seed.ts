@@ -346,7 +346,7 @@ async function main() {
       ],
       ctaLabel: 'Get Started',
       ctaUrl: 'https://coderium.com/products/analytics',
-      order: 1,
+      order: 11,
       featured: true,
     },
     {
@@ -365,7 +365,7 @@ async function main() {
       ],
       ctaLabel: 'Learn More',
       ctaUrl: 'https://coderium.com/products/cms',
-      order: 2,
+      order: 12,
       featured: true,
     },
     {
@@ -383,16 +383,107 @@ async function main() {
         { title: 'Parallel jobs', description: 'Speed up builds with parallelism' },
         { title: 'Deploy previews', description: 'Preview every branch automatically' },
       ],
+      order: 13,
+      featured: false,
+    },
+  ];
+
+  // 11. Seed dummy agency products (Indonesian copy, with badge/proof/faq and
+  // a mailto: CTA) for local development. Figures come from the "Data yang
+  // boleh dipakai" section of docs/development/agency-pivot/requirements.md.
+  // They sort before the legacy samples above so the homepage panels use them.
+  const DUMMY_CTA_URL = 'mailto:coderium.id@gmail.com?subject=Diskusi%20uji%20coba';
+  const agencyProducts = [
+    {
+      name: 'CAF (Coderium Agent Framework)',
+      tagline: 'Tiket jadi pull request. Merge tetap keputusan manusia.',
+      description:
+        '<p>[Dummy] CAF mengerjakan tiket menjadi pull request di repo Anda. Tim Anda yang mereview dan memutuskan merge.</p>',
+      status: 'published' as const,
+      cover: createdMedia['sample-cover-1.jpg'],
+      pipelineSteps: [
+        { title: 'Plan', description: 'Tiket dibaca dan dipecah menjadi rencana kerja.' },
+        { title: 'Implement', description: 'Perubahan kode dikerjakan di branch tersendiri.' },
+        { title: 'Verify', description: 'Typecheck dan build dijalankan sebelum pull request dibuka.' },
+        { title: 'Pull request', description: 'Tim Anda mereview dan memutuskan merge.' },
+      ],
+      features: [
+        { title: 'Berjalan di server Anda', description: 'Tool dipasang di server Anda.' },
+        { title: 'Merge tetap keputusan manusia', description: 'Tidak ada merge otomatis.' },
+        { title: 'Terhubung dengan Linear dan GitHub', description: 'Jira dan GitLab ada di rencana, belum tersedia.' },
+      ],
+      ctaLabel: 'Kirim email',
+      ctaUrl: DUMMY_CTA_URL,
+      badge: 'Early access v0.1.9',
+      proof: {
+        metrics: [
+          { label: 'Tiket dikerjakan', value: '24' },
+          { label: 'PR di-merge', value: '15' },
+          { label: 'Median pemrosesan', value: '11 mnt' },
+          { label: 'Biaya model per tiket', value: '~$10' },
+        ],
+        note: 'Dari pemakaian internal kami pada dua repo. 7 PR masih menunggu review dan 2 ditutup (keduanya tiket keamanan).',
+      },
+      faq: [
+        { question: 'Apakah merge dilakukan otomatis?', answer: 'Tidak. Merge tetap keputusan manusia di tim Anda.' },
+        { question: 'Tiket seperti apa yang belum dikerjakan?', answer: 'Tiket keamanan dan hak akses, serta tiket besar lintas sistem.' },
+      ],
+      order: 1,
+      featured: true,
+    },
+    {
+      name: 'AI Code Reviewer',
+      tagline: 'Review kode dengan AI untuk setiap pull request.',
+      description: '<p>[Dummy] AI Code Reviewer mereview pull request di repo Anda. Keputusan merge tetap di tim Anda.</p>',
+      status: 'published' as const,
+      cover: createdMedia['sample-cover-2.jpg'],
+      pipelineSteps: [
+        { title: 'Pull request dibuka', description: 'Reviewer berjalan pada pull request baru.' },
+        { title: 'Review', description: 'Catatan review ditulis di pull request.' },
+        { title: 'Keputusan tim', description: 'Tim Anda yang memutuskan merge.' },
+      ],
+      features: [
+        { title: 'Berjalan di server Anda', description: 'Tool dipasang di server Anda.' },
+        { title: 'Terhubung dengan GitHub dan GitLab', description: 'Review muncul langsung di pull request.' },
+        { title: 'Uji coba 4 minggu', description: 'Dimulai dari satu repo.' },
+      ],
+      ctaLabel: 'Kirim email',
+      ctaUrl: DUMMY_CTA_URL,
+      badge: 'Open source · MIT',
+      faq: [
+        { question: 'Berapa lama uji cobanya?', answer: 'Uji coba AI Code Review berjalan 4 minggu di satu repo.' },
+      ],
+      order: 2,
+      featured: false,
+    },
+    {
+      name: 'Produk Contoh',
+      tagline: 'Data dummy untuk menguji daftar dan halaman detail produk.',
+      description: '<p>[Dummy] Produk ini hanya contoh untuk pengembangan lokal dan tidak mewakili produk nyata.</p>',
+      status: 'published' as const,
+      cover: createdMedia['sample-cover-3.jpg'],
+      pipelineSteps: [
+        { title: 'Langkah contoh satu', description: 'Deskripsi contoh.' },
+        { title: 'Langkah contoh dua', description: 'Deskripsi contoh.' },
+      ],
+      features: [
+        { title: 'Fitur contoh satu', description: 'Deskripsi contoh.' },
+        { title: 'Fitur contoh dua', description: 'Deskripsi contoh.' },
+      ],
+      ctaLabel: 'Kirim email',
+      ctaUrl: DUMMY_CTA_URL,
+      badge: 'Contoh',
       order: 3,
       featured: false,
     },
   ];
 
-  for (const product of products) {
+  for (const product of [...products, ...agencyProducts]) {
     const slug = slugify(product.name);
     await prisma.product.upsert({
       where: { slug },
-      update: {},
+      // Existing rows keep their content; only the sort position is synced.
+      update: { order: product.order },
       create: {
         ...product,
         slug,

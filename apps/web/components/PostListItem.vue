@@ -11,7 +11,7 @@
         </div>
 
         <!-- Title + subtitle -->
-        <NuxtLink :to="`/posts/${post.slug}`" class="block">
+        <NuxtLink :to="`/articles/${post.slug}`" class="block">
           <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white leading-snug group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors line-clamp-2">
             {{ post.title }}
           </h2>
@@ -23,16 +23,16 @@
         <!-- Meta row -->
         <div class="flex items-center gap-3 mt-3 text-xs text-gray-400 dark:text-gray-400">
           <span class="px-2 py-0.5 rounded-full border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 capitalize">
-            {{ post.type }}
+            {{ postTypeLabel(post.type) }}
           </span>
           <span>{{ readingTime(post.subtitle ?? post.title) }}</span>
-          <span>{{ post.viewsCount }} views</span>
-          <span v-if="post.likesCount !== undefined">{{ post.likesCount }} likes</span>
+          <span>{{ post.viewsCount }} kali dilihat</span>
+          <span v-if="post.likesCount !== undefined">{{ post.likesCount }} suka</span>
         </div>
       </div>
 
       <!-- Thumbnail -->
-      <NuxtLink v-if="post.cover" :to="`/posts/${post.slug}`" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 rounded-sm overflow-hidden shrink-0 ml-3 sm:ml-4 bg-gray-100 dark:bg-dark-secondary border dark:border-gray-800">
+      <NuxtLink v-if="post.cover" :to="`/articles/${post.slug}`" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 rounded-sm overflow-hidden shrink-0 ml-3 sm:ml-4 bg-gray-100 dark:bg-dark-secondary border dark:border-gray-800">
         <img :src="post.cover" :alt="post.title" class="w-full h-full object-cover" />
       </NuxtLink>
     </div>

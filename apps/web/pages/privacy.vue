@@ -1,63 +1,62 @@
 <template>
-  <div class="w-full max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-10">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-2">Privacy Policy</h1>
-    <p class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8">Last updated: {{ lastUpdated }}</p>
+  <div class="page-shell">
+    <PageHeader title="Kebijakan Privasi">Terakhir diperbarui: {{ lastUpdated }}</PageHeader>
 
-    <div class="prose prose-sm md:prose-base dark:prose-invert max-w-none space-y-6 text-gray-700 dark:text-gray-300">
+    <div class="max-w-3xl space-y-8 md:space-y-10 body-copy">
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">1. Information we collect</h2>
+        <h2 class="section-title mb-3">1. Informasi yang kami kumpulkan</h2>
         <p>
-          We collect minimal information needed to operate Coderium, such as pages visited, search queries entered
-          on the site, and basic technical data (browser, device type) via standard analytics.
+          Kami mengumpulkan informasi seminimal mungkin yang diperlukan untuk menjalankan Coderium, seperti halaman yang dikunjungi,
+          kata kunci pencarian di situs, dan data teknis dasar (browser, jenis perangkat) lewat analitik standar.
         </p>
       </section>
 
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">2. How we use it</h2>
+        <h2 class="section-title mb-3">2. Cara kami menggunakannya</h2>
         <ul class="list-disc pl-5 space-y-1">
-          <li>To operate and improve the site, articles, and product listings.</li>
-          <li>To understand which content is useful to readers.</li>
-          <li>To respond to messages sent to us directly (e.g. by email).</li>
+          <li>Untuk menjalankan dan memperbaiki situs, artikel, dan daftar produk.</li>
+          <li>Untuk memahami konten mana yang berguna bagi pembaca.</li>
+          <li>Untuk membalas pesan yang dikirim langsung kepada kami (misalnya lewat email).</li>
         </ul>
       </section>
 
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">3. Cookies & local storage</h2>
+        <h2 class="section-title mb-3">3. Cookie &amp; penyimpanan lokal</h2>
         <p>
-          The site may use cookies or browser local storage for functional purposes, such as remembering your
-          dark/light mode preference. These do not identify you personally.
+          Situs dapat memakai cookie atau penyimpanan lokal browser untuk keperluan fungsional, seperti mengingat
+          pilihan mode gelap/terang Anda. Data ini tidak mengidentifikasi Anda secara pribadi.
         </p>
       </section>
 
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">4. Third parties</h2>
+        <h2 class="section-title mb-3">4. Pihak ketiga</h2>
         <p>
-          We do not sell your personal information. We may use third-party services (such as hosting or analytics
-          providers) that process technical data on our behalf, under their own privacy policies.
+          Kami tidak menjual informasi pribadi Anda. Kami dapat memakai layanan pihak ketiga (seperti penyedia hosting atau analitik)
+          yang memproses data teknis atas nama kami, sesuai kebijakan privasi mereka sendiri.
         </p>
       </section>
 
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">5. Your choices</h2>
+        <h2 class="section-title mb-3">5. Pilihan Anda</h2>
         <p>
-          You can control cookies through your browser settings. You may also contact us to ask what data we hold
-          about you or to request it be removed.
+          Anda dapat mengatur cookie lewat pengaturan browser. Anda juga dapat menghubungi kami untuk menanyakan data apa yang kami simpan
+          tentang Anda atau meminta data itu dihapus.
         </p>
       </section>
 
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">6. Changes to this policy</h2>
+        <h2 class="section-title mb-3">6. Perubahan kebijakan</h2>
         <p>
-          We may update this policy from time to time. Material changes will be reflected by updating the date
-          above.
+          Kami dapat memperbarui kebijakan ini dari waktu ke waktu. Perubahan penting ditandai dengan memperbarui tanggal
+          di atas.
         </p>
       </section>
 
       <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">7. Contact</h2>
+        <h2 class="section-title mb-3">7. Kontak</h2>
         <p>
-          Questions about this policy can be sent to
-          <a href="mailto:hello@coderium.id" class="text-gray-900 dark:text-white underline hover:no-underline">hello@coderium.id</a>.
+          Pertanyaan tentang kebijakan ini dapat dikirim ke
+          <a href="mailto:coderium.id@gmail.com" class="text-gray-900 dark:text-white underline hover:no-underline">coderium.id@gmail.com</a>.
         </p>
       </section>
     </div>
@@ -70,9 +69,9 @@ definePageMeta({
 });
 
 useSeo({
-  title: 'Privacy Policy',
-  description: "Coderium's privacy policy.",
+  title: 'Kebijakan Privasi',
+  description: 'Kebijakan privasi Coderium.',
 });
 
-const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+const lastUpdated = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
 </script>

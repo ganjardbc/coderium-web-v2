@@ -1,36 +1,74 @@
 <template>
-  <div class="w-full max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-10">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-2">About Coderium</h1>
-    <p class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8">
-      Web development resources, guides, and tools for developers.
-    </p>
+  <div class="page-shell">
+    <PageHeader title="Tentang Coderium" lead="AI agency untuk tim engineering." />
 
-    <div class="prose prose-sm md:prose-base dark:prose-invert max-w-none space-y-6 text-gray-700 dark:text-gray-300">
-      <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">What we do</h2>
-        <p>
-          Coderium is a tech blog and resource hub focused on web development. We publish articles, curated series,
-          and tools that help developers learn, build, and ship better software.
-        </p>
-      </section>
+    <!-- Apa yang kami buat -->
+    <section class="split-section pt-0!">
+      <h2 class="section-title">Apa yang kami buat</h2>
+      <div>
+        <p class="body-copy">Kami membuat dua produk untuk tim engineering.</p>
+        <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+          <article v-for="product in products" :key="product.name" class="card p-6 md:p-8">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ product.name }}</h3>
+            <p class="mt-2 text-base text-gray-600 dark:text-gray-400 leading-relaxed">{{ product.description }}</p>
+          </article>
+        </div>
+        <NuxtLink to="/products" class="text-link gap-2 mt-3 text-sm">
+          Lihat detail tiap produk
+          <Icon name="lucide:arrow-right" class="w-4 h-4" aria-hidden="true" />
+        </NuxtLink>
+      </div>
+    </section>
 
-      <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">What you'll find here</h2>
-        <ul class="list-disc pl-5 space-y-1">
-          <li><strong>Posts</strong> — practical guides and write-ups on web technologies.</li>
-          <li><strong>Series</strong> — curated playlists that walk through a topic step by step.</li>
-          <li><strong>Products</strong> — tools and pilots we build and ship ourselves.</li>
+    <!-- Cara kerja pilot -->
+    <section class="split-section">
+      <h2 class="section-title">Cara kerja uji coba</h2>
+      <div>
+        <ul class="divide-y divide-gray-100 dark:divide-gray-800 border-y border-gray-100 dark:border-gray-800">
+          <li v-for="item in pilotSteps" :key="item" class="flex gap-3 py-4 body-copy">
+            <Icon name="lucide:check" class="w-5 h-5 mt-1 shrink-0 text-primary dark:text-indigo-300" aria-hidden="true" />
+            <span>{{ item }}</span>
+          </li>
         </ul>
-      </section>
+        <NuxtLink to="/work-with-us" class="text-link gap-2 mt-3 text-sm">
+          Lihat harga dan syarat dari klien
+          <Icon name="lucide:arrow-right" class="w-4 h-4" aria-hidden="true" />
+        </NuxtLink>
+      </div>
+    </section>
 
-      <section>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Contact</h2>
-        <p>
-          Have feedback, a topic suggestion, or found an issue on the site? Reach out via
-          <a href="mailto:hello@coderium.id" class="text-gray-900 dark:text-white underline hover:no-underline">hello@coderium.id</a>.
-        </p>
-      </section>
-    </div>
+    <!-- Artikel -->
+    <section class="split-section">
+      <h2 class="section-title">Artikel</h2>
+      <div>
+        <p class="body-copy">Kami juga menulis artikel dan series sebagai pelengkap.</p>
+        <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+          <NuxtLink
+            v-for="link in readingLinks"
+            :key="link.to"
+            :to="link.to"
+            class="group card flex items-center justify-between gap-4 p-6 md:p-8 hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
+          >
+            <span class="text-lg font-bold text-gray-900 dark:text-white">{{ link.label }}</span>
+            <Icon name="lucide:arrow-right" class="w-5 h-5 shrink-0 text-gray-400 dark:text-gray-700 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" aria-hidden="true" />
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kontak -->
+    <section class="py-10 md:py-16">
+      <div class="card flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 md:p-10">
+        <div>
+          <h2 class="section-title">Kontak</h2>
+          <p class="mt-2 body-copy">Kontak hanya lewat email: {{ CONTACT_EMAIL }}.</p>
+        </div>
+        <a :href="contactMailto" class="btn btn-solid gap-2 shrink-0">
+          <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
+          Kirim email
+        </a>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -39,8 +77,35 @@ definePageMeta({
   layout: 'default',
 });
 
+const CONTACT_EMAIL = 'coderium.id@gmail.com';
+const contactMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Diskusi uji coba')}`;
+
+const products = [
+  {
+    name: 'CAF (Coderium Agent Framework)',
+    description: 'Tiket dikerjakan menjadi pull request. Merge tetap keputusan manusia.',
+  },
+  {
+    name: 'AI Code Reviewer',
+    description: 'Review kode dengan AI.',
+  },
+];
+
+const pilotSteps = [
+  'Kami mulai dari uji coba di satu repo.',
+  'Uji coba AI Code Review berjalan 4 minggu.',
+  'Uji coba CAF berjalan 6-8 minggu dan dibuka dengan fit check di minggu 1.',
+  'Tim Anda yang mereview pull request dan memutuskan merge.',
+];
+
+const readingLinks = [
+  { to: '/articles', label: 'Artikel' },
+  { to: '/playlists', label: 'Series' },
+];
+
 useSeo({
-  title: 'About',
-  description: 'Learn about Coderium, a platform curating trustworthy articles, tutorials, and insights on AI and software development.',
+  title: 'Tentang',
+  description:
+    'Coderium adalah AI agency untuk tim engineering. Kami membuat CAF (Coderium Agent Framework) dan AI Code Reviewer, dan bekerja lewat uji coba di satu repo.',
 });
 </script>

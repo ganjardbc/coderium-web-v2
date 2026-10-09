@@ -16,12 +16,12 @@ export interface SeoOptions {
 
 const SITE_NAME = 'Coderium';
 const DEFAULT_DESCRIPTION =
-  'Coderium curates trustworthy articles, tutorials, and insights on AI and software development.';
+  'Coderium adalah AI agency untuk tim engineering, dengan dua produk: CAF (Coderium Agent Framework) dan AI Code Reviewer.';
 
 /**
  * Centralized title/description/canonical/Open Graph/Twitter Card meta for a
  * page. `route.path` (query-string free) is always used as the canonical
- * URL, so filtered variants of the same page (e.g. /explore?q=...) collapse
+ * URL, so filtered variants of the same page (e.g. /articles?q=...) collapse
  * onto one canonical instead of being treated as separate pages.
  */
 export function useSeo(options: MaybeRefOrGetter<SeoOptions>) {

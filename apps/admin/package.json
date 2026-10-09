@@ -23,6 +23,7 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@coderium/shared-types": "workspace:*",
     "@coderium/tsconfig": "workspace:*",
     "@primevue/auto-import-resolver": "^4.3.7",
     "@tailwindcss/vite": "^4.0.0",

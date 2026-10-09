@@ -4,14 +4,14 @@ import {
   ConflictException,
   BadRequestException,
 } from '@nestjs/common';
-import { isURL } from 'class-validator';
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database';
 import {
   CreateProductDto,
   UpdateProductDto,
   ListProductsDto,
   ListPublicProductsDto,
+  isCtaUrl,
 } from './dto';
 import { slugify } from '@coderium/shared-utils';
 
@@ -36,7 +36,7 @@ export class ProductsService {
     const failed: string[] = [];
 
     if (!candidate.cover) failed.push('cover');
-    if (!candidate.ctaUrl || !isURL(candidate.ctaUrl)) failed.push('ctaUrl');
+    if (!isCtaUrl(candidate.ctaUrl)) failed.push('ctaUrl');
     if (
       !Array.isArray(candidate.pipelineSteps) ||
       candidate.pipelineSteps.length < 1
@@ -53,6 +53,18 @@ export class ProductsService {
         fields: failed,
       });
     }
+  }
+
+  /**
+   * `proof`/`faq` are nullable Json columns: Prisma rejects a plain `null`
+   * there, so an explicit null from the client (clear the field) is mapped
+   * to a database NULL.
+   */
+  private toJsonColumns(dto: Pick<UpdateProductDto, 'proof' | 'faq'>) {
+    return {
+      ...(dto.proof === null && { proof: Prisma.DbNull }),
+      ...(dto.faq === null && { faq: Prisma.DbNull }),
+    };
   }
 
   private async ensureUniqueSlug(slug: string, excludeId?: string) {
@@ -93,6 +105,7 @@ export class ProductsService {
     return this.prisma.product.create({
       data: {
         ...rest,
+        ...this.toJsonColumns(dto),
         slug,
         status,
       } as Prisma.ProductCreateInput,
@@ -183,7 +196,10 @@ export class ProductsService {
 
     const updated = await this.prisma.product.update({
       where: { id },
-      data: { ...dto } as Prisma.ProductUpdateInput,
+      data: {
+        ...dto,
+        ...this.toJsonColumns(dto),
+      } as Prisma.ProductUpdateInput,
     });
 
     return { success: true, message: 'Product updated', data: updated };

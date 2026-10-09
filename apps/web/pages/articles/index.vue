@@ -1,40 +1,50 @@
 <template>
-  <div class="w-full mx-auto px-4 md:px-6 py-6 md:py-10">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-4 md:mb-6">Explore</h1>
+  <div class="page-shell">
+    <PageHeader title="Artikel" lead="Artikel, video, carousel, dan galeri tentang AI dan pengembangan software." />
 
-    <!-- Search bar -->
-    <div class="relative mb-5 flex items-center">
-      <Icon name="lucide:search" class="absolute left-4 top-3 md:top-4 w-5 h-5 text-gray-400 dark:text-gray-400" />
-      <input
-        v-model="searchInput"
-        type="text"
-        placeholder="Search stories..."
-        class="w-full pl-11 pr-4 py-2.5 md:py-3 border border-gray-200 dark:border-gray-800 rounded-full bg-gray-50 dark:bg-dark-secondary focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700 focus:bg-white dark:focus:bg-gray-800 text-sm md:text-base dark:text-gray-100 transition-colors"
-        @input="onSearch"
-      />
-    </div>
+    <!-- Search and type filter -->
+    <div class="mb-6 md:mb-8 flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6">
+      <div class="relative lg:w-96 lg:shrink-0">
+        <Icon
+          name="lucide:search"
+          class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400"
+          aria-hidden="true"
+        />
+        <input
+          v-model="searchInput"
+          type="search"
+          placeholder="Cari artikel..."
+          aria-label="Cari artikel"
+          class="w-full min-h-11 pl-11 pr-4 rounded-full border border-gray-200 dark:border-gray-800 bg-transparent text-base text-gray-900 dark:text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/40 dark:focus:ring-indigo-300/40 transition-shadow"
+          @input="onSearch"
+        />
+      </div>
 
-    <!-- Type filter chips -->
-    <div class="flex gap-2 flex-wrap mb-4">
-      <button
-        v-for="t in types"
-        :key="t.value"
-        @click="setType(t.value)"
-        :class="filterType === t.value ? 'topic-pill-active' : 'border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-gray-500 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white'"
-        class="px-4 py-1.5 rounded-full border text-xs md:text-sm font-medium transition-colors cursor-pointer"
-      >
-        {{ t.label }}
-      </button>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Filter tipe">
+        <button
+          v-for="t in types"
+          :key="t.value"
+          type="button"
+          :aria-pressed="filterType === t.value"
+          :class="filterType === t.value ? 'topic-pill-active' : 'border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-gray-500 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white'"
+          class="inline-flex items-center min-h-11 px-4 rounded-full border text-sm font-semibold transition-colors cursor-pointer"
+          @click="setType(t.value)"
+        >
+          {{ t.label }}
+        </button>
+      </div>
     </div>
 
     <!-- Active tag filter -->
-    <div v-if="filterTag" class="flex items-center gap-2 mb-6 md:mb-8">
-      <span class="text-xs md:text-sm text-gray-500 dark:text-gray-400">Filtered by tag:</span>
+    <div v-if="filterTag" class="flex flex-wrap items-center gap-2 mb-6 md:mb-8">
+      <span class="text-sm text-gray-600 dark:text-gray-400">Difilter dengan tag:</span>
       <button
+        type="button"
+        :aria-label="`Hapus filter tag ${filterTag}`"
+        class="inline-flex items-center gap-1.5 min-h-11 px-4 rounded-full bg-primary text-white text-sm font-semibold cursor-pointer hover:bg-primary/90 transition-colors"
         @click="clearTag"
-        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs md:text-sm font-medium cursor-pointer"
       >
-        #{{ filterTag }} <Icon name="lucide:x" class="w-3.5 h-3.5" />
+        #{{ filterTag }} <Icon name="lucide:x" class="w-4 h-4" aria-hidden="true" />
       </button>
     </div>
 
@@ -57,9 +67,9 @@
 
     <!-- Empty -->
     <EmptyState v-else-if="items.length === 0" padding="py-16">
-      <p v-if="searchQuery" class="text-base">No results for "<strong class="text-gray-600 dark:text-gray-400">{{ searchQuery }}</strong>"</p>
-      <p v-else-if="filterTag" class="text-base">No stories tagged "<strong class="text-gray-600 dark:text-gray-400">#{{ filterTag }}</strong>"</p>
-      <p v-else class="text-base">No stories yet. Check back soon.</p>
+      <p v-if="searchQuery" class="text-base">Tidak ada hasil untuk "<strong class="text-gray-600 dark:text-gray-400">{{ searchQuery }}</strong>"</p>
+      <p v-else-if="filterTag" class="text-base">Belum ada artikel dengan tag "<strong class="text-gray-600 dark:text-gray-400">#{{ filterTag }}</strong>"</p>
+      <p v-else class="text-base">Belum ada artikel. Silakan cek lagi nanti.</p>
     </EmptyState>
 
     <!-- Results -->
@@ -69,7 +79,7 @@
 
     <!-- Infinite scroll sentinel / loader / end message -->
     <InfiniteScrollLoader v-if="loading" />
-    <EndOfListMessage v-else-if="finished && items.length > 0" message="You've reached the end. No more stories to show." />
+    <EndOfListMessage v-else-if="finished && items.length > 0" message="Sudah sampai akhir. Tidak ada artikel lain." />
     <div ref="sentinel" aria-hidden="true" class="h-px" />
   </div>
 </template>
@@ -104,11 +114,11 @@ const filterType = computed(() => (route.query.type as string) ?? '');
 const filterTag = computed(() => (route.query.tags as string) ?? '');
 
 // A specific search/filter result is a thin, ever-changing subset of the
-// same underlying content — keep only the bare /explore page indexable so
+// same underlying content — keep only the bare /articles page indexable so
 // search engines don't treat every query combination as a distinct page.
 useSeo(() => ({
-  title: 'Explore',
-  description: 'Browse and search Coderium stories — articles, videos, carousels, and galleries on AI and software development.',
+  title: 'Artikel',
+  description: 'Telusuri dan cari artikel, video, carousel, dan galeri Coderium tentang AI dan pengembangan software.',
   noindex: Boolean(searchQuery.value || filterType.value || filterTag.value),
 }));
 
@@ -136,11 +146,11 @@ async function fetchSearchPage(page: number) {
 const { items, loading, finished, sentinel, reset } = useInfiniteList(fetchSearchPage);
 
 const types = [
-  { value: '', label: 'All' },
-  { value: 'article', label: 'Articles' },
-  { value: 'carousel', label: 'Carousels' },
-  { value: 'video', label: 'Videos' },
-  { value: 'stack_gallery', label: 'Galleries' },
+  { value: '', label: 'Semua' },
+  { value: 'article', label: 'Artikel' },
+  { value: 'carousel', label: 'Carousel' },
+  { value: 'video', label: 'Video' },
+  { value: 'stack_gallery', label: 'Galeri' },
 ];
 
 let searchTimeout: ReturnType<typeof setTimeout> | null = null;

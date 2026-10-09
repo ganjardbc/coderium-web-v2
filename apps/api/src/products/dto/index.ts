@@ -4,3 +4,6 @@ export * from './list-products.dto';
 export * from './list-public-products.dto';
 export * from './pipeline-step.dto';
 export * from './feature-item.dto';
+export * from './product-proof.dto';
+export * from './faq-item.dto';
+export * from './cta-url.validator';

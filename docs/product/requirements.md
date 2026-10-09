@@ -17,13 +17,24 @@ Tujuan utama produk:
 
 # Product Positioning
 
-Bukan hanya:
+Sejak Phase 17 (Agency Pivot), coderium.id bukan lagi:
 
-> Blog biasa
+> Blog / Knowledge Hub untuk Developer & Content Creator
 
 Tetapi:
 
-> Platform Knowledge Hub untuk Developer & Content Creator
+> Situs AI agency untuk tim engineering
+
+Rinciannya:
+
+* Dua produk: **CAF (Coderium Agent Framework)** dan **AI Code Reviewer**.
+* Kontak hanya lewat email `coderium.id@gmail.com`.
+* Artikel dan series tetap ada sebagai pelengkap.
+* Platform publishing (post, playlist, media, admin) yang dijelaskan di
+  dokumen ini tetap menjadi fondasi teknisnya.
+
+Sumber kebenaran pivot: `docs/development/agency-pivot/plan.md`,
+`requirements.md`, dan `tasks.md`.
 
 ---
 

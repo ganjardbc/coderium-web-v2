@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
     :to="`/products/${product.slug}`"
-    class="group block rounded-lg border border-gray-100 dark:border-gray-800 overflow-hidden hover:border-gray-300 dark:hover:border-gray-700 transition-colors bg-white dark:bg-dark-secondary/30"
+    class="group block card overflow-hidden hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
   >
     <div
       class="w-full bg-gray-50 dark:bg-dark-secondary overflow-hidden aspect-video"
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="p-4 md:p-5">
+    <div class="p-5">
       <h3
         class="font-bold text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors leading-tight text-base md:text-lg"
       >

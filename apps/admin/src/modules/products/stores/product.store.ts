@@ -2,6 +2,11 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import api from '@/lib/api';
 import type { UploadedMedia } from '@/components/MediaUploader.vue';
+import type {
+  ProductProof,
+  ProductProofMetric,
+  ProductFaqItem,
+} from '@coderium/shared-types';
 
 export interface PipelineStep {
   title: string;
@@ -27,6 +32,9 @@ export interface Product {
   features?: FeatureItem[];
   ctaLabel?: string | null;
   ctaUrl?: string | null;
+  badge?: string | null;
+  proof?: ProductProof | null;
+  faq?: ProductFaqItem[] | null;
   order?: number;
   featured?: boolean;
   createdAt: string;
@@ -51,9 +59,25 @@ export interface ProductPayload {
   features?: FeatureItem[];
   ctaLabel?: string;
   ctaUrl?: string;
+  // null clears the field server-side (see CreateProductDto).
+  badge?: string | null;
+  proof?: ProductProof | null;
+  faq?: ProductFaqItem[] | null;
   order?: number;
   featured?: boolean;
 }
+
+/** Limits mirrored from the API DTOs (apps/api/src/products/dto). */
+export const PRODUCT_LIMITS = {
+  badge: 60,
+  proofMetrics: 8,
+  proofMetricLabel: 60,
+  proofMetricValue: 40,
+  proofNote: 500,
+  faqItems: 20,
+  faqQuestion: 200,
+  faqAnswer: 2000,
+} as const;
 
 /**
  * Human-readable labels for the `fields` array returned by the 400
@@ -64,7 +88,7 @@ export interface ProductPayload {
  */
 export const PUBLISH_FIELD_LABELS: Record<string, string> = {
   cover: 'Cover image',
-  ctaUrl: 'CTA URL (must be a valid URL)',
+  ctaUrl: 'CTA URL (must be an http(s) URL or a mailto: link)',
   pipelineSteps: 'Pipeline Steps (at least 1 item)',
   features: 'Features (at least 1 item)',
 };
@@ -86,6 +110,11 @@ export interface ProductFormData {
   features: FeatureItem[];
   ctaLabel: string;
   ctaUrl: string;
+  badge: string;
+  // `proof` is edited as two flat fields and reassembled in toProductPayload.
+  proofMetrics: ProductProofMetric[];
+  proofNote: string;
+  faq: ProductFaqItem[];
   order: number;
   featured: boolean;
 }
@@ -101,6 +130,10 @@ export function createEmptyProductForm(): ProductFormData {
     features: [],
     ctaLabel: '',
     ctaUrl: '',
+    badge: '',
+    proofMetrics: [],
+    proofNote: '',
+    faq: [],
     order: 0,
     featured: false,
   };
@@ -130,12 +163,20 @@ export function productToFormData(product: Product): ProductFormData {
     features: product.features || [],
     ctaLabel: product.ctaLabel || '',
     ctaUrl: product.ctaUrl || '',
+    badge: product.badge || '',
+    proofMetrics: product.proof?.metrics ?? [],
+    proofNote: product.proof?.note || '',
+    faq: product.faq ?? [],
     order: product.order ?? 0,
     featured: product.featured ?? false,
   };
 }
 
 export function toProductPayload(form: ProductFormData, status: ProductStatus): ProductPayload {
+  const badge = form.badge.trim();
+  const proofNote = form.proofNote.trim();
+  const hasProof = form.proofMetrics.length > 0 || proofNote !== '';
+
   return {
     name: form.name,
     slug: form.slug || undefined,
@@ -149,6 +190,11 @@ export function toProductPayload(form: ProductFormData, status: ProductStatus): 
     features: form.features.length ? form.features : undefined,
     ctaLabel: form.ctaLabel || undefined,
     ctaUrl: form.ctaUrl || undefined,
+    badge: badge || null,
+    proof: hasProof
+      ? { metrics: form.proofMetrics, ...(proofNote && { note: proofNote }) }
+      : null,
+    faq: form.faq.length ? form.faq : null,
     order: form.order,
     featured: form.featured,
   };

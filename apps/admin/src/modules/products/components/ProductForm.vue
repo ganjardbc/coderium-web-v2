@@ -45,6 +45,16 @@
         />
       </FormField>
 
+      <FormField label="Badge" hint="Short status label shown next to the product name, e.g. Early access v0.1.9">
+        <InputText
+          id="product-badge"
+          v-model="form.badge"
+          placeholder="Early access v0.1.9"
+          :maxlength="PRODUCT_LIMITS.badge"
+          class="w-full"
+        />
+      </FormField>
+
       <FormField label="Description">
         <RichTextEditor v-model="form.description" placeholder="Describe the product…" />
       </FormField>
@@ -91,17 +101,73 @@
       <FormField
         label="CTA URL"
         :invalid="isInvalid('ctaUrl')"
-        hint="Must be a valid URL (e.g. https://example.com) to publish"
+        hint="Must be an http(s) URL or a mailto: link to publish, e.g. mailto:coderium.id@gmail.com?subject=Diskusi%20pilot"
       >
         <InputText
           id="product-cta-url"
           v-model="form.ctaUrl"
-          placeholder="https://example.com"
+          placeholder="mailto:coderium.id@gmail.com?subject=Diskusi%20pilot"
           class="w-full"
         />
         <p v-if="ctaUrlLooksInvalid" class="text-xs text-red-500 mt-1">
-          This doesn't look like a valid URL.
+          This doesn't look like a valid http(s) URL or mailto: link.
         </p>
+      </FormField>
+
+      <FormField
+        label="Proof"
+        :invalid="proofIncomplete && detailsChecked"
+        hint="Optional. Metrics shown under &quot;Hasil dari pemakaian kami sendiri&quot;. Every metric needs a label and a value."
+      >
+        <RepeatableListField
+          v-model="form.proofMetrics"
+          label="Proof Metrics"
+          item-label="Metric"
+          title-key="label"
+          description-key="value"
+          title-label="Label"
+          description-label="Value"
+          title-placeholder="Label, e.g. Tiket dikerjakan"
+          description-placeholder="Value, e.g. 24"
+          description-required
+          :description-multiline="false"
+          :title-maxlength="PRODUCT_LIMITS.proofMetricLabel"
+          :description-maxlength="PRODUCT_LIMITS.proofMetricValue"
+          :max-items="PRODUCT_LIMITS.proofMetrics"
+          :force-validate="detailsChecked"
+        />
+        <Textarea
+          id="product-proof-note"
+          v-model="form.proofNote"
+          placeholder="Note (optional), e.g. context or caveats for the numbers above"
+          aria-label="Proof note"
+          rows="2"
+          :maxlength="PRODUCT_LIMITS.proofNote"
+          class="w-full"
+        />
+      </FormField>
+
+      <FormField
+        label="FAQ"
+        :invalid="faqIncomplete && detailsChecked"
+        hint="Optional. Every item needs a question and an answer."
+      >
+        <RepeatableListField
+          v-model="form.faq"
+          label="FAQ"
+          item-label="Question"
+          title-key="question"
+          description-key="answer"
+          title-label="Question"
+          description-label="Answer"
+          title-placeholder="Question"
+          description-placeholder="Answer"
+          description-required
+          :title-maxlength="PRODUCT_LIMITS.faqQuestion"
+          :description-maxlength="PRODUCT_LIMITS.faqAnswer"
+          :max-items="PRODUCT_LIMITS.faqItems"
+          :force-validate="detailsChecked"
+        />
       </FormField>
     </div>
 
@@ -130,13 +196,16 @@
 
       <!-- Actions -->
       <div class="flex flex-col gap-2">
+        <p v-if="detailsChecked && (proofIncomplete || faqIncomplete)" class="text-xs text-red-500" role="alert">
+          Complete or remove the unfinished Proof / FAQ rows before saving.
+        </p>
         <Button
           type="button"
           label="Save & Publish"
           icon="pi pi-send"
           :loading="loading"
           class="w-full justify-center"
-          @click="emit('submit-publish')"
+          @click="submit('submit-publish')"
         />
         <Button
           type="button"
@@ -145,7 +214,7 @@
           outlined
           :loading="loading"
           class="w-full justify-center"
-          @click="emit('submit-draft')"
+          @click="submit('submit-draft')"
         />
         <Button
           type="button"
@@ -168,12 +237,13 @@ import {
   ToggleSwitch,
   Button,
   Message,
+  Textarea,
 } from 'primevue';
 import RichTextEditor from '@/components/RichTextEditor.vue';
 import MediaUploader from '@/components/MediaUploader.vue';
 import RepeatableListField from '@/components/RepeatableListField.vue';
 import type { ProductFormData } from '../stores/product.store';
-import { PUBLISH_FIELD_LABELS } from '../stores/product.store';
+import { PUBLISH_FIELD_LABELS, PRODUCT_LIMITS } from '../stores/product.store';
 
 const props = withDefaults(
   defineProps<{
@@ -295,6 +365,25 @@ watch(
   },
 );
 
+// Proof metrics and FAQ items are optional, but a row that exists must be
+// complete — the API rejects empty label/value/question/answer. Checked on
+// either submit button so the user gets inline errors instead of a raw 400.
+const isBlank = (value?: string) => !value || value.trim() === '';
+const proofIncomplete = computed(() =>
+  props.form.proofMetrics.some((m) => isBlank(m.label) || isBlank(m.value)),
+);
+const faqIncomplete = computed(() =>
+  props.form.faq.some((f) => isBlank(f.question) || isBlank(f.answer)),
+);
+const detailsChecked = ref(false);
+
+function submit(event: 'submit-draft' | 'submit-publish') {
+  detailsChecked.value = true;
+  if (proofIncomplete.value || faqIncomplete.value) return;
+  if (event === 'submit-draft') emit('submit-draft');
+  else emit('submit-publish');
+}
+
 function isInvalid(key: string): boolean {
   return props.bannerFields.includes(key);
 }
@@ -306,10 +395,11 @@ function fieldLabel(key: string): string {
 const ctaUrlLooksInvalid = computed(() => {
   const value = props.form.ctaUrl;
   if (!value) return false;
+  if (/\s/.test(value)) return true;
   try {
-    // eslint-disable-next-line no-new
-    new URL(value);
-    return false;
+    const url = new URL(value);
+    if (url.protocol === 'mailto:') return !/^[^@?]+@[^@?]+\.[^@?]+$/.test(url.pathname);
+    return url.protocol !== 'http:' && url.protocol !== 'https:';
   } catch {
     return true;
   }

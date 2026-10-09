@@ -39,6 +39,7 @@
     "rxjs": "^7.8.0"
   },
   "devDependencies": {
+    "@coderium/shared-types": "workspace:*",
     "@coderium/tsconfig": "workspace:*",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",

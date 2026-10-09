@@ -1397,3 +1397,452 @@ Details:
 
 ---
 
+---
+
+# Phase 17 - Agency Pivot (Public Site)
+
+Sumber kebenaran: `docs/development/agency-pivot/plan.md`, `requirements.md`,
+dan `tasks.md` (detail, file, dan acceptance tiap task ada di `tasks.md`).
+Dikerjakan satu task pada satu waktu, berurutan.
+
+## TASK-0
+
+Task: Isi CLAUDE.md (konvensi kode, konteks bisnis, perintah verifikasi)
+
+Status: `DONE`
+
+Details:
+
+```txt
+- Semua TODO di CLAUDE.md diisi dari kondisi repo dan dokumen agency-pivot
+- Perintah verifikasi nyata: pnpm typecheck, pnpm lint, pnpm build (root, turbo)
+- Dicatat: tidak ada workspace yang punya skrip lint maupun test (pnpm lint
+  menjalankan 0 task); *.spec.ts di apps/api tidak bisa dieksekusi
+- Referensi .ai/tasks/README.md diperbaiki ke .caf/tasks/README.md (folder .ai
+  tidak ada di repo)
+```
+
+---
+
+## AGENCY-001
+
+Task: Izinkan `mailto:` pada CTA produk
+
+Status: `DONE`
+
+Details:
+
+```txt
+- Aturan baru di apps/api/src/products/dto/cta-url.validator.ts: isCtaUrl()
+  + decorator @IsCtaUrl(). ctaUrl valid bila URL http(s) absolut, atau
+  mailto: ke satu alamat email valid (query seperti ?subject=... boleh).
+- CreateProductDto (dan UpdateProductDto lewat PartialType) memakai
+  @IsCtaUrl() menggantikan @IsUrl(); ProductsService.assertPublishable()
+  memakai isCtaUrl() yang sama, jadi simpan dan publish satu aturan.
+- PERUBAHAN PERILAKU: aturan lama (@IsUrl()/isURL() bawaan) menerima URL
+  tanpa protokol (example.com) dan ftp://. Sekarang keduanya ditolak,
+  sesuai FR-1 (hanya http(s) atau mailto:). Produk lama dengan ctaUrl
+  tanpa protokol akan gagal disimpan ulang/dipublish sampai diperbaiki.
+- apps/admin ProductForm.vue: hint dan placeholder memakai contoh
+  mailto:coderium.id@gmail.com?subject=Diskusi%20pilot; cek format di klien
+  mengikuti aturan yang sama. Label ctaUrl di PUBLISH_FIELD_LABELS
+  (product.store.ts) disesuaikan.
+- apps/web pages/products/[slug].vue: kedua tombol CTA tidak memakai
+  target="_blank"/rel bila ctaUrl berupa mailto:.
+- products.service.spec.ts ditambah kasus mailto dan URL tidak valid, tetapi
+  TIDAK dieksekusi (apps/api tidak punya test runner). Aturan diuji ad-hoc
+  lewat dist hasil build: 13 kasus isCtaUrl() + validasi CreateProductDto,
+  semua sesuai. pnpm typecheck dan pnpm build PASS.
+- Belum diuji: simpan/publish lewat HTTP dan DB nyata, tampilan form admin
+  dan klik tombol di browser.
+```
+
+---
+
+## AGENCY-002
+
+Task: Tambah field `badge`, `proof`, `faq` pada Product
+
+Status: `DONE`
+
+Details:
+
+```txt
+- schema.prisma: Product.badge String?, proof Json?, faq Json? (tanpa default).
+  Migration 20261009120000_add_product_badge_proof_faq: satu ALTER TABLE
+  "products" ADD COLUMN x3, additive, tidak menyentuh tabel lain. SQL ditulis
+  tangan (tidak ada DB lokal yang dipakai) dan sama persis dengan keluaran
+  `prisma migrate diff` skema lama -> skema baru.
+- MIGRATION BELUM DIJALANKAN di database mana pun. Backup dulu sebelum
+  deploy (prisma migrate deploy).
+- packages/shared-types: ProductProofMetric, ProductProof, ProductFaqItem.
+  apps/api menambah devDependency @coderium/shared-types (app pertama yang
+  memakainya; pnpm-lock.yaml ikut berubah); DTO meng-implements tipe itu.
+- DTO baru product-proof.dto.ts (ProofMetricDto, ProductProofDto) dan
+  faq-item.dto.ts (FaqItemDto). Batas (keputusan implementasi, bisa diubah):
+  badge <= 60 karakter; proof.metrics <= 8 item, label <= 60, value <= 40,
+  note <= 500; faq <= 20 item, question <= 200, answer <= 2000.
+- Mengosongkan field: kirim null (badge, proof, faq) atau [] (faq).
+  ProductsService memetakan null pada proof/faq ke Prisma.DbNull.
+- Response publik dan admin mengembalikan field baru tanpa perubahan lain
+  (service mengembalikan baris Product utuh, tidak ada select whitelist).
+- Validasi DTO diuji ad-hoc lewat dist (18 kasus valid/tidak valid, semua
+  sesuai). pnpm typecheck dan pnpm build PASS.
+- Belum diuji: simpan dan baca field lewat HTTP + DB nyata.
+```
+
+---
+
+## AGENCY-003
+
+Task: Form admin untuk badge, proof, dan FAQ
+
+Status: `DONE`
+
+Details:
+
+```txt
+- ProductForm.vue: input Badge, editor Proof (daftar metrik label + value
+  dengan tambah/hapus/urut, plus textarea catatan), editor FAQ (question +
+  answer, tambah/hapus/urut).
+- RepeatableListField.vue digeneralisasi (bukan komponen baru): prop opsional
+  titleKey/descriptionKey, label, placeholder, descriptionRequired,
+  descriptionMultiline, maxlength, maxItems. Default tidak berubah, jadi
+  pemakaian pipelineSteps/features tetap sama. Perubahan internal: baris
+  diperbarui lewat emit array baru, tidak lagi mutasi item di tempat.
+- product.store.ts: Product/ProductPayload/ProductFormData menambah badge,
+  proof, faq (tipe dari @coderium/shared-types, devDependency baru di
+  apps/admin). Form menyimpan proof sebagai proofMetrics + proofNote dan
+  dirakit ulang di toProductPayload. Field kosong dikirim null supaya bisa
+  dikosongkan saat edit. PRODUCT_LIMITS menyalin batas dari DTO API.
+- Validasi: baris metrik/FAQ yang belum lengkap ditandai merah dan kedua
+  tombol simpan ditahan (pesan di atas tombol) sampai baris dilengkapi atau
+  dihapus. maxlength dan batas jumlah item mengikuti DTO.
+- typecheck (vue-tsc) dan build admin PASS.
+- Belum diuji di browser: simpan, muat ulang saat edit, tampilan error, dan
+  regresi editor pipelineSteps/features setelah generalisasi komponen.
+```
+
+---
+
+## AGENCY-004
+
+Task: Render badge, description, bukti, FAQ, dan CTA di detail produk
+
+Status: `DONE`
+
+Details:
+
+```txt
+- apps/web/pages/products/[slug].vue: badge (pill di atas judul), description
+  setelah hero, blok "Hasil dari pemakaian kami sendiri" (metrics + note),
+  FAQ, CTA penutup memakai ctaUrl (mailto tanpa target="_blank", dari
+  AGENCY-001). Tiap bagian v-if sendiri; bagian kosong tidak dirender.
+- description adalah HTML dari RichTextEditor admin: disanitasi dengan
+  DOMPurify (profil html) lalu dirender v-html di dalam .prose-medium, pola
+  yang sama dengan isi artikel. Markup kosong (<p></p>) dianggap tidak ada.
+  Fallback meta description kini membuang tag HTML.
+- Komponen baru apps/web/components/FaqAccordion.vue: button + aria-expanded
+  + aria-controls, tinggi minimal 44px, jawaban v-show (tetap ada di HTML
+  SSR). Generik (props items), bisa dipakai lagi di /work-with-us.
+- composables/useJsonLd.ts: helper faqPageJsonLd(); JSON-LD FAQPage hanya
+  dipasang bila faq ada.
+- Tipe proof/faq dari @coderium/shared-types (devDependency baru di apps/web).
+- Diverifikasi lewat SSR nyata: build web dijalankan terhadap mock API,
+  HTML produk "lengkap" dan "kosong" diperiksa: badge, description
+  (tag <script> terbuang), blok bukti, FAQ, FAQPage, CTA mailto tanpa
+  target; produk kosong tidak merender satu pun bagian baru dan CTA http
+  tetap target="_blank". pnpm typecheck dan pnpm build PASS.
+- Belum diuji: tampilan visual di browser (mobile, dark mode), klik
+  buka-tutup FAQ, dan data dari API/DB nyata.
+```
+
+---
+
+## AGENCY-005
+
+Task: Halaman `/work-with-us`
+
+Status: `DONE`
+
+Details:
+
+```txt
+- Halaman baru apps/web/pages/work-with-us.vue, statis, bahasa Indonesia:
+  header + CTA, dua pilot dan harganya (termasuk harga perintis dan
+  Rp2.000.000 di muka fit check CAF), kartu harga perintis (diskon 30%
+  dengan izin studi kasus) dan retainer, syarat dari klien, FAQ, CTA penutup.
+- Semua harga, durasi, dan syarat disalin dari requirements.md bagian Data;
+  tidak ada angka atau klaim baru.
+- FAQ (6 butir) disusun hanya dari fakta di requirements.md (merge tetap
+  keputusan manusia, tiket yang belum dikerjakan, Jira/GitLab di rencana,
+  belum ada SLA, arti harga perintis, cara mulai). Teksnya perlu direview
+  pemilik produk.
+- CTA: mailto:coderium.id@gmail.com dengan subjek terisi ("Diskusi pilot",
+  "Diskusi pilot AI Code Review", "Diskusi pilot CAF"), tanpa target.
+- Pakai ulang useSeo, useJsonLd + faqPageJsonLd (FAQPage), FaqAccordion.
+- Warna masih abu/hitam seperti halaman produk; token indigo baru masuk di
+  AGENCY-007. Tautan ke halaman ini dari navigasi masuk di AGENCY-006.
+- Route dicatat di docs/frontend/frontend-routes.md.
+- Diverifikasi lewat SSR nyata (build web + mock API): HTTP 200, semua harga
+  dan syarat ada di HTML, title/canonical/FAQPage ada, tiga tautan mailto
+  bersubjek, /work-with-us muncul di sitemap.xml. pnpm typecheck dan
+  pnpm build PASS.
+- Belum diuji: tampilan visual di browser (mobile, dark mode).
+```
+
+---
+
+## AGENCY-006
+
+Task: Layout menu atas dan footer
+
+Status: `DONE`
+
+Details:
+
+```txt
+- apps/web/layouts/default.vue: sidebar desktop dan bottom nav mobile dihapus,
+  diganti header menu atas: logo, Produk (/products), Kerja Sama
+  (/work-with-us), Artikel (/explore, aktif juga di /posts/*), Series
+  (/playlists), tombol pill "Kirim email"
+  (mailto:coderium.id@gmail.com?subject=Diskusi%20pilot). Tombol "Write" dan
+  variabel adminUrl dihapus dari layout. Dark mode toggle dipertahankan.
+- Mobile (< md): tombol menu (aria-expanded, aria-controls) membuka panel
+  lipat berisi empat tautan + tombol "Kirim email"; menutup otomatis setelah
+  navigasi. Tombol dan tautan menu 44px.
+- Footer: Produk, Kerja Sama, Artikel, Tentang, coderium.id@gmail.com (mailto).
+  Tautan Terms dan Privacy dipertahankan di baris copyright supaya halaman
+  legal tidak yatim.
+- Konten utama kini selebar max-w-7xl tanpa kolom sidebar; padding bawah
+  untuk bottom nav (pb-16) dihapus.
+- Di luar daftar file task, akibat langsung hilangnya bottom nav:
+  PostActionBar.vue mobile bottom-20 -> bottom-6.
+- JSON-LD Organization/WebSite di layout tidak diubah (AGENCY-008).
+- Diverifikasi: build web dijalankan terhadap mock API; /, /products,
+  /products/:slug, /work-with-us, /explore, /playlists, /playlists/:slug,
+  /posts/:slug, /about, /terms semua HTTP 200 dengan menu baru, tanpa
+  "Write". Di Chrome: desktop terang dan gelap (/explore, /posts/:slug,
+  /playlists, /work-with-us), viewport 390px (menu buka/tutup, tutup setelah
+  navigasi, target 44px, tanpa scroll horizontal, dark mode).
+  pnpm typecheck dan pnpm build PASS.
+- Belum diuji: perangkat nyata, data produksi, halaman beranda secara visual
+  (dirombak di AGENCY-007).
+```
+
+---
+
+## AGENCY-007
+
+Task: Beranda agency (Opsi B), font, dan token warna
+
+Status: `DONE`
+
+Details:
+
+```txt
+- Dikerjakan ulang pada 2026-10-10: FR-6 diganti dari beranda lama (hero +
+  panel terminal) ke Opsi B (editorial agency). Bagian font dan token dari
+  pengerjaan pertama tidak berubah: Inter dan JetBrains Mono dimuat di
+  main.css (--font-sans / --font-mono), warna utama #3730D9 sebagai token
+  @theme --color-primary, Charter tetap untuk isi artikel, dan
+  docs/frontend/design-system.md sudah memakai #3730D9.
+- pages/index.vue ditulis ulang mengikuti FR-6 Opsi B: hero "Coderium. AI
+  Agency." + strip tiga janji, strip "Terhubung dengan", 01 Apa itu
+  Coderium, 02 dua panel produk (GET /products; panel gelap untuk produk
+  featured dengan badge dan maks 3 metrik dari proof, panel terang untuk
+  produk kedua), 03 Diskusi/pilot/laporan, 04 tabel Pasang sendiri vs Pilot
+  (tabel di desktop, satu kolom di mobile), 05 tiga kartu paket, 06 Tentang,
+  07 FAQ enam pertanyaan dua kolom + JSON-LD FAQPage, 08 tiga kartu artikel
+  (gambar, tanggal, judul), 09 blok Kontak gelap.
+- Sumber harga bersama: composables/usePricing.ts (pricingPlans,
+  PIONEER_PRICE_NOTE, CLIENT_COST_NOTE). pages/work-with-us.vue kini membaca
+  dari file ini, jadi harga beranda dan /work-with-us identik.
+- Komponen baru components/HomeSectionHeading.vue (nomor + judul section).
+- Footer (layouts/default.vue) diganti mengikuti FR-6.12 atas keputusan
+  pemilik produk: gelap di kedua tema, berkolom Layanan (Produk, Kerja Sama),
+  Perusahaan (Tentang, Artikel, Series), Kontak (coderium.id@gmail.com). Berlaku
+  di semua halaman web. Terms dan Privacy tetap di baris copyright. FR-5 di
+  requirements.md masih menulis footer lama.
+- Catatan kaki panel produk: memakai proof.note dari admin; bila kosong,
+  fallback ke angka di requirements.md bagian Data (7 PR menunggu review,
+  2 ditutup, keduanya tiket keamanan). Tanpa produk terpublikasi, section 02
+  tidak dirender.
+- Kartu Retainer tidak menampilkan harga perintis: bagian Data hanya
+  mencatat harga perintis untuk dua pilot.
+- Teks hero, definisi, tiga langkah, isi tabel perbandingan, Tentang, dan FAQ
+  disusun dari fakta di requirements.md; perlu direview pemilik produk,
+  terutama baris "Ukuran keberhasilan" dan langkah "Laporan" yang tidak punya
+  rincian di bagian Data.
+- Tombol "Lihat layanan" mengarah ke /products.
+- HeroTerminal.vue, FeaturedProductCard.vue, dan PopularPostItem.vue tidak
+  lagi dipakai; file tidak dihapus.
+- MOCKUP TIDAK BISA DIBUKA: kanvas "Mockup Beranda Coderium (Agency)" tidak
+  terjangkau (server MCP pencil gagal konek), jadi acceptance "sesuai mockup
+  Opsi B" BELUM diverifikasi. Tata letak dibangun dari teks FR-6.
+- Diverifikasi: build web dijalankan terhadap mock API; /, /work-with-us,
+  /explore, /about HTTP 200; isi SSR beranda dan /work-with-us diperiksa
+  (harga sama, tidak ada "Stay curious" maupun hero lama). Di Chrome: desktop
+  1440 terang (bagian atas) dan gelap; lebar 390px lewat iframe: satu kolom,
+  tanpa scroll horizontal. pnpm typecheck dan build web PASS.
+- Perapian layout (2026-10-10, setelah review visual): padding ganda di
+  beranda dihapus sehingga konten sejajar dengan header dan footer; tiap
+  section memakai pola yang sama (label bernomor + judul besar) lewat
+  HomeSectionHeading; hero dua kolom dengan tiga janji di kanan dan strip
+  "Terhubung dengan" di bawahnya; section 01 dan 06 dua kolom; panel produk
+  tanpa metrik menampilkan maks 3 judul features dari API; kartu Pilot CAF
+  ditonjolkan (ring + tombol penuh), dua kartu lain tombol outline; blok
+  Kontak menyatu dengan footer; tombol "Kirim email" di header memakai
+  token primary.
+- Section 08 Artikel terbaru memakai UI daftar yang sama dengan /explore
+  (PostListItem + pembatas), atas permintaan pemilik produk; bukan tiga kartu
+  bergambar seperti teks FR-6.10.
+- Judul besar tiap section adalah draf dan perlu direview pemilik produk:
+  "AI agency untuk tim engineering.", "Dua produk, kami buat dan kami pakai
+  sendiri.", "Diskusi, pilot, laporan.", "Pasang sendiri, atau pilot bersama
+  kami.", "Harga terbuka, mulai dari satu repo.", "Yang sering ditanyakan.",
+  "Artikel terbaru.".
+- Diverifikasi setelah perapian: typecheck dan build web PASS; Chrome desktop
+  1440 terang (seluruh halaman) dan lebar 390px gelap lewat iframe (tanpa
+  scroll horizontal, tidak ada tautan/tombol di bawah 44px, sebagian halaman
+  dilihat).
+- Bahasa (2026-10-10, atas permintaan pemilik produk): seluruh teks UI
+  apps/web yang masih berbahasa Inggris diterjemahkan ke Indonesia, di luar
+  daftar file task ini: /explore (judul "Artikel"), /playlists dan
+  /playlists/:slug, /products dan /products/:slug, /posts/:slug, /terms,
+  /privacy, tautan Ketentuan/Privasi di footer, NotFoundState,
+  EndOfListMessage, PostActionBar, PostListItem, PopularPostItem, UserAvatar.
+  useFormatters.ts: tanggal id-ID, "menit baca", dan postTypeLabel bersama
+  (salinan lokal di /products/:slug dihapus). Nama breadcrumb JSON-LD ikut
+  diterjemahkan. Teks /terms dan /privacy adalah terjemahan langsung dan
+  perlu direview pemilik produk. Konten dari API (artikel, series, produk)
+  tidak diterjemahkan. HeroTerminal dan FeaturedProductCard (tidak dipakai)
+  tidak disentuh.
+- Konsistensi UI seluruh apps/web (2026-10-10, atas permintaan pemilik
+  produk): kelas bersama di main.css (@layer components: page-shell,
+  section-title, body-copy, card, btn, btn-solid, btn-outline, text-link)
+  dan komponen baru PageHeader.vue (judul besar font-black + lead). Dipakai
+  di /explore, /playlists, /playlists/:slug, /products, /products/:slug,
+  /posts/:slug, /about, /terms, /privacy, /work-with-us, NotFoundState,
+  BackButton, ProductCard, dan beranda. Padding ganda dihapus di semua
+  halaman (konten sejajar header/footer), aksen biru dan tombol hitam diganti
+  token primary, kartu rounded-2xl, judul section seragam. /products/:slug
+  kini selebar halaman dengan hero dua kolom; teks panjang dibatasi max-w-3xl
+  rata kiri. /posts/:slug tetap kolom baca terpusat.
+- Diverifikasi di Chrome desktop terang: header dan kerangka /explore,
+  /playlists, /products, /work-with-us, /privacy, serta keadaan kosong dan
+  tidak-ditemukan. Belum diuji: daftar dan halaman detail (artikel, series,
+  produk) DENGAN DATA, karena proxy /api di build lokal mengarah ke API lokal
+  yang kosong; juga mobile dan dark mode untuk halaman selain beranda.
+- Hero beranda dibuat lebih modern (2026-10-10, atas permintaan pemilik
+  produk): latar grid tipis dan cahaya indigo selebar layar (dekoratif,
+  aria-hidden), label kecil berkedip "AI agency untuk tim engineering",
+  "AI Agency." bergradasi indigo, tiga janji dan daftar "Terhubung dengan"
+  sebagai kartu tembus pandang. Blok Kontak memakai latar grid yang sama.
+  Kelas hero-grid, hero-glow, glass-card di main.css. Gradasi memakai indigo
+  saja, bukan gradien biru-ungu logo.
+- Footer dan blok Kontak di dark mode memakai abu gelap netral #18181b (bukan biru gelap);
+  mode terang tidak berubah.
+- Rute halaman Kerja Sama diganti dari /kerja-sama ke /work-with-us
+  (2026-10-10, keputusan pemilik produk; file pages/work-with-us.vue). Label
+  menu tetap "Kerja Sama". Tanpa redirect dari rute lama. Baris rute di
+  "Keputusan yang sudah final" plan.md dan semua dokumen ikut diperbarui.
+- Istilah "pilot" di teks situs diganti "uji coba" (2026-10-10, permintaan
+  pemilik produk, supaya lebih mudah dipahami), termasuk nama paket ("Uji
+  coba AI Code Review", "Uji coba CAF") dan subjek email. requirements.md
+  dan plan.md masih memakai kata "pilot".
+- Rute artikel diganti (2026-10-10, keputusan pemilik produk): daftar
+  /explore -> /articles (pages/articles/index.vue), detail /posts/:slug ->
+  /articles/:slug (pages/articles/[slug].vue). Semua tautan, sitemap,
+  canonical, breadcrumb, dan SearchAction JSON-LD ikut. Redirect 301 dari
+  /explore dan /posts/** ditambahkan di routeRules (nuxt.config.ts) supaya
+  URL artikel lama tetap jalan. Endpoint API /posts tidak berubah. Entri
+  backlog di atas masih menyebut rute lama.
+- Email kontak diganti dari alamat @coderium.id lama ke coderium.id@gmail.com
+  (2026-10-10, keputusan pemilik produk) di seluruh repo: apps/web, hint
+  admin, contoh DTO dan spec API, seeder, CLAUDE.md, dan dokumen termasuk
+  "Keputusan yang sudah final" di plan.md.
+- Footer mode terang diganti jadi abu sangat terang (neutral-50) dengan
+  teks gelap dan logo berwarna (2026-10-10, permintaan pemilik produk);
+  dark mode tetap abu gelap. Ini menyimpang dari "footer gelap" di FR-6.12.
+  Blok Kontak beranda tidak lagi menyatu dengan footer: kini kartu gelap
+  tersendiri di kedua tema.
+- Belum diuji: kesesuaian dengan mockup, desktop gelap setelah perapian,
+  footer baru di halaman lain secara visual, perangkat nyata, data produksi.
+```
+
+---
+
+## AGENCY-008
+
+Task: Identitas, SEO, dan About
+
+Status: `DONE`
+
+Details:
+
+```txt
+- nuxt.config.ts: meta description default diganti dari "Coderium - Tech
+  Blog & Resources" ke identitas AI agency; ditambah htmlAttrs lang="id"
+  (tambahan di luar daftar detail task, karena halaman baru berbahasa
+  Indonesia).
+- composables/useSeo.ts: DEFAULT_DESCRIPTION memakai kalimat yang sama.
+- layouts/default.vue: JSON-LD Organization menambah description dan
+  contactPoint (email coderium.id@gmail.com, contactType "sales",
+  availableLanguage id).
+- pages/about.vue ditulis ulang dalam bahasa Indonesia: apa yang kami buat
+  (CAF, AI Code Reviewer), cara kerja pilot, artikel sebagai pelengkap,
+  kontak email (mailto bersubjek). Isi hanya dari fakta di requirements.md.
+- Tidak ada lagi teks "tech blog" di apps/web (grep bersih). Teks halaman
+  Series/Explore yang memang soal artikel tidak diubah.
+- Diverifikasi lewat SSR (build web + mock API): lang, title/description
+  About, dan Organization JSON-LD. Description default tidak diperiksa di
+  halaman nyata (semua halaman yang dicek punya description sendiri).
+  pnpm typecheck dan pnpm build PASS.
+- Belum diuji: pratinjau OG di layanan nyata (masuk AGENCY-011).
+```
+
+---
+
+## AGENCY-009
+
+Task: [Manual] Isi konten produk lewat admin
+
+Status: `TODO`
+
+---
+
+## AGENCY-010
+
+Task: [Manual + CAF] Perbarui dokumen proyek
+
+Status: `DONE`
+
+Details:
+
+```txt
+- CLAUDE.md: sudah diisi di TASK-0 (masih menunggu review manusia).
+- docs/product/requirements.md: Product Positioning diganti ke situs AI
+  agency untuk tim engineering (dua produk, kontak email, artikel sebagai
+  pelengkap). Bagian lain PRD tidak diubah.
+- docs/frontend/frontend-routes.md: tambah /products, /products/:slug
+  (/work-with-us sudah masuk di AGENCY-005); deskripsi route / diperbarui.
+- backlog.md dan progress.md: Phase 17 dan status tiap task diperbarui di
+  akhir setiap task.
+- Bagian manual yang tersisa: review teks Product Positioning dan CLAUDE.md.
+- Belum disentuh (di luar daftar task): Product Summary di AGENTS.md masih
+  menyebut platform Content Publishing; docs/frontend/layouts.md,
+  ui-pages.md, dan module-breakdown.md masih menggambarkan sidebar/beranda
+  lama; api-contract.md dan prisma-schema-design.md sudah diperbarui untuk
+  field produk baru.
+```
+
+---
+
+## AGENCY-011
+
+Task: [Manual] QA dan rilis
+
+Status: `TODO`
+
+---

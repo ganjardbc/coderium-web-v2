@@ -80,6 +80,41 @@ describe('ProductsService', () => {
       );
     });
 
+    it.each([
+      'mailto:',
+      'mailto:not-an-email',
+      'mailto:coderium.id@gmail.com?subject=Diskusi pilot',
+      'ftp://example.com',
+      'example.com',
+      'javascript:alert(1)',
+    ])('rejects publish when ctaUrl is %s', async (ctaUrl) => {
+      const existing = { ...baseProduct, ctaUrl };
+      (prisma.product.findUnique as jest.Mock).mockResolvedValue(existing);
+
+      await expect(service.publish('product-1')).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(prisma.product.update).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      'mailto:coderium.id@gmail.com',
+      'mailto:coderium.id@gmail.com?subject=Diskusi%20pilot',
+      'https://example.com/pilot',
+      'http://example.com',
+    ])('publishes when ctaUrl is %s', async (ctaUrl) => {
+      const existing = { ...baseProduct, ctaUrl };
+      (prisma.product.findUnique as jest.Mock).mockResolvedValue(existing);
+      (prisma.product.update as jest.Mock).mockResolvedValue({
+        ...existing,
+        status: 'published',
+      });
+
+      const result = await service.publish('product-1');
+
+      expect(result.data.status).toBe('published');
+    });
+
     it('rejects publish when pipelineSteps is empty', async () => {
       const existing = { ...baseProduct, pipelineSteps: [] };
       (prisma.product.findUnique as jest.Mock).mockResolvedValue(existing);

@@ -8,12 +8,12 @@
         <UserAvatar :name="post.user?.name" size="xs" />
         <span class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ post.user?.name }}</span>
       </div>
-      <NuxtLink :to="`/posts/${post.slug}`">
+      <NuxtLink :to="`/articles/${post.slug}`">
         <h4 class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors line-clamp-2 leading-snug">
           {{ post.title }}
         </h4>
       </NuxtLink>
-      <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ formatDate(post.publishedAt || post.createdAt) }} &bull; {{ post.viewsCount }} views</p>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ formatDate(post.publishedAt || post.createdAt) }} &bull; {{ post.viewsCount }} kali dilihat</p>
     </div>
   </div>
 </template>

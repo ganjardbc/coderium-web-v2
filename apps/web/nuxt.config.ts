@@ -24,11 +24,16 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      htmlAttrs: { lang: 'id' },
       title: 'Coderium',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Coderium - Tech Blog & Resources' },
+        {
+          name: 'description',
+          content:
+            'Coderium adalah AI agency untuk tim engineering, dengan dua produk: CAF (Coderium Agent Framework) dan AI Code Reviewer.',
+        },
         { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#0a0a0a', media: '(prefers-color-scheme: dark)' },
       ],
@@ -53,6 +58,10 @@ export default defineNuxtConfig({
     // Keep browser requests same-origin while routing SSR/API proxy traffic
     // directly over the Docker network. Avoid hairpinning through Cloudflare.
     '/api/**': { proxy: `${process.env.NUXT_API_INTERNAL_BASE || 'http://localhost:3030/api/v1'}/**` },
+    // Old article URLs (the list lived at /explore, details at /posts/:slug)
+    // keep working and pass their search ranking on to the new paths.
+    '/explore': { redirect: { to: '/articles', statusCode: 301 } },
+    '/posts/**': { redirect: { to: '/articles/**', statusCode: 301 } },
   },
 
   // Unified site metadata consumed by @nuxtjs/sitemap and @nuxtjs/robots

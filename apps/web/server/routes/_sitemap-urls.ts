@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
   ]);
 
   return [
-    ...posts.map((p) => ({ loc: `/posts/${p.slug}`, lastmod: p.updatedAt })),
+    ...posts.map((p) => ({ loc: `/articles/${p.slug}`, lastmod: p.updatedAt })),
     ...products.map((p) => ({ loc: `/products/${p.slug}`, lastmod: p.updatedAt })),
     ...playlists.map((p) => ({ loc: `/playlists/${p.slug}`, lastmod: p.updatedAt })),
   ];
