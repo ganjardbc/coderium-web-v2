@@ -1,6 +1,5 @@
 <template>
-  <!-- -mb-* cancels the layout's bottom padding so the contact block meets the footer. -->
-  <div class="w-full mx-auto px-4 md:px-0 pt-6 md:pt-10 -mb-6 md:-mb-8 space-y-16 md:space-y-28">
+  <div class="w-full mx-auto px-4 md:px-0 pt-6 md:pt-10 pb-4 md:pb-8 space-y-16 md:space-y-28">
     <!-- Hero -->
     <section class="relative isolate pt-4 md:pt-10">
       <!-- Decorative backdrop: full-bleed grid and glow, starting right under the site header. -->
@@ -287,8 +286,8 @@
       </div>
     </section>
 
-    <!-- 09 Kontak: same surface as the footer in both themes, so the two read as one closing block. -->
-    <section class="relative isolate overflow-hidden rounded-t-2xl bg-gray-900 dark:bg-dark-secondary dark:border dark:border-b-0 dark:border-gray-800 dark:-mb-px px-6 py-10 md:px-14 md:py-20">
+    <!-- 09 Kontak: a standalone dark card in both themes. -->
+    <section class="relative isolate overflow-hidden rounded-2xl bg-gray-900 dark:bg-dark-secondary dark:border dark:border-gray-800 px-6 py-10 md:px-14 md:py-20">
       <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
         <div class="hero-grid hero-grid-inverse absolute inset-0" />
         <div class="hero-glow absolute -top-40 -right-20 h-112 w-md rounded-full blur-3xl" />

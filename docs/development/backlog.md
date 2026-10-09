@@ -1762,6 +1762,11 @@ Details:
   (2026-10-10, keputusan pemilik produk) di seluruh repo: apps/web, hint
   admin, contoh DTO dan spec API, seeder, CLAUDE.md, dan dokumen termasuk
   "Keputusan yang sudah final" di plan.md.
+- Footer mode terang diganti jadi abu sangat terang (neutral-50) dengan
+  teks gelap dan logo berwarna (2026-10-10, permintaan pemilik produk);
+  dark mode tetap abu gelap. Ini menyimpang dari "footer gelap" di FR-6.12.
+  Blok Kontak beranda tidak lagi menyatu dengan footer: kini kartu gelap
+  tersendiri di kedua tema.
 - Belum diuji: kesesuaian dengan mockup, desktop gelap setelah perapian,
   footer baru di halaman lain secara visual, perangkat nyata, data produksi.
 ```

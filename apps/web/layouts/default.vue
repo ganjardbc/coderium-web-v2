@@ -91,25 +91,26 @@
       <slot />
     </main>
 
-    <!-- Footer: dark in both themes; neutral dark gray (not navy) in dark mode. -->
-    <footer class="bg-gray-900 dark:bg-dark-secondary dark:border-t dark:border-gray-800 text-gray-300">
+    <!-- Footer: light gray in light mode, neutral dark gray in dark mode. -->
+    <footer class="bg-neutral-50 dark:bg-dark-secondary border-t border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400">
       <div class="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-16">
         <!-- Centered on mobile, left-aligned columns from md up. -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 text-center md:text-left">
           <div>
             <NuxtLink to="/" class="inline-flex items-center min-h-11" aria-label="Coderium, beranda">
-              <img src="~/assets/logo-white.png" class="h-8 md:h-10" alt="Coderium" />
+              <img src="~/assets/logo-fill.png" class="h-8 md:h-10 dark:hidden" alt="Coderium" />
+              <img src="~/assets/logo-white.png" class="h-8 md:h-10 hidden dark:block" alt="Coderium" />
             </NuxtLink>
             <p class="mt-2 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">AI agency untuk tim engineering.</p>
           </div>
 
           <nav v-for="column in footerColumns" :key="column.title" :aria-label="column.title">
-            <h2 class="text-sm font-bold uppercase tracking-wider text-white">{{ column.title }}</h2>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-white">{{ column.title }}</h2>
             <ul class="mt-2 md:mt-4 md:space-y-3">
               <li v-for="item in column.items" :key="item.to">
                 <NuxtLink
                   :to="item.to"
-                  class="inline-flex items-center min-h-11 md:min-h-0 text-sm hover:text-white transition-colors"
+                  class="inline-flex items-center min-h-11 md:min-h-0 text-sm hover:text-gray-900 dark:hover:text-white transition-colors"
                 >
                   {{ item.label }}
                 </NuxtLink>
@@ -118,21 +119,21 @@
           </nav>
 
           <div>
-            <h2 class="text-sm font-bold uppercase tracking-wider text-white">Kontak</h2>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-white">Kontak</h2>
             <a
               :href="contactMailto"
-              class="mt-2 md:mt-4 inline-flex items-center min-h-11 md:min-h-0 text-sm font-semibold text-white underline underline-offset-4 hover:no-underline"
+              class="mt-2 md:mt-4 inline-flex items-center min-h-11 md:min-h-0 text-sm font-semibold text-gray-900 dark:text-white underline underline-offset-4 hover:no-underline"
             >
               {{ CONTACT_EMAIL }}
             </a>
           </div>
         </div>
 
-        <div class="mt-8 md:mt-12 pt-6 border-t border-white/15 flex flex-col items-center md:flex-row md:justify-between gap-2 text-xs">
+        <div class="mt-8 md:mt-12 pt-6 border-t border-gray-200 dark:border-gray-800 flex flex-col items-center md:flex-row md:justify-between gap-2 text-xs">
           <div>&copy; {{ new Date().getFullYear() }} Coderium</div>
           <div class="flex gap-6">
-            <NuxtLink to="/terms" class="inline-flex items-center min-h-11 md:min-h-0 hover:text-white transition-colors">Ketentuan</NuxtLink>
-            <NuxtLink to="/privacy" class="inline-flex items-center min-h-11 md:min-h-0 hover:text-white transition-colors">Privasi</NuxtLink>
+            <NuxtLink to="/terms" class="inline-flex items-center min-h-11 md:min-h-0 hover:text-gray-900 dark:hover:text-white transition-colors">Ketentuan</NuxtLink>
+            <NuxtLink to="/privacy" class="inline-flex items-center min-h-11 md:min-h-0 hover:text-gray-900 dark:hover:text-white transition-colors">Privasi</NuxtLink>
           </div>
         </div>
       </div>
