@@ -13,7 +13,7 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] gap-10 lg:gap-16 lg:items-end">
-        <div>
+        <div class="@container">
           <p class="inline-flex items-center gap-2.5 rounded-full border border-primary/20 bg-primary/5 dark:bg-indigo-300/10 px-3.5 py-1.5 font-mono text-xs font-medium text-primary dark:text-indigo-300">
             <span class="relative flex h-2 w-2">
               <span class="absolute inline-flex h-full w-full rounded-full bg-primary dark:bg-indigo-300 opacity-60 motion-safe:animate-ping" />
@@ -21,8 +21,9 @@
             </span>
             Coderium · AI agency untuk tim engineering
           </p>
-          <!-- Below sm the size follows the viewport so the title stays at 2 lines on phones (checked 320-640px). -->
-          <h1 class="mt-6 md:mt-8 text-[clamp(1.5rem,calc((100vw_-_2rem)/10.5),2.25rem)] sm:text-5xl md:text-7xl font-black tracking-tight leading-[1.02] text-balance text-gray-900 dark:text-white">
+          <!-- Size follows the width of this column (container query) so the title stays at 2 lines
+               on every screen; checked 320-1920px. Re-check if the headline text changes. -->
+          <h1 class="mt-6 md:mt-8 text-[clamp(1.5rem,calc(100cqw/10.5),4.5rem)] font-black tracking-tight leading-[1.02] text-balance text-gray-900 dark:text-white">
             AI untuk Tim Developer
             <span class="bg-linear-to-r from-primary to-indigo-400 dark:from-indigo-200 dark:to-indigo-400 bg-clip-text text-transparent">Indonesia.</span>
           </h1>
