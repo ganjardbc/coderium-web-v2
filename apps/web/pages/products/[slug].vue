@@ -45,15 +45,23 @@
           <p v-if="product.tagline" class="mt-4 md:mt-5 text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
             {{ product.tagline }}
           </p>
-          <a
-            :href="product.ctaUrl"
-            :target="ctaIsMailto ? undefined : '_blank'"
-            :rel="ctaIsMailto ? undefined : 'noopener noreferrer'"
-            class="btn btn-solid gap-2 mt-6 md:mt-8 shadow-lg shadow-primary/30"
-          >
-            <Icon v-if="ctaIsMailto" name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
-            {{ product.ctaLabel || 'Kirim email' }}
-          </a>
+          <div class="mt-6 md:mt-8 flex flex-col sm:flex-row gap-3">
+            <a :href="auditHref" class="btn btn-solid gap-2 shadow-lg shadow-primary/30">
+              <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
+              Pesan audit gratis
+            </a>
+            <!-- The admin CTA stays as a second button only when it is a web link (e.g. repo or docs). -->
+            <a
+              v-if="externalCta"
+              :href="externalCta.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-outline gap-2"
+            >
+              {{ externalCta.label }}
+              <Icon name="lucide:external-link" class="w-4 h-4" aria-hidden="true" />
+            </a>
+          </div>
         </div>
         <div
           v-if="product.cover"
@@ -205,17 +213,14 @@
         <div class="glass-card relative isolate overflow-hidden flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 md:p-10">
           <div class="hero-glow pointer-events-none absolute -top-32 -right-24 -z-10 h-80 w-80 rounded-full blur-3xl" aria-hidden="true" />
           <div>
-            <p class="section-title">Siap memulai uji coba?</p>
-            <p v-if="product.tagline" class="mt-2 body-copy">{{ product.tagline }}</p>
+            <p class="section-title">Mau {{ product.name }} dipasang di tim Anda?</p>
+            <p class="mt-2 body-copy">
+              Alatnya gratis untuk dipasang sendiri. Jika ingin dipasang dan disesuaikan oleh Coderium, mulai dengan audit gratis.
+            </p>
           </div>
-          <a
-            :href="product.ctaUrl"
-            :target="ctaIsMailto ? undefined : '_blank'"
-            :rel="ctaIsMailto ? undefined : 'noopener noreferrer'"
-            class="btn btn-solid gap-2 shrink-0"
-          >
-            <Icon v-if="ctaIsMailto" name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
-            {{ product.ctaLabel || 'Kirim email' }}
+          <a :href="auditHref" class="btn btn-solid gap-2 shrink-0">
+            <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
+            Pesan audit gratis
           </a>
         </div>
       </section>
@@ -283,8 +288,15 @@ const { data: productRes, pending, error } = await useAsyncData<{ data: ProductD
   () => $fetch(`${apiBase}/products/${slug}`)
 );
 const product = computed(() => productRes.value?.data);
-// mailto: opens the mail client in place; only real web links get a new tab.
-const ctaIsMailto = computed(() => product.value?.ctaUrl?.toLowerCase().startsWith('mailto:') ?? false);
+// "Pesan audit gratis" always opens the mail client in place, with the product in the subject.
+const auditHref = computed(() => mailtoHref(productAuditSubject(product.value?.name ?? 'Coderium')));
+// The admin-entered CTA is kept only when it points to the web (it then opens in a new tab);
+// a mailto: CTA would duplicate the audit button above.
+const externalCta = computed(() => {
+  const url = product.value?.ctaUrl;
+  if (!url || !/^https?:\/\//i.test(url)) return null;
+  return { url, label: product.value?.ctaLabel || 'Buka tautan' };
+});
 
 // `description` is rich-text HTML authored in the admin editor.
 const descriptionHtml = computed(() => {

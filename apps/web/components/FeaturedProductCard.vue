@@ -20,7 +20,7 @@
         class="inline-flex items-center gap-1.5 w-fit px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm text-white text-xs font-medium uppercase tracking-wider mb-3"
       >
         <Icon name="lucide:sparkles" class="w-3.5 h-3.5" />
-        Featured Product
+        Produk unggulan
       </span>
       <h3 class="text-xl md:text-4xl font-bold text-white leading-tight max-w-2xl">
         {{ product.name }}
@@ -31,7 +31,7 @@
       <span
         class="mt-2 md:mt-4 inline-flex items-center gap-1.5 w-fit text-sm font-medium text-white group-hover:gap-2.5 transition-all"
       >
-        Explore Product
+        Lihat produk
         <Icon name="lucide:arrow-right" class="w-4 h-4" />
       </span>
     </div>
