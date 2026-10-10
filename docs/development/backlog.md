@@ -1823,7 +1823,7 @@ Details:
 ```txt
 - CLAUDE.md: sudah diisi di TASK-0 (masih menunggu review manusia).
 - docs/product/requirements.md: Product Positioning diganti ke situs AI
-  agency untuk tim engineering (dua produk, kontak email, artikel sebagai
+  agency untuk tim developer (dua produk, kontak email, artikel sebagai
   pelengkap). Bagian lain PRD tidak diubah.
 - docs/frontend/frontend-routes.md: tambah /products, /products/:slug
   (/work-with-us sudah masuk di AGENCY-005); deskripsi route / diperbarui.
@@ -1862,8 +1862,8 @@ Status: `DONE` (menunggu review PR)
 Details:
 
 ```txt
-- Hero beranda: judul "Kami memasang AI di tim engineering Indonesia, di
-  server Anda sendiri."; CTA "Pesan audit gratis" (mailto, subjek "Audit
+- Hero beranda: judul "AI untuk Tim Developer Indonesia." (2 baris di
+  semua lebar layar, ukuran huruf mengikuti lebar kolom); CTA "Pesan audit gratis" (mailto, subjek "Audit
   gratis Coderium", tanpa tab baru) dan "Lihat produk" (#produk); janji
   ketiga "Dibuat dan dipakai sendiri oleh pembuatnya".
 - Section Produk: judul "Produk" + subjudul; semua produk published dari
@@ -1887,6 +1887,7 @@ Details:
   bila berupa tautan web.
 - Section artikel beranda: "Catatan terbaru", tetap 3 artikel, tetap di
   posisi terakhir sebelum kontak.
+- Seluruh situs memakai "tim developer" (bukan "tim engineering").
 - Kontak tetap coderium.id@gmail.com dan rute tetap /work-with-us
   (dikonfirmasi pemilik produk; helper bersama di composables/useContact.ts).
 - Verifikasi: pnpm typecheck PASS, pnpm build PASS. Build web + mock API:

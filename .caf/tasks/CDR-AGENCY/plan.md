@@ -4,7 +4,7 @@ Dokumen ini menjelaskan arah dan urutan kerja. Detail kebutuhan ada di `requirem
 
 ## Tujuan
 
-Mengubah coderium.id dari blog menjadi situs AI agency untuk tim engineering. Dua produk: **CAF (Coderium Agent Framework)** dan **AI Code Reviewer**. Kontak hanya lewat email `coderium.id@gmail.com`. Artikel tetap ada sebagai pelengkap.
+Mengubah coderium.id dari blog menjadi situs AI agency untuk tim developer. Dua produk: **CAF (Coderium Agent Framework)** dan **AI Code Reviewer**. Kontak hanya lewat email `coderium.id@gmail.com`. Artikel tetap ada sebagai pelengkap.
 
 ## Temuan di repo
 
