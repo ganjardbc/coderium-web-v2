@@ -160,7 +160,8 @@ useJsonLd([
     url: siteUrl,
     logo: `${siteUrl}/favicon.png`,
     description:
-      'Coderium adalah AI agency untuk tim engineering, dengan dua produk: CAF (Coderium Agent Framework) dan AI Code Reviewer.',
+      'Coderium adalah agency kecil yang memasang AI di tim engineering Indonesia, di server tim itu sendiri. Alatnya: CAF (Coderium Agent Framework) dan AI Code Reviewer.',
+    founder: { '@type': 'Person', name: 'Ganjar Hadiatna' },
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'sales',

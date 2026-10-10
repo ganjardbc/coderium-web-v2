@@ -238,8 +238,14 @@
 
     <!-- 06 Tentang -->
     <section :class="SPLIT_SECTION">
-      <HomeSectionHeading number="06" label="Tentang" title="Agency awal. Pendirinya yang membangun." />
+      <HomeSectionHeading number="06" label="Tentang" title="Agency kecil. Pendirinya yang membangun." />
       <div class="text-md md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+          <FounderPhoto />
+          <p>
+            Coderium didirikan oleh <span class="font-semibold text-gray-900 dark:text-white">Ganjar Hadiatna</span>, frontend developer dan tech lead yang membangun CAF dan AI Code Reviewer.
+          </p>
+        </div>
         <p>
           Coderium belum punya klien. Angka di halaman ini berasal dari pemakaian internal kami sendiri pada dua repo.
         </p>
