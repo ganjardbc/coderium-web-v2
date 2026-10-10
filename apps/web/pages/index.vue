@@ -332,7 +332,7 @@ definePageMeta({
 });
 
 useSeo({
-  title: 'Coderium - Memasang AI di tim developer Indonesia',
+  title: 'Coderium - AI untuk Tim Developer Indonesia',
   titleSuffix: false,
   description:
     'Coderium memasang AI di tim developer Indonesia, di server Anda sendiri. CAF (Coderium Agent Framework) dan AI Code Reviewer gratis untuk dipasang sendiri, atau dipasang Coderium setelah audit gratis.',
