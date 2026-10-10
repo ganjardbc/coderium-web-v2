@@ -21,12 +21,13 @@
             </span>
             Coderium · AI agency untuk tim engineering
           </p>
-          <h1 class="mt-6 md:mt-8 text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-[1.02] text-balance text-gray-900 dark:text-white">
-            Kami memasang AI di tim engineering Indonesia,
-            <span class="bg-linear-to-r from-primary to-indigo-400 dark:from-indigo-200 dark:to-indigo-400 bg-clip-text text-transparent">di server Anda sendiri.</span>
+          <!-- Below sm the size follows the viewport so the title stays at 2 lines on phones (checked 320-640px). -->
+          <h1 class="mt-6 md:mt-8 text-[clamp(1.5rem,calc((100vw_-_2rem)/11.6),2.25rem)] sm:text-5xl md:text-7xl font-black tracking-tight leading-[1.02] text-balance text-gray-900 dark:text-white">
+            AI untuk tim engineering
+            <span class="bg-linear-to-r from-primary to-indigo-400 dark:from-indigo-200 dark:to-indigo-400 bg-clip-text text-transparent">Indonesia.</span>
           </h1>
           <p class="mt-6 md:mt-8 text-lg md:text-2xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
-            Coderium membuat CAF (Coderium Agent Framework) dan AI Code Reviewer. Alatnya gratis untuk Anda pasang sendiri. Jika ingin dipasang dan disesuaikan oleh Coderium, mulai dengan audit gratis.
+            Kami membuat CAF dan AI Code Reviewer, gratis untuk dipasang sendiri. Kalau mau kami yang memasang dan menyesuaikan, mulai dari audit gratis. Semuanya berjalan di server Anda.
           </p>
           <div class="mt-6 md:mt-8 flex flex-col sm:flex-row gap-3">
             <a :href="mailtoHref(AUDIT_SUBJECT)" class="btn btn-solid gap-2 shadow-lg shadow-primary/30">
