@@ -269,10 +269,10 @@
       </div>
     </section>
 
-    <!-- 08 Artikel terbaru -->
+    <!-- 08 Catatan terbaru: articles are supporting notes, so they sit last, right before contact. -->
     <section v-if="pending || recentPosts.length > 0">
       <div class="mb-8 md:mb-12 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 sm:gap-6">
-        <HomeSectionHeading number="08" label="Artikel" title="Artikel terbaru." />
+        <HomeSectionHeading number="08" label="Catatan" title="Catatan terbaru." />
         <NuxtLink to="/articles" class="inline-flex items-center gap-2 min-h-11 shrink-0 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
           Semua artikel <Icon name="lucide:arrow-right" class="w-4 h-4" aria-hidden="true" />
         </NuxtLink>
