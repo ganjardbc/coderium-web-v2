@@ -86,7 +86,7 @@ sering menentukan kualitas PR:
 
 ## Konteks Bisnis
 
-- coderium.id sedang dipivot dari blog menjadi situs AI agency untuk tim engineering.
+- coderium.id sedang dipivot dari blog menjadi situs AI agency untuk tim developer.
   Sumber kebenaran pivot: `docs/development/agency-pivot/plan.md`, `requirements.md`,
   dan `tasks.md` (Phase 17 - Agency Pivot).
 - Dua produk: **CAF (Coderium Agent Framework)** dan **AI Code Reviewer**. Artikel

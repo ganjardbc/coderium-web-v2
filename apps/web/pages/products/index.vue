@@ -1,6 +1,6 @@
 <template>
   <div class="page-shell">
-    <PageHeader title="Produk" lead="Lihat apa yang kami buat dan uji coba yang bisa Anda mulai." />
+    <PageHeader title="Produk" lead="Alat yang kami bangun dan pakai sendiri. Gratis untuk dipasang sendiri, atau dipasang Coderium setelah audit gratis." />
 
     <!-- Loading -->
     <div v-if="pending" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
@@ -38,7 +38,7 @@ definePageMeta({
 
 useSeo({
   title: 'Produk',
-  description: 'Lihat apa yang kami buat dan uji coba yang bisa Anda mulai.',
+  description: 'Alat yang kami bangun dan pakai sendiri. Gratis untuk dipasang sendiri, atau dipasang Coderium setelah audit gratis.',
 });
 
 const config = useRuntimeConfig();

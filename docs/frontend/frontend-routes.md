@@ -8,14 +8,15 @@ File-based routing.
 
 | Route                   | Page File                           | Description              |
 | ----------------------- | ----------------------------------- | ------------------------ |
-| `/`                     | `pages/index.vue`                   | Beranda agency (Opsi B): hero, produk unggulan, proses, perbandingan, paket dan harga, tentang, FAQ, catatan terbaru, kontak |
+| `/`                     | `pages/index.vue`                   | Beranda agency: hero (CTA audit gratis), apa itu Coderium, produk (semua produk published), proses, perbandingan, cara kerja sama (tanpa harga), tentang, FAQ, catatan terbaru, kontak |
+| `/about`                | `pages/about.vue`                   | Tentang Coderium: apa itu Coderium, pendiri, cara kerja, catatan (artikel/series), kontak |
 | `/articles`             | `pages/articles/index.vue`          | Browse & search all posts (`/explore` redirects here) |
 | `/articles/:slug`       | `pages/articles/[slug].vue`         | Post detail (SSR + SEO; `/posts/:slug` redirects here) |
 | `/playlists`            | `pages/playlists/index.vue`         | Playlist list            |
 | `/playlists/:slug`      | `pages/playlists/[slug].vue`        | Playlist detail          |
 | `/products`             | `pages/products/index.vue`          | Daftar produk terpublikasi |
 | `/products/:slug`       | `pages/products/[slug].vue`         | Detail produk: badge, description, bukti, FAQ, CTA (SSR + SEO) |
-| `/work-with-us`           | `pages/work-with-us.vue`              | Kerja Sama — pilot, harga, syarat klien, FAQ, CTA email (statis, SSR) |
+| `/work-with-us`           | `pages/work-with-us.vue`              | Kerja Sama — cara kerja sama tanpa harga tetap (pasang sendiri, dipasang Coderium, dukungan bulanan), program design partner, syarat klien, FAQ, CTA audit gratis via email (statis, SSR, masuk sitemap otomatis) |
 
 ---
 

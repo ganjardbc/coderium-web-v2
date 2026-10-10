@@ -32,7 +32,7 @@ export default defineNuxtConfig({
         {
           name: 'description',
           content:
-            'Coderium adalah AI agency untuk tim engineering, dengan dua produk: CAF (Coderium Agent Framework) dan AI Code Reviewer.',
+            'Coderium adalah agency kecil yang memasang AI di tim developer Indonesia, di server tim itu sendiri. Alatnya: CAF (Coderium Agent Framework) dan AI Code Reviewer.',
         },
         { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#0a0a0a', media: '(prefers-color-scheme: dark)' },

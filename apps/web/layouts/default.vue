@@ -101,7 +101,7 @@
               <img src="~/assets/logo-fill.png" class="h-8 md:h-10 dark:hidden" alt="Coderium" />
               <img src="~/assets/logo-white.png" class="h-8 md:h-10 hidden dark:block" alt="Coderium" />
             </NuxtLink>
-            <p class="mt-2 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">AI agency untuk tim engineering.</p>
+            <p class="mt-2 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">AI agency untuk tim developer.</p>
           </div>
 
           <nav v-for="column in footerColumns" :key="column.title" :aria-label="column.title">
@@ -144,8 +144,8 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 
-const CONTACT_EMAIL = 'coderium.id@gmail.com';
-const contactMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Diskusi uji coba')}`;
+// CONTACT_EMAIL and mailtoHref come from composables/useContact.ts.
+const contactMailto = mailtoHref('Diskusi dengan Coderium');
 
 // Site-wide structured data: lets Google understand the brand/organization
 // and enables a sitelinks search box for "Coderium" queries.
@@ -160,7 +160,8 @@ useJsonLd([
     url: siteUrl,
     logo: `${siteUrl}/favicon.png`,
     description:
-      'Coderium adalah AI agency untuk tim engineering, dengan dua produk: CAF (Coderium Agent Framework) dan AI Code Reviewer.',
+      'Coderium adalah agency kecil yang memasang AI di tim developer Indonesia, di server tim itu sendiri. Alatnya: CAF (Coderium Agent Framework) dan AI Code Reviewer.',
+    founder: { '@type': 'Person', name: 'Ganjar Hadiatna' },
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'sales',

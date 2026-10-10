@@ -23,7 +23,7 @@ Sejak Phase 17 (Agency Pivot), coderium.id bukan lagi:
 
 Tetapi:
 
-> Situs AI agency untuk tim engineering
+> Situs AI agency untuk tim developer
 
 Rinciannya:
 

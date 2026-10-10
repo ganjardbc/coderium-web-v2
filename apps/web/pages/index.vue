@@ -13,27 +13,30 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] gap-10 lg:gap-16 lg:items-end">
-        <div>
+        <div class="@container">
           <p class="inline-flex items-center gap-2.5 rounded-full border border-primary/20 bg-primary/5 dark:bg-indigo-300/10 px-3.5 py-1.5 font-mono text-xs font-medium text-primary dark:text-indigo-300">
             <span class="relative flex h-2 w-2">
               <span class="absolute inline-flex h-full w-full rounded-full bg-primary dark:bg-indigo-300 opacity-60 motion-safe:animate-ping" />
               <span class="relative inline-flex h-2 w-2 rounded-full bg-primary dark:bg-indigo-300" />
             </span>
-            AI agency untuk tim engineering
+            Coderium · AI agency untuk tim developer
           </p>
-          <h1 class="mt-6 md:mt-8 text-5xl sm:text-6xl md:text-8xl font-black tracking-tight leading-[0.95] text-gray-900 dark:text-white">
-            Coderium.<br />
-            <span class="bg-linear-to-r from-primary to-indigo-400 dark:from-indigo-200 dark:to-indigo-400 bg-clip-text text-transparent">AI Agency.</span>
+          <!-- Size follows the width of this column (container query) so the title stays at 2 lines
+               on every screen; checked 320-1920px. Re-check if the headline text changes. -->
+          <h1 class="mt-6 md:mt-8 text-[clamp(1.5rem,calc(100cqw/10.5),4.5rem)] font-black tracking-tight leading-[1.02] text-balance text-gray-900 dark:text-white">
+            AI untuk Tim Developer
+            <span class="bg-linear-to-r from-primary to-indigo-400 dark:from-indigo-200 dark:to-indigo-400 bg-clip-text text-transparent">Indonesia.</span>
           </h1>
           <p class="mt-6 md:mt-8 text-lg md:text-2xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
-            Kami membuat CAF (Coderium Agent Framework) dan AI Code Reviewer untuk tim engineering, lalu memasangnya di server Anda.
+            Kami membuat CAF dan AI Code Reviewer, gratis untuk dipasang sendiri. Kalau mau kami yang memasang dan menyesuaikan, mulai dari audit gratis. Semuanya berjalan di server Anda.
           </p>
           <div class="mt-6 md:mt-8 flex flex-col sm:flex-row gap-3">
-            <a :href="mailto('Diskusi uji coba')" class="btn btn-solid gap-2 shadow-lg shadow-primary/30">
-              Kirim email
+            <a :href="mailtoHref(AUDIT_SUBJECT)" class="btn btn-solid gap-2 shadow-lg shadow-primary/30">
+              Pesan audit gratis
               <Icon name="lucide:arrow-right" class="w-4 h-4" aria-hidden="true" />
             </a>
-            <NuxtLink to="/products" class="btn btn-outline backdrop-blur-sm">Lihat layanan</NuxtLink>
+            <!-- Falls back to /products when the homepage has no product section to jump to. -->
+            <a :href="homeProducts.length > 0 ? '#produk' : '/products'" class="btn btn-outline backdrop-blur-sm">Lihat produk</a>
           </div>
         </div>
 
@@ -74,15 +77,15 @@
 
     <!-- 01 Apa itu Coderium -->
     <section :class="SPLIT_SECTION">
-      <HomeSectionHeading number="01" label="Apa itu Coderium" title="AI agency untuk tim engineering." />
+      <HomeSectionHeading number="01" label="Apa itu Coderium" title="AI agency untuk tim developer." />
       <p class="text-md md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
-        Kami membuat dua produk, CAF (Coderium Agent Framework) dan AI Code Reviewer, lalu memasangnya di server Anda lewat uji coba di satu repo. CAF mengerjakan tiket menjadi pull request. Merge tetap keputusan manusia di tim Anda.
+        Kami membuat dua produk, CAF (Coderium Agent Framework) dan AI Code Reviewer, gratis untuk dipasang sendiri. Jika Anda ingin kami yang memasang dan menyesuaikannya di server Anda, kita mulai dari audit gratis. CAF mengerjakan tiket menjadi pull request. Merge tetap keputusan manusia di tim Anda.
       </p>
     </section>
 
-    <!-- 02 Dua produk unggulan -->
-    <section v-if="pendingProducts || homeProducts.length > 0">
-      <HomeSectionHeading number="02" label="Produk" title="Dua produk, kami buat dan kami pakai sendiri." class="mb-8 md:mb-12" />
+    <!-- 02 Produk: every published product from the API, no fixed count. -->
+    <section v-if="pendingProducts || homeProducts.length > 0" id="produk" class="scroll-mt-24">
+      <HomeSectionHeading number="02" title="Produk" lead="Alat yang kami bangun dan pakai sendiri." class="mb-8 md:mb-12" />
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         <template v-if="pendingProducts">
           <SkeletonBlock v-for="i in 2" :key="i" class="h-72 rounded-2xl w-full" />
@@ -135,13 +138,18 @@
             </li>
           </ul>
 
-          <div class="mt-auto pt-6 md:pt-8">
+          <div class="mt-auto pt-6 md:pt-8 flex flex-col sm:flex-row gap-3">
+            <a :href="mailtoHref(productAuditSubject(product.name))" class="btn btn-solid gap-2">
+              <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
+              Pesan audit gratis
+            </a>
             <NuxtLink
               :to="`/products/${product.slug}`"
-              class="inline-flex items-center gap-2 min-h-11 w-fit text-sm font-semibold underline underline-offset-4 hover:no-underline"
-              :class="panelTone(index).title"
+              class="btn gap-2 border"
+              :class="panelTone(index).secondaryButton"
+              :aria-label="`Lihat detail ${product.name}`"
             >
-              Lihat {{ product.name }}
+              Lihat detail
               <Icon name="lucide:arrow-right" class="w-4 h-4 shrink-0" aria-hidden="true" />
             </NuxtLink>
           </div>
@@ -152,9 +160,9 @@
       </p>
     </section>
 
-    <!-- 03 Diskusi, pilot, laporan -->
+    <!-- 03 Proses: audit, pasang, dukungan -->
     <section>
-      <HomeSectionHeading number="03" label="Proses" title="Diskusi, uji coba, laporan." class="mb-8 md:mb-12" />
+      <HomeSectionHeading number="03" label="Proses" title="Audit, pasang, dukungan." class="mb-8 md:mb-12" />
       <ol class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
         <li v-for="(step, index) in steps" :key="step.title" class="border-t-2 border-gray-900 dark:border-white pt-5">
           <span class="block font-mono text-sm font-medium text-primary dark:text-indigo-300" aria-hidden="true">
@@ -165,22 +173,22 @@
         </li>
       </ol>
       <p class="mt-8 text-sm md:text-base text-gray-700 dark:text-gray-300">
-        Uji coba mulai {{ startingPlan.price }}, harga perintis mulai {{ startingPlan.pioneerPrice }}.
-        <NuxtLink to="/work-with-us" class="text-link">Lihat harga dan syarat</NuxtLink>
+        Tidak ada harga paket tetap: setelah audit, Anda menerima penawaran tertulis dengan lingkup tetap.
+        <NuxtLink to="/work-with-us" class="text-link">Lihat cara kerja sama</NuxtLink>
       </p>
     </section>
 
-    <!-- 04 Pasang sendiri vs pilot -->
+    <!-- 04 Pasang sendiri vs dipasang Coderium -->
     <section>
-      <HomeSectionHeading number="04" label="Perbandingan" title="Pasang sendiri, atau uji coba bersama kami." class="mb-8 md:mb-12" />
+      <HomeSectionHeading number="04" label="Perbandingan" title="Pasang sendiri, atau dipasang Coderium." class="mb-8 md:mb-12" />
 
       <!-- Desktop: table -->
       <table class="hidden md:table w-full text-left border-collapse">
         <thead>
           <tr class="border-b border-gray-200 dark:border-gray-800">
             <th scope="col" class="w-1/5 py-4 pr-6"><span class="sr-only">Aspek</span></th>
-            <th scope="col" class="w-2/5 py-4 pr-6 text-lg font-bold text-gray-600 dark:text-gray-400">Pasang sendiri</th>
-            <th scope="col" class="w-2/5 py-4 text-lg font-bold text-gray-900 dark:text-white">Uji coba bersama Coderium</th>
+            <th scope="col" class="w-2/5 py-4 pr-6 text-lg font-bold text-gray-600 dark:text-gray-400">{{ SELF_COLUMN }}</th>
+            <th scope="col" class="w-2/5 py-4 text-lg font-bold text-gray-900 dark:text-white">{{ CODERIUM_COLUMN }}</th>
           </tr>
         </thead>
         <tbody>
@@ -189,7 +197,7 @@
               {{ row.aspect }}
             </th>
             <td class="py-5 pr-6 text-base text-gray-600 dark:text-gray-400 leading-relaxed">{{ row.self }}</td>
-            <td class="py-5 text-base text-gray-900 dark:text-white leading-relaxed">{{ row.pilot }}</td>
+            <td class="py-5 text-base text-gray-900 dark:text-white leading-relaxed">{{ row.coderium }}</td>
           </tr>
         </tbody>
       </table>
@@ -200,44 +208,51 @@
           <h3 class="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-white">{{ row.aspect }}</h3>
           <dl class="mt-3 space-y-3">
             <div>
-              <dt class="text-sm font-semibold text-gray-600 dark:text-gray-400">Pasang sendiri</dt>
+              <dt class="text-sm font-semibold text-gray-600 dark:text-gray-400">{{ SELF_COLUMN }}</dt>
               <dd class="mt-0.5 text-base text-gray-600 dark:text-gray-400 leading-relaxed">{{ row.self }}</dd>
             </div>
             <div>
-              <dt class="text-sm font-semibold text-gray-900 dark:text-white">Uji coba bersama Coderium</dt>
-              <dd class="mt-0.5 text-base text-gray-900 dark:text-white leading-relaxed">{{ row.pilot }}</dd>
+              <dt class="text-sm font-semibold text-gray-900 dark:text-white">{{ CODERIUM_COLUMN }}</dt>
+              <dd class="mt-0.5 text-base text-gray-900 dark:text-white leading-relaxed">{{ row.coderium }}</dd>
             </div>
           </dl>
         </div>
       </div>
     </section>
 
-    <!-- 05 Paket dan harga -->
+    <!-- 05 Cara kerja sama (no prices; options come from composables/useEngagement.ts) -->
     <section>
-      <HomeSectionHeading number="05" label="Paket" title="Harga terbuka, mulai dari satu repo." class="mb-8 md:mb-12" />
+      <HomeSectionHeading number="05" label="Kerja sama" title="Cara kerja sama." class="mb-8 md:mb-12" />
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        <PricingCard
-          v-for="plan in pricingPlans"
-          :key="plan.id"
-          :plan="plan"
-          :highlighted="plan.id === HIGHLIGHTED_PLAN_ID"
+        <EngagementCard
+          v-for="option in engagementOptions"
+          :key="option.id"
+          :option="option"
+          :highlighted="option.id === HIGHLIGHTED_ENGAGEMENT_ID"
         />
       </div>
+      <DesignPartnerNote class="mt-4 md:mt-6" />
       <p class="mt-5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-        Harga perintis: {{ PIONEER_PRICE_NOTE }} {{ CLIENT_COST_NOTE }}
+        {{ CLIENT_COST_NOTE }}
         <NuxtLink to="/work-with-us" class="text-link">Lihat syarat lengkap</NuxtLink>
       </p>
     </section>
 
     <!-- 06 Tentang -->
     <section :class="SPLIT_SECTION">
-      <HomeSectionHeading number="06" label="Tentang" title="Agency awal. Pendirinya yang membangun." />
+      <HomeSectionHeading number="06" label="Tentang" title="Agency kecil. Pendirinya yang membangun." />
       <div class="text-md md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+          <FounderPhoto />
+          <p>
+            Coderium didirikan oleh <span class="font-semibold text-gray-900 dark:text-white">Ganjar Hadiatna</span>, frontend developer dan tech lead yang membangun CAF dan AI Code Reviewer.
+          </p>
+        </div>
         <p>
           Coderium belum punya klien. Angka di halaman ini berasal dari pemakaian internal kami sendiri pada dua repo.
         </p>
         <p>
-          Karena itu kami membuka harga perintis: diskon 30% dengan izin studi kasus.
+          Karena itu kami membuka program design partner: harga khusus untuk 3 klien pertama, dengan izin menulis studi kasus.
         </p>
         <NuxtLink to="/about" class="text-link gap-2 text-sm">
           Tentang Coderium
@@ -256,10 +271,10 @@
       </div>
     </section>
 
-    <!-- 08 Artikel terbaru -->
+    <!-- 08 Catatan terbaru: articles are supporting notes, so they sit last, right before contact. -->
     <section v-if="pending || recentPosts.length > 0">
       <div class="mb-8 md:mb-12 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 sm:gap-6">
-        <HomeSectionHeading number="08" label="Artikel" title="Artikel terbaru." />
+        <HomeSectionHeading number="08" label="Catatan" title="Catatan terbaru." />
         <NuxtLink to="/articles" class="inline-flex items-center gap-2 min-h-11 shrink-0 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
           Semua artikel <Icon name="lucide:arrow-right" class="w-4 h-4" aria-hidden="true" />
         </NuxtLink>
@@ -298,7 +313,7 @@
           <p class="text-base md:text-lg text-gray-300 leading-relaxed">
             Tidak ada form, tidak perlu membuat akun.
           </p>
-          <a :href="mailto('Diskusi uji coba')" class="btn btn-solid mt-4 gap-2 w-full sm:w-auto">
+          <a :href="mailtoHref(AUDIT_SUBJECT)" class="btn btn-solid mt-4 gap-2 w-full sm:w-auto">
             <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
             {{ CONTACT_EMAIL }}
           </a>
@@ -317,21 +332,16 @@ definePageMeta({
 });
 
 useSeo({
-  title: 'Coderium - AI agency untuk tim engineering',
+  title: 'Coderium - AI untuk Tim Developer Indonesia',
   titleSuffix: false,
   description:
-    'Coderium adalah AI agency untuk tim engineering. CAF (Coderium Agent Framework) dan AI Code Reviewer, dipasang di server Anda lewat uji coba berharga tetap.',
+    'Coderium memasang AI di tim developer Indonesia, di server Anda sendiri. CAF (Coderium Agent Framework) dan AI Code Reviewer gratis untuk dipasang sendiri, atau dipasang Coderium setelah audit gratis.',
 });
 
 // Every figure, price, and limitation on this page comes from the "Data yang
 // boleh dipakai" / "Di luar lingkup" sections of
 // docs/development/agency-pivot/requirements.md. Do not add new claims here.
-// Prices come from composables/usePricing.ts, shared with /work-with-us.
-const CONTACT_EMAIL = 'coderium.id@gmail.com';
-
-function mailto(subject: string): string {
-  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
-}
+// Contact address and mailto helpers come from composables/useContact.ts.
 
 // ─── Kelas bersama ────────────────────────────────────────────────────────────
 
@@ -344,7 +354,7 @@ const apiBase = import.meta.server
   ? (config.apiInternalBase as string)
   : (config.public.apiBase as string);
 
-// ─── Produk unggulan ──────────────────────────────────────────────────────────
+// ─── Produk ──────────────────────────────────────────────────────────
 
 interface Product {
   id: string;
@@ -359,7 +369,6 @@ interface Product {
   features?: Array<{ title: string; description?: string | null }> | null;
 }
 
-const HOME_PRODUCT_COUNT = 2;
 const PANEL_METRIC_COUNT = 3;
 const PANEL_FEATURE_COUNT = 3;
 
@@ -369,10 +378,11 @@ const { data: productsRes, pending: pendingProducts } = await useAsyncData<{ dat
   { default: () => ({ data: [] }) }
 );
 
-// GET /products is already ordered by `order` asc.
-const homeProducts = computed(() => (productsRes.value?.data ?? []).slice(0, HOME_PRODUCT_COUNT));
+// GET /products only returns published products, already ordered by `order` asc.
+// All of them are shown; no product card is ever added from code.
+const homeProducts = computed(() => productsRes.value?.data ?? []);
 
-// The featured product (CAF) gets the dark panel; the other one stays light.
+// The featured product (CAF) gets the dark panel; the others stay light.
 const darkPanelIndex = computed(() => Math.max(0, homeProducts.value.findIndex((p) => p.featured)));
 
 const DARK_PANEL = {
@@ -381,6 +391,7 @@ const DARK_PANEL = {
   title: 'text-white',
   body: 'text-gray-300',
   divider: 'border-white/15',
+  secondaryButton: 'border-white/30 text-white hover:border-white/60',
 };
 
 const LIGHT_PANEL = {
@@ -389,6 +400,7 @@ const LIGHT_PANEL = {
   title: 'text-gray-900 dark:text-white',
   body: 'text-gray-600 dark:text-gray-400',
   divider: 'border-gray-200 dark:border-gray-800',
+  secondaryButton: 'border-gray-300 text-gray-800 hover:border-gray-500 dark:border-gray-700 dark:text-gray-200 dark:hover:border-gray-500',
 };
 
 function panelTone(index: number) {
@@ -405,14 +417,26 @@ function panelFeatures(product: Product) {
 }
 
 // Honest footnote for the numbers above. The admin-entered note wins; the
-// fallback repeats the figures recorded in requirements.md.
+// fallback repeats the figures recorded in .caf/tasks/CDR-AGENCY/requirements.md.
 const FALLBACK_PROOF_NOTE =
   'Dari pemakaian internal kami pada dua repo. 7 PR masih menunggu review dan 2 ditutup (keduanya tiket keamanan).';
+
+// Limitations that must always sit next to the numbers. Each one is appended
+// only when the note (admin or fallback) does not already say it.
+const PROOF_CAVEATS = [
+  { mentionedBy: /\b5 run\b/i, sentence: '5 run perlu perhatian.' },
+  {
+    mentionedBy: /infrastruktur/i,
+    sentence: 'Sebagian run sempat lama karena masalah infrastruktur (worker tertahan, kuota model habis).',
+  },
+];
 
 const proofNote = computed(() => {
   const product = homeProducts.value[darkPanelIndex.value];
   if (!product || panelMetrics(product).length === 0) return '';
-  return product.proof?.note || FALLBACK_PROOF_NOTE;
+  const note = (product.proof?.note || FALLBACK_PROOF_NOTE).trim();
+  const caveats = PROOF_CAVEATS.filter((caveat) => !caveat.mentionedBy.test(note)).map((caveat) => caveat.sentence);
+  return [note, ...caveats].join(' ');
 });
 
 // ─── Konten statis ────────────────────────────────────────────────────────────
@@ -420,54 +444,55 @@ const proofNote = computed(() => {
 const promises = [
   { icon: 'lucide:server', title: 'Berjalan di server Anda' },
   { icon: 'lucide:git-merge', title: 'Merge tetap keputusan manusia' },
-  { icon: 'lucide:tag', title: 'Uji coba berharga tetap' },
+  { icon: 'lucide:wrench', title: 'Dibuat dan dipakai sendiri oleh pembuatnya' },
 ];
 
 const integrations = ['Linear', 'GitHub Issues', 'GitHub', 'GitLab', 'Claude Code'];
 
-// The cheapest pilot, used for the "mulai dari" lines.
-const startingPlan = pricingPlans[0];
-
+// No prices or week counts here: duration and price are agreed after the audit.
 const steps = [
   {
-    title: 'Diskusi',
-    description: `Kirim email ke ${CONTACT_EMAIL} dan ceritakan repo serta tim Anda.`,
+    title: 'Audit gratis',
+    description: '30-60 menit. Kita lihat bersama apakah AI memang membantu tim Anda.',
   },
   {
-    title: 'Uji coba',
-    description: 'Uji coba di satu repo: AI Code Review 4 minggu, atau CAF 6-8 minggu yang dibuka dengan fit check di minggu 1.',
+    title: 'Pasang dan sesuaikan',
+    description: 'Kami memasang dan menyesuaikan alatnya di server Anda. Lama pengerjaan disepakati setelah audit.',
   },
   {
-    title: 'Laporan',
-    description: 'Uji coba ditutup dengan laporan hasil di repo Anda.',
+    title: 'Dukungan',
+    description: 'Opsional, dengan jam kerja terbatas per bulan.',
   },
 ];
+
+const SELF_COLUMN = 'Pasang sendiri (gratis)';
+const CODERIUM_COLUMN = 'Dipasang Coderium';
 
 const comparison = [
   {
     aspect: 'Pemasangan',
     self: 'Tim Anda memasang dan mengonfigurasi sendiri.',
-    pilot: 'Kami yang memasang di server Anda, pada satu repo.',
+    coderium: 'Kami yang memasang di server Anda.',
   },
   {
-    aspect: 'Penyesuaian',
+    aspect: 'Penyesuaian ke tim Anda',
     self: 'Tim Anda menyesuaikan sendiri dengan repo dan alur kerjanya.',
-    pilot: 'Kami menyesuaikan dengan repo dan tiket Anda selama uji coba.',
+    coderium: 'Kami menyesuaikan dengan repo, tiket, dan alur kerja tim Anda.',
   },
   {
     aspect: 'Ukuran keberhasilan',
     self: 'Tim Anda menentukan dan mengukur sendiri.',
-    pilot: 'Disepakati di awal uji coba dan dilaporkan di akhir.',
+    coderium: 'Disepakati saat audit dan dilaporkan setelah pemasangan.',
   },
   {
     aspect: 'Kendala operasional',
     self: 'Ditangani tim Anda. Pada pemakaian kami sendiri, worker sempat tertahan dan kuota model sempat habis.',
-    pilot: 'Kami tangani selama uji coba.',
+    coderium: 'Kami tangani selama pemasangan, dan selama dukungan bila Anda memilihnya.',
   },
   {
     aspect: 'Biaya',
-    self: 'Biaya server dan model, ditambah waktu tim Anda.',
-    pilot: `Harga uji coba tetap, mulai ${startingPlan.price}. Biaya server dan model ditanggung klien.`,
+    self: 'Gratis. Biaya server dan model ditanggung tim Anda.',
+    coderium: 'Audit gratis, lalu penawaran tertulis dengan lingkup tetap. Biaya server dan model tetap ditanggung klien.',
   },
 ];
 
@@ -494,7 +519,7 @@ const faq: ProductFaqItem[] = [
   },
   {
     question: 'Bagaimana cara memulai?',
-    answer: `Kirim email ke ${CONTACT_EMAIL}. Tidak ada form atau pendaftaran akun.`,
+    answer: `Pesan audit gratis lewat email ke ${CONTACT_EMAIL}. Tidak ada form atau pendaftaran akun.`,
   },
 ];
 

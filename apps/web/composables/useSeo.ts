@@ -16,7 +16,7 @@ export interface SeoOptions {
 
 const SITE_NAME = 'Coderium';
 const DEFAULT_DESCRIPTION =
-  'Coderium adalah AI agency untuk tim engineering, dengan dua produk: CAF (Coderium Agent Framework) dan AI Code Reviewer.';
+  'Coderium adalah agency kecil yang memasang AI di tim developer Indonesia, di server tim itu sendiri. Alatnya: CAF (Coderium Agent Framework) dan AI Code Reviewer.';
 
 /**
  * Centralized title/description/canonical/Open Graph/Twitter Card meta for a
@@ -57,7 +57,7 @@ export function useSeo(options: MaybeRefOrGetter<SeoOptions>) {
         { property: 'og:type', content: opts.type ?? 'website' },
         { property: 'og:url', content: url },
         { property: 'og:site_name', content: SITE_NAME },
-        { property: 'og:locale', content: 'en_US' },
+        { property: 'og:locale', content: 'id_ID' },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },

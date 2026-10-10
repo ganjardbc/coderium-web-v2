@@ -1,20 +1,24 @@
 <template>
   <div class="page-shell">
-    <PageHeader title="Kerja Sama" lead="Kami mulai dari uji coba di satu repo, dengan harga yang terbuka. Kontak lewat email." />
+    <PageHeader
+      title="Kerja Sama"
+      lead="Alatnya gratis untuk dipasang sendiri. Jika ingin dipasang dan disesuaikan oleh Coderium, kita mulai dari audit gratis. Kontak lewat email."
+    />
 
-    <!-- Paket dan harga -->
+    <!-- Cara kerja sama (no prices; options come from composables/useEngagement.ts) -->
     <section class="pb-10 md:pb-16 border-b border-gray-100 dark:border-gray-800">
-      <h2 class="section-title mb-6 md:mb-8">Paket dan harga</h2>
+      <h2 class="section-title mb-6 md:mb-8">Cara kerja sama</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        <PricingCard
-          v-for="plan in pricingPlans"
-          :key="plan.id"
-          :plan="plan"
-          :highlighted="plan.id === HIGHLIGHTED_PLAN_ID"
+        <EngagementCard
+          v-for="option in engagementOptions"
+          :key="option.id"
+          :option="option"
+          :highlighted="option.id === HIGHLIGHTED_ENGAGEMENT_ID"
         />
       </div>
+      <DesignPartnerNote class="mt-4 md:mt-6" />
       <p class="mt-5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-        Harga perintis: {{ PIONEER_PRICE_NOTE }} Retainer bersifat opsional. {{ CLIENT_COST_NOTE }}
+        Dukungan bulanan bersifat opsional. {{ CLIENT_COST_NOTE }}
       </p>
     </section>
 
@@ -43,14 +47,14 @@
     <section class="py-10 md:py-16">
       <div class="card flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 md:p-10">
         <div>
-          <p class="section-title">Mau diskusi uji coba?</p>
+          <p class="section-title">Mau mulai dengan audit gratis?</p>
           <p class="mt-2 body-copy">
             Kirim email ke {{ CONTACT_EMAIL }}. Tidak ada form, tidak perlu membuat akun.
           </p>
         </div>
-        <a :href="mailto('Diskusi uji coba')" class="btn btn-solid gap-2 shrink-0">
+        <a :href="mailtoHref(AUDIT_SUBJECT)" class="btn btn-solid gap-2 shrink-0">
           <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
-          Kirim email
+          Pesan audit gratis
         </a>
       </div>
     </section>
@@ -64,16 +68,10 @@ definePageMeta({
   layout: 'default',
 });
 
-// Prices, durations, and terms on this page come from the "Data yang boleh
-// dipakai" section of docs/development/agency-pivot/requirements.md. Do not
-// add figures or claims that are not recorded there.
-const CONTACT_EMAIL = 'coderium.id@gmail.com';
-
-function mailto(subject: string): string {
-  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
-}
-
-// Prices come from composables/usePricing.ts, shared with the homepage cards.
+// No fixed prices on this page: the tools are free, the audit is free, and the
+// installation is quoted in a written fixed-scope offer after the audit. Terms
+// come from .caf/tasks/CDR-AGENCY/requirements.md; do not add new figures.
+// Contact helpers come from composables/useContact.ts.
 
 const clientRequirements = [
   'Satu penanggung jawab dari tim Anda.',
@@ -101,19 +99,24 @@ const faq: ProductFaqItem[] = [
     answer: 'Belum ada SLA dukungan.',
   },
   {
-    question: 'Apa itu harga perintis?',
-    answer: 'Diskon 30% dari harga uji coba, dengan izin dari Anda untuk menuliskan studi kasus.',
+    question: 'Berapa biayanya?',
+    answer:
+      'Alatnya gratis untuk dipasang sendiri, dan audit juga gratis. Setelah audit, Anda menerima penawaran tertulis dengan lingkup tetap. Biaya server dan model dibayar klien langsung.',
+  },
+  {
+    question: 'Apa itu program design partner?',
+    answer: 'Untuk 3 klien pertama, kami memberi harga khusus dengan imbalan izin menulis studi kasus.',
   },
   {
     question: 'Bagaimana cara memulai?',
-    answer: `Kirim email ke ${CONTACT_EMAIL}. Tidak ada form atau pendaftaran akun.`,
+    answer: `Pesan audit gratis lewat email ke ${CONTACT_EMAIL}. Tidak ada form atau pendaftaran akun.`,
   },
 ];
 
 useSeo({
   title: 'Kerja Sama',
   description:
-    'Uji coba AI Code Review dan uji coba CAF untuk tim engineering: harga terbuka, syarat dari klien, dan kontak lewat email coderium.id@gmail.com.',
+    'Cara kerja sama dengan Coderium: pasang sendiri gratis, dipasang Coderium mulai dari audit gratis, atau dukungan bulanan. Syarat dari klien dan kontak lewat email.',
 });
 
 useJsonLd(faqPageJsonLd(faq));

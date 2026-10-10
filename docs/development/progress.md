@@ -85,6 +85,7 @@ Last Updated:
 | Phase 15 - Hermes Integration (Backend & Admin UI) | DONE | 100% |
 | Phase 16 - AI Content Generation (Backend, ticket 24) | DONE | 100% |
 | Phase 17 - Agency Pivot (Public Site) | IN_PROGRESS | 83% (10/12) |
+| Phase 18 - Perbaikan Konten Agency (Public Site) | IN_REVIEW | 100% (1/1, PR belum di-merge) |
 
 ---
 
@@ -250,6 +251,7 @@ AGENCY-006 Layout menu atas dan footer (Phase 17 Agency Pivot)
 AGENCY-007 Beranda agency (Opsi B), font, dan token warna — dikerjakan ulang 2026-10-10 (Phase 17 Agency Pivot)
 AGENCY-008 Identitas, SEO, dan About (Phase 17 Agency Pivot)
 AGENCY-010 Perbarui dokumen proyek (Phase 17 Agency Pivot)
+AGENCY-FIX-001 Perbaikan konten dan klaim situs agency — harga tetap dihapus, audit gratis, About baru (Phase 18, PR menunggu review)
 ```
 
 ---
@@ -778,6 +780,39 @@ check via code reading). Also see `docs/development/backlog.md` Phase 16
 Module), and `docs/api/api-contract.md` (`# AI Content API (Admin, Ticket
 #24)`) for the resulting API surface. Ticket 25 (apps/admin UI) is the
 next dependent ticket, not yet started.
+```
+
+---
+
+### DEC-012
+
+Date:
+
+```txt
+2026-10-10
+```
+
+Decision:
+
+```txt
+Situs publik tidak lagi menampilkan harga tetap (pilot, harga perintis,
+fit check, retainer). Alur baru: alat gratis untuk dipasang sendiri,
+audit gratis, lalu penawaran tertulis berlingkup tetap. "Harga perintis"
+diganti program design partner (3 klien pertama, tanpa angka diskon).
+```
+
+Reason:
+
+```txt
+Keputusan pemilik produk (Phase 18, AGENCY-FIX-001). Menggantikan baris
+"Harga: tampil terbuka di /work-with-us" pada "Keputusan yang sudah final"
+di .caf/tasks/CDR-AGENCY/plan.md; plan.md sendiri tidak diubah.
+```
+
+Status:
+
+```txt
+ACTIVE
 ```
 
 ---
