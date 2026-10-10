@@ -144,8 +144,8 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 
-const CONTACT_EMAIL = 'coderium.id@gmail.com';
-const contactMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Diskusi uji coba')}`;
+// CONTACT_EMAIL and mailtoHref come from composables/useContact.ts.
+const contactMailto = mailtoHref('Diskusi dengan Coderium');
 
 // Site-wide structured data: lets Google understand the brand/organization
 // and enables a sitelinks search box for "Coderium" queries.

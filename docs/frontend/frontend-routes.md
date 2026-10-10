@@ -15,7 +15,7 @@ File-based routing.
 | `/playlists/:slug`      | `pages/playlists/[slug].vue`        | Playlist detail          |
 | `/products`             | `pages/products/index.vue`          | Daftar produk terpublikasi |
 | `/products/:slug`       | `pages/products/[slug].vue`         | Detail produk: badge, description, bukti, FAQ, CTA (SSR + SEO) |
-| `/work-with-us`           | `pages/work-with-us.vue`              | Kerja Sama — pilot, harga, syarat klien, FAQ, CTA email (statis, SSR) |
+| `/work-with-us`           | `pages/work-with-us.vue`              | Kerja Sama — cara kerja sama tanpa harga tetap (pasang sendiri, dipasang Coderium, dukungan bulanan), program design partner, syarat klien, FAQ, CTA audit gratis via email (statis, SSR, masuk sitemap otomatis) |
 
 ---
 

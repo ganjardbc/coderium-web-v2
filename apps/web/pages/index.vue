@@ -218,19 +218,20 @@
       </div>
     </section>
 
-    <!-- 05 Paket dan harga -->
+    <!-- 05 Cara kerja sama (no prices; options come from composables/useEngagement.ts) -->
     <section>
-      <HomeSectionHeading number="05" label="Paket" title="Harga terbuka, mulai dari satu repo." class="mb-8 md:mb-12" />
+      <HomeSectionHeading number="05" label="Kerja sama" title="Cara kerja sama." class="mb-8 md:mb-12" />
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        <PricingCard
-          v-for="plan in pricingPlans"
-          :key="plan.id"
-          :plan="plan"
-          :highlighted="plan.id === HIGHLIGHTED_PLAN_ID"
+        <EngagementCard
+          v-for="option in engagementOptions"
+          :key="option.id"
+          :option="option"
+          :highlighted="option.id === HIGHLIGHTED_ENGAGEMENT_ID"
         />
       </div>
+      <DesignPartnerNote class="mt-4 md:mt-6" />
       <p class="mt-5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-        Harga perintis: {{ PIONEER_PRICE_NOTE }} {{ CLIENT_COST_NOTE }}
+        {{ CLIENT_COST_NOTE }}
         <NuxtLink to="/work-with-us" class="text-link">Lihat syarat lengkap</NuxtLink>
       </p>
     </section>
@@ -243,7 +244,7 @@
           Coderium belum punya klien. Angka di halaman ini berasal dari pemakaian internal kami sendiri pada dua repo.
         </p>
         <p>
-          Karena itu kami membuka harga perintis: diskon 30% dengan izin studi kasus.
+          Karena itu kami membuka program design partner: harga khusus untuk 3 klien pertama, dengan izin menulis studi kasus.
         </p>
         <NuxtLink to="/about" class="text-link gap-2 text-sm">
           Tentang Coderium
@@ -332,7 +333,6 @@ useSeo({
 // Every figure, price, and limitation on this page comes from the "Data yang
 // boleh dipakai" / "Di luar lingkup" sections of
 // docs/development/agency-pivot/requirements.md. Do not add new claims here.
-// Prices come from composables/usePricing.ts, shared with /work-with-us.
 // Contact address and mailto helpers come from composables/useContact.ts.
 
 // ─── Kelas bersama ────────────────────────────────────────────────────────────
