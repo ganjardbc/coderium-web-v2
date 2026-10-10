@@ -1846,3 +1846,57 @@ Task: [Manual] QA dan rilis
 Status: `TODO`
 
 ---
+
+# Phase 18 - Perbaikan Konten Agency (Public Site)
+
+Perbaikan konten dan klaim di apps/web atas permintaan pemilik produk
+(2026-10-10). Branch `chore/agency-content-fix`, satu commit per langkah.
+Tidak ada perubahan skema atau data database.
+
+## AGENCY-FIX-001
+
+Task: Perbaikan konten dan klaim situs agency (8 langkah)
+
+Status: `DONE` (menunggu review PR)
+
+Details:
+
+```txt
+- Hero beranda: judul "Kami memasang AI di tim engineering Indonesia, di
+  server Anda sendiri."; CTA "Pesan audit gratis" (mailto, subjek "Audit
+  gratis Coderium", tanpa tab baru) dan "Lihat produk" (#produk); janji
+  ketiga "Dibuat dan dipakai sendiri oleh pembuatnya".
+- Section Produk: judul "Produk" + subjudul; semua produk published dari
+  GET /products (tanpa batas dua, tanpa kartu dari kode); tiap kartu
+  "Pesan audit gratis" + "Lihat detail"; catatan kaki menambah "5 run
+  perlu perhatian" dan kalimat insiden infrastruktur bila belum ada.
+- Proses: Audit gratis (30-60 menit) / Pasang dan sesuaikan / Dukungan.
+  Tabel "Pasang sendiri (gratis)" vs "Dipasang Coderium".
+- Semua harga tetap dihapus dari beranda dan /work-with-us;
+  composables/usePricing.ts dan components/PricingCard.vue dihapus.
+  Diganti composables/useEngagement.ts + EngagementCard.vue (tiga kartu
+  non-harga) dan DesignPartnerNote.vue. "harga perintis" -> "design
+  partner". FAQ "Berapa biayanya?" ditambahkan.
+- About ditulis ulang (agency kecil, pendiri Ganjar Hadiatna, cara kerja,
+  belum ada klien, artikel sebagai catatan pelengkap). FounderPhoto.vue
+  tidak merender apa pun sampai foto asli diisi (TODO di komponen).
+  Description default, JSON-LD Organization (+ founder), og:locale id_ID.
+- /products dan /products/:slug: tombol "Pesan audit gratis" (subjek
+  berisi nama produk). CTA admin tetap tampil sebagai tombol kedua hanya
+  bila berupa tautan web.
+- Section artikel beranda: "Catatan terbaru", tetap 3 artikel, tetap di
+  posisi terakhir sebelum kontak.
+- Kontak tetap coderium.id@gmail.com dan rute tetap /work-with-us
+  (dikonfirmasi pemilik produk; helper bersama di composables/useContact.ts).
+- Verifikasi: pnpm typecheck PASS, pnpm build PASS. Build web + mock API:
+  /, /products, /products/:slug, /work-with-us, /about di 390px dan
+  1280px, terang dan gelap: tanpa scroll horizontal, semua tautan/tombol
+  di <main> tinggi >= 44px, mailto tanpa target. /work-with-us ada di
+  sitemap.xml. Grep sisa harga/pilot/perintis/tech blog bersih.
+- Belum diuji: data produksi nyata (teks produk dari admin), klien email
+  sungguhan untuk mailto.
+- Menunggu manual: isi produk AI Code Reviewer dan perbaikan teks CAF
+  lewat admin (lihat deskripsi PR).
+```
+
+---

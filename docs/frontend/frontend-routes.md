@@ -8,7 +8,8 @@ File-based routing.
 
 | Route                   | Page File                           | Description              |
 | ----------------------- | ----------------------------------- | ------------------------ |
-| `/`                     | `pages/index.vue`                   | Beranda agency (Opsi B): hero, produk unggulan, proses, perbandingan, paket dan harga, tentang, FAQ, catatan terbaru, kontak |
+| `/`                     | `pages/index.vue`                   | Beranda agency: hero (CTA audit gratis), apa itu Coderium, produk (semua produk published), proses, perbandingan, cara kerja sama (tanpa harga), tentang, FAQ, catatan terbaru, kontak |
+| `/about`                | `pages/about.vue`                   | Tentang Coderium: apa itu Coderium, pendiri, cara kerja, catatan (artikel/series), kontak |
 | `/articles`             | `pages/articles/index.vue`          | Browse & search all posts (`/explore` redirects here) |
 | `/articles/:slug`       | `pages/articles/[slug].vue`         | Post detail (SSR + SEO; `/posts/:slug` redirects here) |
 | `/playlists`            | `pages/playlists/index.vue`         | Playlist list            |
