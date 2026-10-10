@@ -33,7 +33,8 @@
               Pesan audit gratis
               <Icon name="lucide:arrow-right" class="w-4 h-4" aria-hidden="true" />
             </a>
-            <a href="#produk" class="btn btn-outline backdrop-blur-sm">Lihat produk</a>
+            <!-- Falls back to /products when the homepage has no product section to jump to. -->
+            <a :href="homeProducts.length > 0 ? '#produk' : '/products'" class="btn btn-outline backdrop-blur-sm">Lihat produk</a>
           </div>
         </div>
 
@@ -80,9 +81,9 @@
       </p>
     </section>
 
-    <!-- 02 Dua produk unggulan -->
+    <!-- 02 Produk: every published product from the API, no fixed count. -->
     <section v-if="pendingProducts || homeProducts.length > 0" id="produk" class="scroll-mt-24">
-      <HomeSectionHeading number="02" label="Produk" title="Dua produk, kami buat dan kami pakai sendiri." class="mb-8 md:mb-12" />
+      <HomeSectionHeading number="02" title="Produk" lead="Alat yang kami bangun dan pakai sendiri." class="mb-8 md:mb-12" />
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         <template v-if="pendingProducts">
           <SkeletonBlock v-for="i in 2" :key="i" class="h-72 rounded-2xl w-full" />
@@ -135,13 +136,18 @@
             </li>
           </ul>
 
-          <div class="mt-auto pt-6 md:pt-8">
+          <div class="mt-auto pt-6 md:pt-8 flex flex-col sm:flex-row gap-3">
+            <a :href="mailtoHref(productAuditSubject(product.name))" class="btn btn-solid gap-2">
+              <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
+              Pesan audit gratis
+            </a>
             <NuxtLink
               :to="`/products/${product.slug}`"
-              class="inline-flex items-center gap-2 min-h-11 w-fit text-sm font-semibold underline underline-offset-4 hover:no-underline"
-              :class="panelTone(index).title"
+              class="btn gap-2 border"
+              :class="panelTone(index).secondaryButton"
+              :aria-label="`Lihat detail ${product.name}`"
             >
-              Lihat {{ product.name }}
+              Lihat detail
               <Icon name="lucide:arrow-right" class="w-4 h-4 shrink-0" aria-hidden="true" />
             </NuxtLink>
           </div>
@@ -340,7 +346,7 @@ const apiBase = import.meta.server
   ? (config.apiInternalBase as string)
   : (config.public.apiBase as string);
 
-// ─── Produk unggulan ──────────────────────────────────────────────────────────
+// ─── Produk ──────────────────────────────────────────────────────────
 
 interface Product {
   id: string;
@@ -355,7 +361,6 @@ interface Product {
   features?: Array<{ title: string; description?: string | null }> | null;
 }
 
-const HOME_PRODUCT_COUNT = 2;
 const PANEL_METRIC_COUNT = 3;
 const PANEL_FEATURE_COUNT = 3;
 
@@ -365,10 +370,11 @@ const { data: productsRes, pending: pendingProducts } = await useAsyncData<{ dat
   { default: () => ({ data: [] }) }
 );
 
-// GET /products is already ordered by `order` asc.
-const homeProducts = computed(() => (productsRes.value?.data ?? []).slice(0, HOME_PRODUCT_COUNT));
+// GET /products only returns published products, already ordered by `order` asc.
+// All of them are shown; no product card is ever added from code.
+const homeProducts = computed(() => productsRes.value?.data ?? []);
 
-// The featured product (CAF) gets the dark panel; the other one stays light.
+// The featured product (CAF) gets the dark panel; the others stay light.
 const darkPanelIndex = computed(() => Math.max(0, homeProducts.value.findIndex((p) => p.featured)));
 
 const DARK_PANEL = {
@@ -377,6 +383,7 @@ const DARK_PANEL = {
   title: 'text-white',
   body: 'text-gray-300',
   divider: 'border-white/15',
+  secondaryButton: 'border-white/30 text-white hover:border-white/60',
 };
 
 const LIGHT_PANEL = {
@@ -385,6 +392,7 @@ const LIGHT_PANEL = {
   title: 'text-gray-900 dark:text-white',
   body: 'text-gray-600 dark:text-gray-400',
   divider: 'border-gray-200 dark:border-gray-800',
+  secondaryButton: 'border-gray-300 text-gray-800 hover:border-gray-500 dark:border-gray-700 dark:text-gray-200 dark:hover:border-gray-500',
 };
 
 function panelTone(index: number) {
@@ -401,14 +409,26 @@ function panelFeatures(product: Product) {
 }
 
 // Honest footnote for the numbers above. The admin-entered note wins; the
-// fallback repeats the figures recorded in requirements.md.
+// fallback repeats the figures recorded in .caf/tasks/CDR-AGENCY/requirements.md.
 const FALLBACK_PROOF_NOTE =
   'Dari pemakaian internal kami pada dua repo. 7 PR masih menunggu review dan 2 ditutup (keduanya tiket keamanan).';
+
+// Limitations that must always sit next to the numbers. Each one is appended
+// only when the note (admin or fallback) does not already say it.
+const PROOF_CAVEATS = [
+  { mentionedBy: /\b5 run\b/i, sentence: '5 run perlu perhatian.' },
+  {
+    mentionedBy: /infrastruktur/i,
+    sentence: 'Sebagian run sempat lama karena masalah infrastruktur (worker tertahan, kuota model habis).',
+  },
+];
 
 const proofNote = computed(() => {
   const product = homeProducts.value[darkPanelIndex.value];
   if (!product || panelMetrics(product).length === 0) return '';
-  return product.proof?.note || FALLBACK_PROOF_NOTE;
+  const note = (product.proof?.note || FALLBACK_PROOF_NOTE).trim();
+  const caveats = PROOF_CAVEATS.filter((caveat) => !caveat.mentionedBy.test(note)).map((caveat) => caveat.sentence);
+  return [note, ...caveats].join(' ');
 });
 
 // ─── Konten statis ────────────────────────────────────────────────────────────
