@@ -1,13 +1,13 @@
 <template>
   <div class="page-shell">
-    <PageHeader title="Tentang Coderium" lead="Agency kecil yang memasang AI di tim engineering Indonesia." />
+    <PageHeader title="Tentang Coderium" lead="Agency kecil yang memasang AI di tim developer Indonesia." />
 
     <!-- Apa itu Coderium -->
     <section class="split-section pt-0!">
       <h2 class="section-title">Apa itu Coderium</h2>
       <div>
         <p class="body-copy">
-          Coderium adalah agency kecil yang memasang AI di tim engineering Indonesia, di server tim itu sendiri. Kami membangun dua alat:
+          Coderium adalah agency kecil yang memasang AI di tim developer Indonesia, di server tim itu sendiri. Kami membangun dua alat:
         </p>
         <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
           <article v-for="product in products" :key="product.name" class="card p-6 md:p-8">
@@ -131,6 +131,6 @@ const readingLinks = [
 useSeo({
   title: 'Tentang',
   description:
-    'Coderium adalah agency kecil yang memasang AI di tim engineering Indonesia. Didirikan oleh Ganjar Hadiatna, pembuat CAF (Coderium Agent Framework) dan AI Code Reviewer.',
+    'Coderium adalah agency kecil yang memasang AI di tim developer Indonesia. Didirikan oleh Ganjar Hadiatna, pembuat CAF (Coderium Agent Framework) dan AI Code Reviewer.',
 });
 </script>

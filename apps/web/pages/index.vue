@@ -19,7 +19,7 @@
               <span class="absolute inline-flex h-full w-full rounded-full bg-primary dark:bg-indigo-300 opacity-60 motion-safe:animate-ping" />
               <span class="relative inline-flex h-2 w-2 rounded-full bg-primary dark:bg-indigo-300" />
             </span>
-            Coderium · AI agency untuk tim engineering
+            Coderium · AI agency untuk tim developer
           </p>
           <!-- Size follows the width of this column (container query) so the title stays at 2 lines
                on every screen; checked 320-1920px. Re-check if the headline text changes. -->
@@ -77,7 +77,7 @@
 
     <!-- 01 Apa itu Coderium -->
     <section :class="SPLIT_SECTION">
-      <HomeSectionHeading number="01" label="Apa itu Coderium" title="AI agency untuk tim engineering." />
+      <HomeSectionHeading number="01" label="Apa itu Coderium" title="AI agency untuk tim developer." />
       <p class="text-md md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
         Kami membuat dua produk, CAF (Coderium Agent Framework) dan AI Code Reviewer, gratis untuk dipasang sendiri. Jika Anda ingin kami yang memasang dan menyesuaikannya di server Anda, kita mulai dari audit gratis. CAF mengerjakan tiket menjadi pull request. Merge tetap keputusan manusia di tim Anda.
       </p>
@@ -332,10 +332,10 @@ definePageMeta({
 });
 
 useSeo({
-  title: 'Coderium - Memasang AI di tim engineering Indonesia',
+  title: 'Coderium - Memasang AI di tim developer Indonesia',
   titleSuffix: false,
   description:
-    'Coderium memasang AI di tim engineering Indonesia, di server Anda sendiri. CAF (Coderium Agent Framework) dan AI Code Reviewer gratis untuk dipasang sendiri, atau dipasang Coderium setelah audit gratis.',
+    'Coderium memasang AI di tim developer Indonesia, di server Anda sendiri. CAF (Coderium Agent Framework) dan AI Code Reviewer gratis untuk dipasang sendiri, atau dipasang Coderium setelah audit gratis.',
 });
 
 // Every figure, price, and limitation on this page comes from the "Data yang
