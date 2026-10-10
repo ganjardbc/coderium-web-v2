@@ -1879,7 +1879,8 @@ Details:
   partner". FAQ "Berapa biayanya?" ditambahkan.
 - About ditulis ulang (agency kecil, pendiri Ganjar Hadiatna, cara kerja,
   belum ada klien, artikel sebagai catatan pelengkap). FounderPhoto.vue
-  tidak merender apa pun sampai foto asli diisi (TODO di komponen).
+  memakai foto asli public/images/ganjar-hadiatna.jpg (480px); kosongkan
+  FOUNDER_PHOTO_SRC untuk menyembunyikan.
   Description default, JSON-LD Organization (+ founder), og:locale id_ID.
 - /products dan /products/:slug: tombol "Pesan audit gratis" (subjek
   berisi nama produk). CTA admin tetap tampil sebagai tombol kedua hanya

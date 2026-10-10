@@ -10,7 +10,6 @@
 
 <script setup lang="ts">
 // Renders nothing until a real photo is set. Never use a stock or generated image here.
-// TODO(Ganjar): add a real photo, e.g. apps/web/public/images/ganjar-hadiatna.jpg,
-// then set this to '/images/ganjar-hadiatna.jpg'. Empty means no photo is shown.
-const FOUNDER_PHOTO_SRC = '';
+// Real photo of the founder (public/images/ganjar-hadiatna.jpg). Set to '' to hide it.
+const FOUNDER_PHOTO_SRC = '/images/ganjar-hadiatna.jpg';
 </script>
