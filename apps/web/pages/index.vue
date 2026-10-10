@@ -22,8 +22,8 @@
             Coderium · AI agency untuk tim engineering
           </p>
           <!-- Below sm the size follows the viewport so the title stays at 2 lines on phones (checked 320-640px). -->
-          <h1 class="mt-6 md:mt-8 text-[clamp(1.5rem,calc((100vw_-_2rem)/11.6),2.25rem)] sm:text-5xl md:text-7xl font-black tracking-tight leading-[1.02] text-balance text-gray-900 dark:text-white">
-            AI untuk tim engineering
+          <h1 class="mt-6 md:mt-8 text-[clamp(1.5rem,calc((100vw_-_2rem)/10.5),2.25rem)] sm:text-5xl md:text-7xl font-black tracking-tight leading-[1.02] text-balance text-gray-900 dark:text-white">
+            AI untuk Tim Developer
             <span class="bg-linear-to-r from-primary to-indigo-400 dark:from-indigo-200 dark:to-indigo-400 bg-clip-text text-transparent">Indonesia.</span>
           </h1>
           <p class="mt-6 md:mt-8 text-lg md:text-2xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
