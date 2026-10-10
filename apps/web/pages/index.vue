@@ -19,21 +19,21 @@
               <span class="absolute inline-flex h-full w-full rounded-full bg-primary dark:bg-indigo-300 opacity-60 motion-safe:animate-ping" />
               <span class="relative inline-flex h-2 w-2 rounded-full bg-primary dark:bg-indigo-300" />
             </span>
-            AI agency untuk tim engineering
+            Coderium · AI agency untuk tim engineering
           </p>
-          <h1 class="mt-6 md:mt-8 text-5xl sm:text-6xl md:text-8xl font-black tracking-tight leading-[0.95] text-gray-900 dark:text-white">
-            Coderium.<br />
-            <span class="bg-linear-to-r from-primary to-indigo-400 dark:from-indigo-200 dark:to-indigo-400 bg-clip-text text-transparent">AI Agency.</span>
+          <h1 class="mt-6 md:mt-8 text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-[1.02] text-balance text-gray-900 dark:text-white">
+            Kami memasang AI di tim engineering Indonesia,
+            <span class="bg-linear-to-r from-primary to-indigo-400 dark:from-indigo-200 dark:to-indigo-400 bg-clip-text text-transparent">di server Anda sendiri.</span>
           </h1>
           <p class="mt-6 md:mt-8 text-lg md:text-2xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
-            Kami membuat CAF (Coderium Agent Framework) dan AI Code Reviewer untuk tim engineering, lalu memasangnya di server Anda.
+            Coderium membuat CAF (Coderium Agent Framework) dan AI Code Reviewer. Alatnya gratis untuk Anda pasang sendiri. Jika ingin dipasang dan disesuaikan oleh Coderium, mulai dengan audit gratis.
           </p>
           <div class="mt-6 md:mt-8 flex flex-col sm:flex-row gap-3">
-            <a :href="mailto('Diskusi uji coba')" class="btn btn-solid gap-2 shadow-lg shadow-primary/30">
-              Kirim email
+            <a :href="mailtoHref(AUDIT_SUBJECT)" class="btn btn-solid gap-2 shadow-lg shadow-primary/30">
+              Pesan audit gratis
               <Icon name="lucide:arrow-right" class="w-4 h-4" aria-hidden="true" />
             </a>
-            <NuxtLink to="/products" class="btn btn-outline backdrop-blur-sm">Lihat layanan</NuxtLink>
+            <a href="#produk" class="btn btn-outline backdrop-blur-sm">Lihat produk</a>
           </div>
         </div>
 
@@ -81,7 +81,7 @@
     </section>
 
     <!-- 02 Dua produk unggulan -->
-    <section v-if="pendingProducts || homeProducts.length > 0">
+    <section v-if="pendingProducts || homeProducts.length > 0" id="produk" class="scroll-mt-24">
       <HomeSectionHeading number="02" label="Produk" title="Dua produk, kami buat dan kami pakai sendiri." class="mb-8 md:mb-12" />
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         <template v-if="pendingProducts">
@@ -298,7 +298,7 @@
           <p class="text-base md:text-lg text-gray-300 leading-relaxed">
             Tidak ada form, tidak perlu membuat akun.
           </p>
-          <a :href="mailto('Diskusi uji coba')" class="btn btn-solid mt-4 gap-2 w-full sm:w-auto">
+          <a :href="mailtoHref(AUDIT_SUBJECT)" class="btn btn-solid mt-4 gap-2 w-full sm:w-auto">
             <Icon name="lucide:mail" class="w-4 h-4" aria-hidden="true" />
             {{ CONTACT_EMAIL }}
           </a>
@@ -317,21 +317,17 @@ definePageMeta({
 });
 
 useSeo({
-  title: 'Coderium - AI agency untuk tim engineering',
+  title: 'Coderium - Memasang AI di tim engineering Indonesia',
   titleSuffix: false,
   description:
-    'Coderium adalah AI agency untuk tim engineering. CAF (Coderium Agent Framework) dan AI Code Reviewer, dipasang di server Anda lewat uji coba berharga tetap.',
+    'Coderium memasang AI di tim engineering Indonesia, di server Anda sendiri. CAF (Coderium Agent Framework) dan AI Code Reviewer gratis untuk dipasang sendiri, atau dipasang Coderium setelah audit gratis.',
 });
 
 // Every figure, price, and limitation on this page comes from the "Data yang
 // boleh dipakai" / "Di luar lingkup" sections of
 // docs/development/agency-pivot/requirements.md. Do not add new claims here.
 // Prices come from composables/usePricing.ts, shared with /work-with-us.
-const CONTACT_EMAIL = 'coderium.id@gmail.com';
-
-function mailto(subject: string): string {
-  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
-}
+// Contact address and mailto helpers come from composables/useContact.ts.
 
 // ─── Kelas bersama ────────────────────────────────────────────────────────────
 
@@ -420,7 +416,7 @@ const proofNote = computed(() => {
 const promises = [
   { icon: 'lucide:server', title: 'Berjalan di server Anda' },
   { icon: 'lucide:git-merge', title: 'Merge tetap keputusan manusia' },
-  { icon: 'lucide:tag', title: 'Uji coba berharga tetap' },
+  { icon: 'lucide:wrench', title: 'Dibuat dan dipakai sendiri oleh pembuatnya' },
 ];
 
 const integrations = ['Linear', 'GitHub Issues', 'GitHub', 'GitLab', 'Claude Code'];
